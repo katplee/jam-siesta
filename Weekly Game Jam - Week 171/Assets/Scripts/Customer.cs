@@ -11,29 +11,30 @@ public class Customer : Singleton<Customer>
     {
         WAITING,
         GIVE_SUITCASE,
-        SUITCASE_GIVEN,
-        YES_PAJAMAS,
-        YES_BED,
-        SLEEPING,
+        WAIT_PAJAMAS,
+        WAIT_TOUR,
+        YES_BED,        
         AWAKE,
         NO_PAJAMAS,
         YES_PAYMENT,
         YES_SUITCASE,        
     }
 
-    private customerState[] statesOrder = new customerState[10]
+    private customerState[] statesOrder = new customerState[9]
         {customerState.WAITING, 
          customerState.GIVE_SUITCASE,
-         customerState.SUITCASE_GIVEN,
-         customerState.YES_PAJAMAS,
+         customerState.WAIT_PAJAMAS,
+         customerState.WAIT_TOUR,
          customerState.YES_BED,
-         customerState.SLEEPING,
          customerState.AWAKE,
          customerState.NO_PAJAMAS,
          customerState.YES_PAYMENT,
          customerState.YES_SUITCASE};
 
     public customerState State { get; set; }
+
+    List<GameObject> clickRecord;
+
     public int stateIndex = 0;
     public int readyState = 0;
 
@@ -54,7 +55,7 @@ public class Customer : Singleton<Customer>
 
     private void Start()
     {
-                
+        clickRecord = GameManager.Instance.clickRecord;
     }
     private void Update()
     {
@@ -65,9 +66,23 @@ public class Customer : Singleton<Customer>
             case (customerState.WAITING):
                 if (AtWaiting()) { ReadyToChangeState(); }
                 break;
+
             case (customerState.GIVE_SUITCASE):
                 if (AtGiveSuitcase()) { ReadyToChangeState(); }
                 break;
+
+            case (customerState.WAIT_PAJAMAS):
+                if (AtWaitPajamas()) { ReadyToChangeState(); }
+                break;
+
+            case (customerState.WAIT_TOUR):
+                if (AtWaitTour()) { ReadyToChangeState(); }
+                break;
+
+            case (customerState.YES_BED):
+                if (AtYesBed()) { ReadyToChangeState(); }
+                break;
+
             default:
                 break;
         }
@@ -75,44 +90,88 @@ public class Customer : Singleton<Customer>
 
     private void OnMouseDown()
     {
-        if (!GameManager.Instance.SequenceRunning)
+        if (GameManager.Instance.playerTransform.GetComponent<PlayerDestination>() == null)
         {
-            GameManager.Instance.clickRecord.Add(gameObject);
-            GameManager.Instance.SetClickedObject(gameObject, objectType);
+            clickRecord.Add(gameObject);
+            GameManager.Instance.SetClickedObject(gameObject, objectType);            
         }        
-    }
-
-    private void OnMouseUp()
-    {
-        
     }
 
     private void ReadyToChangeState()
     {
         stateIndex = readyState;
-        GameManager.Instance.clickRecord.Add(GameObject.Find("Click Divider"));
-
+        GameManager.Instance.AddClickDivider();
     }
 
     private bool AtWaiting()
     {
-        if (Player.Instance.MovementDone)
+        if (GameManager.Instance.playerTransform.GetComponent<PlayerDestination>() == null)
         {
-            if(GameManager.Instance.clickRecord[GameManager.Instance.clickRecord.Count - 1] == gameObject)
+            if(clickRecord[clickRecord.Count - 1] == gameObject)
             {
                 readyState++;
                 return true;
             }            
         }
         return false;
-
     }
 
     private bool AtGiveSuitcase()
     {
-        if(GameManager.Instance.clickRecord[GameManager.Instance.clickRecord.Count-1].name == "Suitcase Cabinet")
+        if(clickRecord[clickRecord.Count-1].name == "Suitcase Cabinet")
         {
-            if(GameManager.Instance.clickRecord[GameManager.Instance.clickRecord.Count - 2] == gameObject)
+            if(clickRecord[clickRecord.Count - 2] == gameObject)
+            {
+                readyState++;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool AtWaitPajamas()
+    {
+        if (clickRecord[clickRecord.Count - 1] == gameObject)
+        {
+            if (clickRecord[clickRecord.Count - 2].name == "Pajamas Cabinet")
+            {
+                readyState++;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool AtWaitTour()
+    {
+        if (clickRecord[clickRecord.Count - 1] == gameObject)
+        {
+            if (gameObject.GetComponent<CustomerDestination>() == null)
+            {
+                CustomerDestination customer = gameObject.AddComponent<CustomerDestination>();
+                customer.Destination = GameManager.Instance.customerPosition["Customer Tour Checkpoint"];
+            }
+
+            if (Mathf.Abs(transform.position.x - PlayerLocation.Instance.transform.position.x) <= 1f)
+            {
+                readyState++;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool AtYesBed()
+    {
+        if (clickRecord[clickRecord.Count - 1].tag == "Bed")
+        {
+            if (gameObject.GetComponent<CustomerDestination>() == null)
+            {
+                CustomerDestination customer = gameObject.AddComponent<CustomerDestination>();
+                customer.Destination = GameManager.Instance.customerPosition[clickRecord[clickRecord.Count - 1].name + " Node"];
+            }
+
+            if (Mathf.Abs(transform.position.x - clickRecord[clickRecord.Count - 1].transform.position.x) <= 1f)
             {
                 readyState++;
                 return true;

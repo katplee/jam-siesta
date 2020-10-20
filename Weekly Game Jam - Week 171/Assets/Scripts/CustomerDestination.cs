@@ -3,28 +3,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : Singleton<Player>
-{
-    public bool MovementDone { get; set; }
-    public bool onLastNode = false;
-    public MovementNode CurrentDestination { get; set; }
-
+public class CustomerDestination : MonoBehaviour
+{   
     public Vector3 Destination { get; set; }
+    public CustomerMovementNode CurrentDestination { get; set; }
+    public CustomerController Controller { get; set; }
+
+    private void Awake()
+    {
+        Controller = gameObject.GetComponent<CustomerController>();        
+    }
 
     private void Start()
     {
         CurrentDestination = null;
+        Controller.Destination = Destination;
+    }
+
+    private void Update()
+    {
+        CheckIfInDestination(Destination);
+        Debug.Log("Customer Destination: " + Destination);
     }
 
     public void CheckIfInDestination(Vector3 destination)
-    {        
+    {
         if (Vector3.Distance(Destination, transform.position) < 0.1f)
         {
-            onLastNode = false;
             transform.position = Destination;
-            PlayerController.Instance.InputVector = new Vector3(0f, 0f, 0f);
-            GameManager.Instance.SequenceRunning = false;
-            MovementDone = true;
+            Controller.InputVector = new Vector3(0f, 0f, 0f);
+            Controller.hasFinishedSequence = true;
+            Destroy(this);
         }
         else
         {
@@ -34,27 +43,12 @@ public class Player : Singleton<Player>
     
     public void SetDestinationByController(Vector3 destination)
     {
-        Destination = destination;
-
-        if (Mathf.Abs(Destination.x - transform.position.x) < 0.2f || Mathf.Abs(Destination.y - transform.position.y) < 0.1f)
-        {
-            onLastNode = true;
-        }
-
         Vector3 playerToIntDistance;
         float playerToIntDirection;
         Vector3 inputVector;
 
-        if (onLastNode)
-        {            
-            playerToIntDistance = Destination - transform.position;
-            CurrentDestination = null;
-        }
-        else
-        {
-            playerToIntDistance = IntermediateNode() - transform.position;
-        }
-        
+        playerToIntDistance = IntermediateNode() - transform.position;
+
         Debug.Log("playerToIntDistance.x = " + Mathf.Abs(playerToIntDistance.x) + "; " + "playerToIntDistance.y = " + Mathf.Abs(playerToIntDistance.y));
 
         if (Mathf.Abs(playerToIntDistance.x) > Mathf.Abs(playerToIntDistance.y))
@@ -69,7 +63,7 @@ public class Player : Singleton<Player>
         }
 
         Debug.Log(inputVector);
-        PlayerController.Instance.InputVector = inputVector;
+        Controller.InputVector = inputVector;
     }
 
     private Vector3 IntermediateNode()
@@ -82,12 +76,12 @@ public class Player : Singleton<Player>
             if(CurrentDestination != null)
             {
                 transform.position = CurrentDestination.transform.position;
-                PlayerController.Instance.InputVector = new Vector3(0f, 0f, 0f);
+                Controller.InputVector = new Vector3(0f, 0f, 0f);
             }            
 
-            List<MovementNode> accessibleNodes = AccessibleNodes();
+            List<CustomerMovementNode> accessibleNodes = AccessibleNodes();
 
-            MovementNode optimalNode = null;
+            CustomerMovementNode optimalNode = null;
             float shortestDistance = 0f;
 
             foreach (var node in accessibleNodes)
@@ -121,12 +115,12 @@ public class Player : Singleton<Player>
         }        
     }    
 
-    private List<MovementNode> AccessibleNodes()
+    private List<CustomerMovementNode> AccessibleNodes()
     {
         Debug.Log("@ AccessibleNodes()");
-        List<MovementNode> movementNodesArray = MovementNodesArray.Instance.MovementArray;
-        List<MovementNode> accessibleNodes = new List<MovementNode>();
-        MovementNode referenceNode = ReferenceNode();
+        List<CustomerMovementNode> movementNodesArray = CustomerMovementNodesArray.Instance.MovementArray;
+        List<CustomerMovementNode> accessibleNodes = new List<CustomerMovementNode>();
+        CustomerMovementNode referenceNode = ReferenceNode();
         
         float x = referenceNode.transform.position.x;
         float y = referenceNode.transform.position.y;
@@ -148,11 +142,11 @@ public class Player : Singleton<Player>
         
     }
 
-    private MovementNode ReferenceNode()
+    private CustomerMovementNode ReferenceNode()
     {
-        List<MovementNode> movementNodesArray = MovementNodesArray.Instance.MovementArray;
+        List<CustomerMovementNode> movementNodesArray = CustomerMovementNodesArray.Instance.MovementArray;
 
-        MovementNode closestNode = null;
+        CustomerMovementNode closestNode = null;
         float closestDistance = 0f;
 
         foreach (var node in movementNodesArray)

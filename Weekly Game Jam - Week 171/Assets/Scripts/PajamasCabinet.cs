@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SuitcaseCabinet : MonoBehaviour
+public class PajamasCabinet : MonoBehaviour
 {
 
     public GameManager.objectType objectType;
 
     private void Awake()
     {
-        objectType = GameManager.objectType.SUITCASE_CABINET;
+        objectType = GameManager.objectType.PAJAMAS_CABINET;
     }
 
     private void OnMouseDown()

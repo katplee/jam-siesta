@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : Singleton<PlayerController>
+public class CustomerController : MonoBehaviour
 {
     public Transform movePoint;
     private float speed = 5.0f;
@@ -12,19 +12,24 @@ public class PlayerController : Singleton<PlayerController>
 
     private Animator animator;
 
+    public bool hasFinishedSequence = false;
+
     // Start is called before the first frame update
     private void Start(){
 
         movePoint.parent = null;
-
-        animator = GetComponent<Animator>();
-        
+        animator = GetComponent<Animator>();        
     }
 
     void Update(){
 
-        if(gameObject.GetComponent<PlayerDestination>() == null)
+        if(gameObject.GetComponent<CustomerDestination>() != null)
         {
+            hasFinishedSequence = false;
+        }
+
+        if(gameObject.GetComponent<CustomerDestination>() == null)
+        {            
             InputVector = new Vector3(0f, 0f, 0f);
         }
 
