@@ -1,110 +1,153 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class GameManager : Singleton<GameManager>
 {
-    public bool SequenceRunning { get; set; }
-
     public List<GameObject> clickRecord;
-
-    public GameObject trial;
-    public Transform playerTransform;
     public Transform clickDividerTransform;
+    public GameObject lastClickedCustomer = null;
+    public GameObject clickedObject = null; //change this to private
+    public string clickedObjectName; //change this to private
+    [SerializeField]
+    private LayerMask clickableObjectsLayer;
 
-    public Dictionary<string, Vector3> playerPosition = new Dictionary<string, Vector3>();
-    public Dictionary<string, Vector3> customerPosition = new Dictionary<string, Vector3>();
+    [SerializeField]
+    private Camera camera;
+    public Transform playerTransform;
 
+    //public GameObject trial;    
+
+    public Dictionary<string, Vector3Int> playerPosition = new Dictionary<string, Vector3Int>();
+    public Dictionary<string, Vector3Int> customerPosition = new Dictionary<string, Vector3Int>();
+    private Dictionary<Customer.customerState, string> playerPosDict;
+
+    /*
     public enum objectType
     {
         NONE,
         CUSTOMER,
         SUITCASE_CABINET,
         PAJAMAS_CABINET,
-        BED,      
-        PAJAMAS,
+        BED,
         DRESSER,
+        CLEAN_SHEETS_CABINET,
         LAUNDRY
-    }   
+    }
+    */
 
-    public GameObject clickedObject; //change this to private
-    public objectType clickedObjectType; //change this to private
-
-    private void Awake()
+    private void Start()
     {
-        clickedObject = null;
         AddClickDivider();
+        AddClickDivider();
+        playerPosDict = GetComponent<CToPDictionary>().cToPPosition;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        //ExecutePlayerAction();
         if (Input.GetMouseButtonDown(0))
         {
-            if(GameManager.Instance.playerTransform.GetComponent<PlayerDestination>() == null)
+            if(playerTransform.GetComponent<PlayerDestination>() == null)
             {
-                playerTransform.gameObject.AddComponent<PlayerDestination>();
-                PlayerDestination.Instance.Destination = DecidePlayerDestination();
-            }                    
-        }        
-    }        
+                RaycastHit2D hit = Physics2D.Raycast(camera.ScreenToWorldPoint(Input.mousePosition), Vector3.zero, Mathf.Infinity, clickableObjectsLayer);
 
-    
-    private Vector3 DecidePlayerDestination()
-    {
-        switch (clickedObjectType)
-        {
-            case (objectType.CUSTOMER):
-
-                Customer.customerState customerState = clickedObject.GetComponent<Customer>().State;
-                
-                switch (customerState)
+                if(hit.collider != null)
                 {
-                    case (Customer.customerState.WAITING):
-                        PlayerLocation.Instance.location = PlayerLocation.playerLocation.WAITING_LINE;
-                        return playerPosition["Waiting Line"];
-
-                    case (Customer.customerState.GIVE_SUITCASE):
-                        PlayerLocation.Instance.location = PlayerLocation.playerLocation.WAITING_LINE;
-                        return playerPosition["Waiting Line"];
-
-                    case (Customer.customerState.WAIT_PAJAMAS):
-                        PlayerLocation.Instance.location = PlayerLocation.playerLocation.WAITING_LINE;
-                        return playerPosition["Waiting Line"];
-
-                    case (Customer.customerState.WAIT_TOUR):
-                        PlayerLocation.Instance.location = PlayerLocation.playerLocation.TOUR_CHECKPOINT;
-                        return playerPosition["Player Tour Checkpoint"];
-                }                
-                
-                break;
-
-            case (objectType.SUITCASE_CABINET):
-                PlayerLocation.Instance.location = PlayerLocation.playerLocation.SUITCASE_CABINET;
-                return playerPosition["Suitcase Cabinet"];
-
-            case (objectType.PAJAMAS_CABINET):
-                PlayerLocation.Instance.location = PlayerLocation.playerLocation.PAJAMAS_CABINET;
-                return playerPosition["Pajamas Cabinet"];
-
-            case (objectType.BED):
-                PlayerLocation.Instance.location = PlayerLocation.playerLocation.BEDSIDE;
-                return trial.transform.position;
-                //return playerPosition["Pajamas Cabinet"];
+                    SetClickedObject(hit.collider);
+                    playerTransform.gameObject.AddComponent<PlayerDestination>();
+                    PlayerDestination.Instance.Destination = DecidePlayerDestination();
+                }
+            }
         }
-        return playerPosition["Player Default"];
+
+        MoreUpdate(clickRecord, ref lastClickedCustomer);
     }
-    
+
+    private Vector3Int DecidePlayerDestination()
+    {
+        //IF WITHOUT DIRTY SHEETS, YOU CAN SELECT ANYTHING
+        if (playerTransform.childCount == 0)
+        {
+            switch (clickedObjectName)
+            {
+                case "CUSTOMER":
+                    return CustomerToPlayer();
+
+                case "SUITCASE_CABINET":
+                case "PAJAMAS_CABINET":
+                case "CLEAN_SHEETS_CABINET":
+                case "LAUNDRY":
+                    return playerPosition[clickedObjectName];                
+            }
+
+            if (clickedObjectName.StartsWith("DRESSER"))
+            {
+                return playerPosition[clickedObjectName];
+            }
+
+            if (clickedObjectName.StartsWith("BED"))
+            {
+                return BedChecklist(clickedObjectName);
+            }
+        }
+        //IF WITH DIRTY SHEETS, ONLY CLICKABLE AREA IS WASHING MACHINE
+        else
+        {
+            switch (clickedObjectName)
+            {
+                case "LAUNDRY":
+                    return playerPosition[clickedObjectName];
+            }
+            return playerPosition["PLAYER_LOCATION"];
+        }
+        return playerPosition["PLAYER_LOCATION"];
+    }
+
+    private Vector3Int CustomerToPlayer()
+    {
+        Customer.customerState customerState = clickedObject.GetComponent<Customer>().State;
+        string playerPos = playerPosDict[customerState];
+        return playerPosition[playerPos];
+    }
+
+    private Vector3Int BedChecklist(string bedName)
+    {
+        bool go = true;
+        bool isAvailable = clickedObject.GetComponent<Bed>().IsAvailable;
+        bool isWithCustomer = (PlayerLocation.Instance.location == "PLAYER_TOUR_CHECKPOINT");
+
+        if (isWithCustomer) { go = isAvailable; }
+
+        return go ? playerPosition[bedName] : playerPosition["PLAYER_LOCATION"];
+    }    
+
+    private void MoreUpdate(List<GameObject> clickRecord, ref GameObject lastCustomer)
+    {
+        //***KEEP CLICK LIST AT A MAX OF 8 ELEMENTS
+        if(clickRecord.Count > 8)
+        {
+            clickRecord.Remove(clickRecord.First());
+        }
+
+        //***SAVE LAST CUSTOMER GAME OBJECT
+        if(clickedObjectName == "CUSTOMER")
+        {
+            lastCustomer = clickedObject;
+        }
+    }
+
     public void AddClickDivider()
     {
         clickRecord.Add(clickDividerTransform.gameObject);
-    }
-    
+    }    
 
-    public void SetClickedObject(GameObject clickedObject, objectType clickedObjectType)
+    public void SetClickedObject(Collider2D collider)
     {
-        this.clickedObject = clickedObject;
-        this.clickedObjectType = clickedObjectType;        
+        clickRecord.Add(collider.gameObject);
+        this.clickedObject = collider.gameObject;
+        this.clickedObjectName = clickedObject.name;        
     }    
 }

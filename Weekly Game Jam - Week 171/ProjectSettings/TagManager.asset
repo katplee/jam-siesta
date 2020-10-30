@@ -5,8 +5,6 @@ TagManager:
   serializedVersion: 2
   tags:
   - Bed
-  - CustomerMovementNode
-  - MovementNode
   layers:
   - Default
   - TransparentFX
@@ -16,8 +14,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Tilemap
+  - Clickable Objects
   - 
   - 
   - 
