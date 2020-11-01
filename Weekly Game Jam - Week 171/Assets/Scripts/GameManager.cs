@@ -109,6 +109,25 @@ public class GameManager : Singleton<GameManager>
     private Vector3Int CustomerToPlayer()
     {
         Customer.customerState customerState = clickedObject.GetComponent<Customer>().State;
+
+        if(customerState == 0
+            || customerState == (Customer.customerState)1 
+            || customerState == (Customer.customerState)2
+            || customerState == (Customer.customerState)9
+            || customerState == (Customer.customerState)10)
+        {
+            Vector3 trWorldPos = clickedObject.transform.position;
+            Vector3Int trTilePos = Tilemaps.Instance.customerTileMap.WorldToCell(trWorldPos);
+
+            foreach (KeyValuePair<string, Vector3Int> pair in playerPosition)
+            {
+                if(Vector3.Distance(trTilePos, pair.Value) <= 2f)
+                {
+                    return pair.Value;
+                }
+            }
+        }
+
         string playerPos = playerPosDict[customerState];
         return playerPosition[playerPos];
     }

@@ -80,12 +80,13 @@ public class Customer : MonoBehaviour
     }
 
     private void Start()
-    {
+    {   
         clickRecord = GameManager.Instance.clickRecord;
         custInPlayContainer = Containers.Instance.custInPlayContainer;
         customerTileMap = Tilemaps.Instance.customerTileMap;
         sleepNeeded = SetSleepTime();
     }
+
     private void Update()
     {
         State = statesOrder[stateIndex];   
@@ -294,19 +295,19 @@ public class Customer : MonoBehaviour
     {       
         if (customerSetDestination == null)
         {
-            Vector3Int destinationVector;
-            MoveCustomer("PAYING_LINE", out destinationVector);
-            Vector3 trWorldPos = transform.position;
-            Vector3Int trTilePos = customerTileMap.WorldToCell(trWorldPos);
+            //Vector3Int destinationVector;
+            //Vector3 trWorldPos = transform.position;
+            //Vector3Int trTilePos = customerTileMap.WorldToCell(trWorldPos);
+            MoveCustomer(ChoosePayingPoint());
 
-            if (Vector3.Distance(trTilePos, destinationVector) <= 0.2f)
+            if (transform.parent.name == "PAYING_LINE_1")
             {
                 readyState++;
                 return true;
             }
         }        
         return false;
-    }
+    }    
 
     private bool AtWaitCashier(PlayerLocation playerInstance, PlayerDestination playerSetDestination, GameObject lastClick)
     {
@@ -371,6 +372,20 @@ public class Customer : MonoBehaviour
     private void MoveCustomer(string customerDestination)
     {
         MoveCustomer(customerDestination, out _);
+    }
+
+    private string ChoosePayingPoint()
+    {
+        List<Transform> payingList = PayingCustomerManager.Instance.payingList;
+        foreach(Transform tr in payingList)
+        {
+            if(tr.childCount == 0)
+            {
+                transform.SetParent(tr);
+                return tr.name;
+            }
+        }
+        return bedObject.name;
     }
 
     private bool DoChangingAnimation()

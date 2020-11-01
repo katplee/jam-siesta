@@ -5,14 +5,6 @@ using UnityEngine;
 
 public class WaitingCustomerManager : Singleton<WaitingCustomerManager>
 {
-    [SerializeField]
-    private List<WaitingNode> waitingArray = new List<WaitingNode>();
-
-    public List<WaitingNode> WaitingArray
-    {
-        get { return waitingArray; }
-    }
-
     private void Start()
     {
 
