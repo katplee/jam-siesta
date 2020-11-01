@@ -5,4 +5,5 @@ using UnityEngine;
 public class Containers : Singleton<Containers>
 {
     public GameObject custInPlayContainer;
+    public GameObject UICanvas;
 }

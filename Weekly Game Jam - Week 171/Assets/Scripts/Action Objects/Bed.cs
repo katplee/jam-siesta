@@ -11,9 +11,16 @@ public class Bed : MonoBehaviour
     private float timeToClean = 2f;
     public float timeFromClean;
 
+    List<GameObject> clickRecord;
+
+    private void Start()
+    {
+        clickRecord = GameManager.Instance.clickRecord;
+    }
+
     private void Update()
     {
-        IsAvailable = (transform.childCount > 0) ? false : true;
+        IsAvailable = (transform.childCount != 0) ? false : true;
 
         foreach(Transform tr in transform)
         {
@@ -30,13 +37,16 @@ public class Bed : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (Vector3.Distance(PlayerLocation.Instance.gameObject.transform.position, transform.position) <= 1.5)
+        if (IsDirty)
         {
-            if (IsDirty)
+            if (clickRecord[clickRecord.Count - 2] != null && clickRecord[clickRecord.Count - 2].name == "CLEAN_SHEETS_CABINET")
             {
-                if(GameManager.Instance.clickRecord[GameManager.Instance.clickRecord.Count-2].name == "Clean Sheets Cabinet")
+                if (clickRecord[clickRecord.Count - 1]!= null && clickRecord[clickRecord.Count - 1] == gameObject)
                 {
-                    CleanSheets();
+                    if (Vector3.Distance(PlayerLocation.Instance.transform.position, transform.position) <= 1.5)
+                    {
+                        CleanSheets();
+                    }
                 }
             }
         }
@@ -55,8 +65,12 @@ public class Bed : MonoBehaviour
             timeFromClean = 0f;
 
             GameObject dirtySheets;
-            if(Utilities.HasChildWithComponent<DirtySheets>(gameObject, out dirtySheets)) { }
-            dirtySheets.transform.SetParent(PlayerLocation.Instance.transform);
-        }        
+            if(Utilities.HasChildWithComponent<DirtySheets>(gameObject, out dirtySheets))
+            {
+                dirtySheets.transform.SetParent(PlayerLocation.Instance.transform);
+            }            
+        }
     }
+
+    
 }

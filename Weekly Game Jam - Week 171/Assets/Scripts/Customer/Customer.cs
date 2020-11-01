@@ -81,9 +81,9 @@ public class Customer : MonoBehaviour
 
     private void Start()
     {
-        customerTileMap = Tilemaps.Instance.customerTileMap;
-        custInPlayContainer = Containers.Instance.custInPlayContainer;
         clickRecord = GameManager.Instance.clickRecord;
+        custInPlayContainer = Containers.Instance.custInPlayContainer;
+        customerTileMap = Tilemaps.Instance.customerTileMap;
         sleepNeeded = SetSleepTime();
     }
     private void Update()
@@ -431,7 +431,9 @@ public class Customer : MonoBehaviour
         }
         
         StopMeritDemerit();
-        Instantiate(dirtySheetsObject, bedObject.transform);        
+        GameObject go = Instantiate(dirtySheetsObject, bedObject.transform);
+        go.name = dirtySheetsObject.name;
+        
     }
 
     private void StopMeritDemerit()

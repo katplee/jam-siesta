@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Dresser : MonoBehaviour
 {
@@ -15,36 +17,40 @@ public class Dresser : MonoBehaviour
     [SerializeField]
     private bool alarm = false;
     [SerializeField]
-    private GameObject child = null;    
+    private GameObject child = null;
+
+    private GameObject alarmTimer;
+    private GameObject alarmPF;
+    private GameObject fillPF;
+    private GameObject UICanvas;
+    private CountdownUI alarmBar = null;
+
+    private void Start()
+    {
+        UICanvas = Containers.Instance.UICanvas;
+        alarmPF = Prefabs.Instance.alarmPF;
+        fillPF = Prefabs.Instance.fillPF;
+    }
 
     private void Update()
     {
-        if(Utilities.HasSiblingWithAChildWithComponent<Customer>(gameObject, out child))
+        if (Utilities.HasSiblingWithAChildWithComponent<Customer>(gameObject, out child))
         {
             timeUntilOff = Mathf.Clamp(child.GetComponent<Customer>().sleepNeeded, 0f, 20f);
+            SetAlarmValues();            
 
             if (child.GetComponent<Customer>().countdownOn)
             {
                 if (electricitySwitch)
                 {
-                    if (!alarm)
-                    {
-                        canSetAlarm = true;
-                    }
-
-                    if (timeUntilOff == 0f)
-                    {
-                        if (alarm)
-                        {
-                            mustTurnOff = true;
-                        }
-
-                    }
-                }                
+                    canSetAlarm = (!alarm) ? true : false;
+                    mustTurnOff = (timeUntilOff == 0f && alarm) ? true : false;
+                }
             }
         }
         else
         {
+            if (alarmTimer) { Destroy(alarmTimer); }
             electricitySwitch = true;
             timeUntilOff = 0f;
             canSetAlarm = false;
@@ -57,7 +63,7 @@ public class Dresser : MonoBehaviour
     {
         if (electricitySwitch)
         {
-            if (Vector3.Distance(PlayerLocation.Instance.gameObject.transform.position, transform.position) <= 1.5)
+            if (Vector3.Distance(PlayerLocation.Instance.transform.position, transform.position) <= 1.5)
             {
                 if (canSetAlarm)
                 {
@@ -67,7 +73,6 @@ public class Dresser : MonoBehaviour
 
                 if (mustTurnOff)
                 {
-
                     alarm = false;
                     mustTurnOff = false;
                     electricitySwitch = false;
@@ -82,6 +87,54 @@ public class Dresser : MonoBehaviour
         }
     }
 
+    private void SetAlarmValues()
+    {
+        if (!alarmBar)
+        {
+            InstantiateAlarmBar();
+        }
+        SetAlarmBarVisibility();
+        SetAlarmBar(timeUntilOff);
+    }
+
+    private void InstantiateAlarmBar()
+    {
+        //INSTANTIATE ALARM
+        alarmTimer = Instantiate(alarmPF, UICanvas.transform);
+        alarmTimer.name = gameObject.name.Replace("DRESSER", "ALARM");
+        alarmBar = alarmTimer.GetComponent<CountdownUI>();
+        
+        //SET POSITION ABOVE DRESSER        
+        float rectTransPos_x = transform.position.x * 10f;
+        float rectTransPos_y = transform.position.y * 10f + 7f;
+
+        alarmTimer.GetComponent<RectTransform>().anchoredPosition = new Vector3(rectTransPos_x, rectTransPos_y, 0f);
+        
+        //INSTANTIATE FILL
+        GameObject fill = Instantiate(fillPF, alarmTimer.transform);
+        fill.name = gameObject.name.Replace("DRESSER", "FILL");
+    }
+
+    private void SetAlarmBarVisibility()
+    {
+        if (!alarm)
+        {
+            if (alarmBar) { alarmBar.HideBar(); }
+        }
+        else
+        {
+            alarmBar.ShowBar();
+        }
+    }
+
+    private void SetAlarmBar(float timeUntilOff)
+    {
+        alarmBar.SetStartingAlarm(timeUntilOff);
+        alarmBar.SetAlarm(timeUntilOff);
+        if(timeUntilOff == 0) { alarmBar.ResetAlarm(); }
+    }
+
+    /*
     private bool SetAlarmOperation(out bool oversleep)
     {        
         timeUntilOff = child.GetComponent<Customer>().sleepNeeded;
@@ -89,4 +142,5 @@ public class Dresser : MonoBehaviour
 
         return child.GetComponent<Customer>().countdownOn;
     }
+    */
 }

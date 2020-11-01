@@ -35,6 +35,14 @@ public static class Utilities
         return false;
     }
 
+    public static bool HasChildWithComponent<T>(this GameObject parent)
+        where T : Component
+    {
+        HasChildWithComponent<T>(parent, out _);
+        return true; //CODE WILL NEVER GET TO THIS LINE
+    }
+    
+
     public static bool _HasChildWithComponent<T>(this GameObject parent)
         where T : Component
     {

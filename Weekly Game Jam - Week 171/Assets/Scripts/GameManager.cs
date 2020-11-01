@@ -126,6 +126,12 @@ public class GameManager : Singleton<GameManager>
 
     private void MoreUpdate(List<GameObject> clickRecord, ref GameObject lastCustomer)
     {
+        //REMOVE DESTROYED OBJECTS IN THE LIST
+        foreach(GameObject go in clickRecord)
+        {
+            if(go == null) { clickRecord.Remove(go); }
+        }
+
         //***KEEP CLICK LIST AT A MAX OF 8 ELEMENTS
         if(clickRecord.Count > 8)
         {
