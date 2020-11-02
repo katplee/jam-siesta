@@ -298,7 +298,11 @@ public class Customer : MonoBehaviour
             //Vector3Int destinationVector;
             //Vector3 trWorldPos = transform.position;
             //Vector3Int trTilePos = customerTileMap.WorldToCell(trWorldPos);
-            MoveCustomer(ChoosePayingPoint());
+
+            if (!transform.parent.name.StartsWith("PAYING_LINE"))
+            {
+                MoveCustomer(ChoosePayingPoint());
+            }
 
             if (transform.parent.name == "PAYING_LINE_1")
             {
@@ -369,7 +373,7 @@ public class Customer : MonoBehaviour
         customer.Destination = destinationVector;
     }
 
-    private void MoveCustomer(string customerDestination)
+    public void MoveCustomer(string customerDestination)
     {
         MoveCustomer(customerDestination, out _);
     }
@@ -379,7 +383,7 @@ public class Customer : MonoBehaviour
         List<Transform> payingList = PayingCustomerManager.Instance.payingList;
         foreach(Transform tr in payingList)
         {
-            if(tr.childCount == 0)
+            if (tr.childCount == 0)
             {
                 transform.SetParent(tr);
                 return tr.name;

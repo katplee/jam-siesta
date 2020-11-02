@@ -5,5 +5,6 @@ using UnityEngine;
 public class Containers : Singleton<Containers>
 {
     public GameObject custInPlayContainer;
-    public GameObject UICanvas;
+    public GameObject custPayContainer;
+    public GameObject UICanvas;    
 }
