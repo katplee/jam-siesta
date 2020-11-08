@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class CustomerManager : Singleton<CustomerManager>
+public class CustomerSpawner : Singleton<CustomerSpawner>
 {
     public GameObject customerPrefab;
 

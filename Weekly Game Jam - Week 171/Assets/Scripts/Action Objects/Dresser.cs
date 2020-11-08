@@ -19,11 +19,11 @@ public class Dresser : MonoBehaviour
     [SerializeField]
     private GameObject child = null;
 
-    private GameObject alarmTimer;
+    private GameObject alarmObject;
     private GameObject alarmPF;
     private GameObject fillPF;
     private GameObject UICanvas;
-    private CountdownUI alarmBar = null;
+    private AlarmCountdownUI alarmBar = null;
 
     private void Start()
     {
@@ -50,7 +50,7 @@ public class Dresser : MonoBehaviour
         }
         else
         {
-            if (alarmTimer) { Destroy(alarmTimer); }
+            if (alarmObject) { Destroy(alarmObject); }
             electricitySwitch = true;
             timeUntilOff = 0f;
             canSetAlarm = false;
@@ -100,18 +100,18 @@ public class Dresser : MonoBehaviour
     private void InstantiateAlarmBar()
     {
         //INSTANTIATE ALARM
-        alarmTimer = Instantiate(alarmPF, UICanvas.transform);
-        alarmTimer.name = gameObject.name.Replace("DRESSER", "ALARM");
-        alarmBar = alarmTimer.GetComponent<CountdownUI>();
+        alarmObject = Instantiate(alarmPF, UICanvas.transform);
+        alarmObject.name = gameObject.name.Replace("DRESSER", "ALARM");
+        alarmBar = alarmObject.GetComponent<AlarmCountdownUI>();
         
         //SET POSITION ABOVE DRESSER        
         float rectTransPos_x = transform.position.x * 10f;
         float rectTransPos_y = transform.position.y * 10f + 7f;
 
-        alarmTimer.GetComponent<RectTransform>().anchoredPosition = new Vector3(rectTransPos_x, rectTransPos_y, 0f);
+        alarmObject.GetComponent<RectTransform>().anchoredPosition = new Vector3(rectTransPos_x, rectTransPos_y, 0f);
         
         //INSTANTIATE FILL
-        GameObject fill = Instantiate(fillPF, alarmTimer.transform);
+        GameObject fill = Instantiate(fillPF, alarmObject.transform);
         fill.name = gameObject.name.Replace("DRESSER", "FILL");
     }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CountdownUI : MonoBehaviour
+public class AlarmCountdownUI : MonoBehaviour
 {
     [SerializeField]
     private Slider slider;
@@ -18,9 +18,9 @@ public class CountdownUI : MonoBehaviour
 
     private void Start()
     {
+        slider.fillRect = transform.GetChild(0).GetComponent<RectTransform>();
         fillCanvas = transform.GetChild(0).GetComponent<CanvasRenderer>();
         fillImage = transform.GetChild(0).GetComponent<Image>();
-        gameObject.GetComponent<Slider>().fillRect = transform.GetChild(0).GetComponent<RectTransform>();
     }
 
     public void SetStartingAlarm(float neededSleep)

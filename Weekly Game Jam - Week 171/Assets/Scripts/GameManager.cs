@@ -19,7 +19,8 @@ public class GameManager : Singleton<GameManager>
     private Camera camera;
     public Transform playerTransform;
 
-    //public GameObject trial;    
+    [SerializeField]
+    private float income;
 
     public Dictionary<string, Vector3Int> playerPosition = new Dictionary<string, Vector3Int>();
     public Dictionary<string, Vector3Int> customerPosition = new Dictionary<string, Vector3Int>();
@@ -74,7 +75,7 @@ public class GameManager : Singleton<GameManager>
             switch (clickedObjectName)
             {
                 case "CUSTOMER":
-                    return CustomerToPlayer();
+                    return ConvertCustomerToPlayer();
 
                 case "SUITCASE_CABINET":
                 case "PAJAMAS_CABINET":
@@ -93,41 +94,29 @@ public class GameManager : Singleton<GameManager>
                 return BedChecklist(clickedObjectName);
             }
         }
-        //IF WITH DIRTY SHEETS, ONLY CLICKABLE AREA IS WASHING MACHINE
+        //IF WITH DIRTY SHEETS, ONLY THOSE INCLUDED BELOW CAN BE CLICKED
         else
         {
             switch (clickedObjectName)
             {
                 case "LAUNDRY":
+                case "CLEAN_SHEETS_CABINET":
                     return playerPosition[clickedObjectName];
             }
+
+            if (clickedObjectName.StartsWith("BED"))
+            {
+                return BedChecklist(clickedObjectName);
+            }
+
             return playerPosition["PLAYER_LOCATION"];
         }
         return playerPosition["PLAYER_LOCATION"];
     }
 
-    private Vector3Int CustomerToPlayer()
+    private Vector3Int ConvertCustomerToPlayer()
     {
         Customer.customerState customerState = clickedObject.GetComponent<Customer>().State;
-
-        if(customerState == 0
-            || customerState == (Customer.customerState)1 
-            || customerState == (Customer.customerState)2
-            || customerState == (Customer.customerState)9
-            || customerState == (Customer.customerState)10)
-        {
-            Vector3 trWorldPos = clickedObject.transform.position;
-            Vector3Int trTilePos = Tilemaps.Instance.customerTileMap.WorldToCell(trWorldPos);
-
-            foreach (KeyValuePair<string, Vector3Int> pair in playerPosition)
-            {
-                if(Vector3.Distance(trTilePos, pair.Value) <= 2f)
-                {
-                    return pair.Value;
-                }
-            }
-        }
-
         string playerPos = playerPosDict[customerState];
         return playerPosition[playerPos];
     }
@@ -162,6 +151,14 @@ public class GameManager : Singleton<GameManager>
         {
             lastCustomer = clickedObject;
         }
+
+        //SET LAST CLICKED CUSTOMER TO NULL IF MISSING
+        if(!lastClickedCustomer) { lastClickedCustomer = null; }
+        if(!clickedObject) { clickedObject = null; }
+
+        /*
+         * InvalidOperationException: Collection was modified; enumeration operation may not execute.
+         */
     }
 
     public void AddClickDivider()
@@ -174,5 +171,11 @@ public class GameManager : Singleton<GameManager>
         clickRecord.Add(collider.gameObject);
         this.clickedObject = collider.gameObject;
         this.clickedObjectName = clickedObject.name;        
-    }    
+    }
+
+    public void AddPaymentToIncome(float payment)
+    {
+        income += payment;
+    }
+
 }

@@ -47,19 +47,23 @@ public class Customer : MonoBehaviour
     }
 
     List<GameObject> clickRecord;    
-    private GameObject custInPlayContainer;
     private Tilemap customerTileMap;
-
-    public GameObject bedObject;    
-    [SerializeField]
-    private GameObject dirtySheetsObject;
+    private GameObject custInPlayContainer;
+    private GameObject UICanvas;
+    private GameObject patienceObject;
+    private GameObject patiencePF;
+    private GameObject fillPF;
+    private PatienceCountdownUI patienceBar = null;
+    public GameObject bedObject;
+    private GameObject dirtySheetsPF;
 
     public int stateIndex = 0;
     public int readyState = 0;
 
-    private int patientMeter; //patience tracker
-    private int patienceDecrease; //rate patience decreases
-    private int stayThreshold; //patience level less of which customer leaves
+    [SerializeField]
+    private float waitingPatience;
+    [SerializeField]
+    private float patienceLeft; //patience tracker
 
     private float blinkingLength = 2f;
     public float blinkingTime = 0f;
@@ -68,10 +72,19 @@ public class Customer : MonoBehaviour
     public bool countdownOn;
     public float sleepNeeded; //the length of sleep remaining
 
-    private float violationTimer;
     [SerializeField]
-    private float violationMeter; //violation counter
-    private int tipMeter; //tip tracker   
+    private float payment;
+    private float violationCounter;
+    [SerializeField]
+    private int tipCounter; //tip tracker
+
+    private float free = 0f;
+    private float baggageDeposit = 50f;
+    private float pajamasRent = 50f;
+    private float bedRent = 100f;
+    private float alarmService = 50f;
+    private float baggageClaim = 30f;
+       
 
     private void Awake()
     {        
@@ -80,11 +93,15 @@ public class Customer : MonoBehaviour
     }
 
     private void Start()
-    {   
+    {
         clickRecord = GameManager.Instance.clickRecord;
-        custInPlayContainer = Containers.Instance.custInPlayContainer;
         customerTileMap = Tilemaps.Instance.customerTileMap;
-        sleepNeeded = SetSleepTime();
+        custInPlayContainer = Containers.Instance.custInPlayContainer;        
+        SetCustomerTimers();
+        UICanvas = Containers.Instance.UICanvas;
+        patiencePF = Prefabs.Instance.patiencePF;
+        fillPF = Prefabs.Instance.fillPF;
+        dirtySheetsPF = Prefabs.Instance.dirtySheetsPF;
     }
 
     private void Update()
@@ -101,7 +118,7 @@ public class Customer : MonoBehaviour
         switch (State)
         {
             case (customerState.WAITING):
-                if (AtWaiting(playerSetDestination, lastClick)) { ReadyToChangeState(); }
+                if (AtWaiting(playerSetDestination)) { stateIndex = readyState; }
                 break;
 
             case (customerState.GIVE_SUITCASE):
@@ -153,14 +170,23 @@ public class Customer : MonoBehaviour
         }
     }    
 
-    private bool AtWaiting(PlayerDestination playerSetDestination, GameObject lastClick)
+    private bool AtWaiting(PlayerDestination playerSetDestination)
     {
+        RunWaitingSequence();
+        CheckForLeave();
+
         if (playerSetDestination == null)
         {
-            if (lastClick == gameObject)
+            Vector3 trWorldPos = transform.position;
+            Vector3Int trTilePos = customerTileMap.WorldToCell(trWorldPos);
+
+            if (transform.parent.name == "WAITING_LINE_1")
             {
-                readyState++;
-                return true;
+                if (Vector3.Distance(trTilePos, FindCustomerDest("WAITING_LINE_1")) <= 0.2f)
+                {
+                    readyState++;
+                    return true;
+                }
             }            
         }
         return false;
@@ -168,14 +194,35 @@ public class Customer : MonoBehaviour
 
     private bool AtGiveSuitcase(PlayerDestination playerSetDestination, GameObject lastClick, GameObject previousClick)
     {
-        if(playerSetDestination == null)
+        if (patienceObject)
         {
-            if(previousClick == gameObject)
+            RunWaitingSequence();
+            CheckForLeave();
+
+            if(playerSetDestination == null)
             {
-                if(lastClick.name == "SUITCASE_CABINET")
+                if (lastClick == gameObject)
                 {
-                    readyState++;
-                    return true;
+                    DestroyPatienceBar();
+                    patienceLeft = -11f;
+                }
+            }            
+        }        
+        else 
+        {
+            Countdown(ref patienceLeft, out bool bonus, out bool penalty, minValueBeforeStop: -10);
+
+            if (playerSetDestination == null)
+            {
+                if (previousClick == gameObject)
+                {
+                    if (lastClick.name == "SUITCASE_CABINET")
+                    {
+                        AccountPayment(bonus, penalty, baggageDeposit);
+                        patienceLeft = -11f; //restart patienceLeft
+                        readyState++;
+                        return true;
+                    }
                 }
             }
         }
@@ -184,12 +231,16 @@ public class Customer : MonoBehaviour
 
     private bool AtWaitPajamas(PlayerDestination playerSetDestination, GameObject lastClick, GameObject previousClick)
     {
+        Countdown(ref patienceLeft, out bool bonus, out bool penalty, minValueBeforeStop: -10);
+
         if (playerSetDestination == null) 
         {
             if (previousClick.name == "PAJAMAS_CABINET")
             {
                 if (lastClick == gameObject)
                 {
+                    AccountPayment(bonus, penalty, pajamasRent);
+                    patienceLeft = -11f; //restart patienceLeft
                     readyState++;
                     return true;
                 }
@@ -200,6 +251,8 @@ public class Customer : MonoBehaviour
 
     private bool AtWaitTour(Transform playerTransform, CustomerDestination customerSetDestination, GameObject lastClick)
     {
+        Countdown(ref patienceLeft, out bool bonus, out bool penalty, minValueBeforeStop: -10);
+
         if (customerSetDestination == null) 
         {
             if (lastClick == gameObject)
@@ -212,6 +265,8 @@ public class Customer : MonoBehaviour
 
             if (Vector3.Distance(transform.position, playerTransform.position) <= 1f)
             {
+                AccountPayment(bonus, penalty, free);
+                patienceLeft = -11f; //restart patienceLeft
                 readyState++;
                 return true;
             }
@@ -221,6 +276,8 @@ public class Customer : MonoBehaviour
 
     private bool AtYesBed(CustomerDestination customerSetDestination, GameObject lastClick, GameObject previousClick)
     {
+        Countdown(ref patienceLeft, out bool bonus, out bool penalty, minValueBeforeStop: -10);
+
         if (customerSetDestination == null) 
         {
             if(previousClick == gameObject)
@@ -232,11 +289,13 @@ public class Customer : MonoBehaviour
                         //STORES THE BED USED BY THE CUSTOMER
                         bedObject = lastClick;
                         //MOVES THE CUSTOMER TO THE NODE NEXT TO THE BED
-                        MoveCustomer(lastClick.name);
+                        MoveCustomer(bedObject.name);
                     }
 
-                    if (Vector3.Distance(transform.position, lastClick.transform.position) <= 1.5f)
+                    if (Vector3.Distance(transform.position, bedObject.transform.position) <= 1.5f)
                     {
+                        AccountPayment(bonus, penalty, bedRent);
+                        patienceLeft = -11f; //restart patienceLeft
                         readyState++;
                         return true;
                     }
@@ -265,12 +324,13 @@ public class Customer : MonoBehaviour
         if (lastClick == bedObject)
         {
             string dresserName = bedObject.name.Replace("BED", "DRESSER");
-
             if (previousClick.name == dresserName)
             {
                 if (playerInstance.location == bedObject.name)
                 {
                     RunWakeUpSequence();
+                    AccountPayment(mustWakeUp, false, alarmService);
+                    patienceLeft = -0.1f; //restart patienceLeft
                     readyState++;
                     return true;
                 }
@@ -296,18 +356,26 @@ public class Customer : MonoBehaviour
         if (customerSetDestination == null)
         {
             //Vector3Int destinationVector;
-            //Vector3 trWorldPos = transform.position;
-            //Vector3Int trTilePos = customerTileMap.WorldToCell(trWorldPos);
+            Vector3 trWorldPos = transform.position;
+            Vector3Int trTilePos = customerTileMap.WorldToCell(trWorldPos);
 
             if (!transform.parent.name.StartsWith("PAYING_LINE"))
             {
                 MoveCustomer(ChoosePayingPoint());
             }
 
-            if (transform.parent.name == "PAYING_LINE_1")
+            if (transform.parent.name.StartsWith("PAYING_LINE"))
             {
-                readyState++;
-                return true;
+                if(Vector3.Distance(trTilePos, FindCustomerDest(transform.parent.name)) < 0.2f)
+                {
+                    Countdown(ref patienceLeft, out bool bonus, out bool penalty, minValueBeforeStop: -10);
+
+                    if (transform.parent.name == "PAYING_LINE_1")
+                    {   
+                        readyState++;
+                        return true;
+                    }
+                }
             }
         }        
         return false;
@@ -315,12 +383,16 @@ public class Customer : MonoBehaviour
 
     private bool AtWaitCashier(PlayerLocation playerInstance, PlayerDestination playerSetDestination, GameObject lastClick)
     {
+        Countdown(ref patienceLeft, out bool bonus, out bool penalty, minValueBeforeStop: -10);
+
         if (playerSetDestination == null)
         {
             if (lastClick == gameObject)
             {
                 if (playerInstance.location == "PAYING_LINE")
                 {
+                    AccountPayment(bonus, penalty, free);
+                    patienceLeft = -0.1f; //restart patienceLeft
                     readyState++;
                     return true;
                 }                    
@@ -331,12 +403,16 @@ public class Customer : MonoBehaviour
 
     private bool AtReceiveSuitcase(PlayerDestination playerSetDestination, GameObject lastClick, GameObject previousClick)
     {
+        Countdown(ref patienceLeft, out bool bonus, out bool penalty, minValueBeforeStop: -10);
+
         if (playerSetDestination == null)
         {
             if (previousClick.name == "SUITCASE_CABINET")
             {
                 if (lastClick == gameObject)
                 {
+                    AccountPayment(bonus, penalty, baggageClaim);
+                    patienceLeft = -11f; //restart patienceLeft
                     readyState++;
                     return true;
                 }
@@ -347,11 +423,14 @@ public class Customer : MonoBehaviour
 
     private bool AtLeaving()
     {
+        float totalPayment = payment + tipCounter * 5f;
+        GameManager.Instance.AddPaymentToIncome(totalPayment);
+
         Debug.Log("Do animation.");
         return true;
     }
 
-    #region BASIC METHODS
+    #region METHODS
 
     private void ReadyToChangeState()
     {
@@ -359,11 +438,85 @@ public class Customer : MonoBehaviour
         GameManager.Instance.AddClickDivider();
     }
 
-    private float SetSleepTime()
+    private void SetCustomerTimers()
     {
-        if (type == customerType.PARENT){ return 20f; }
-        if (type == customerType.SALARY_MAN) { return 15f; }        
-        return 10f;
+        if (type == customerType.PARENT) { sleepNeeded = 20f; patienceLeft = 15f; }
+        else if (type == customerType.SALARY_MAN) { sleepNeeded = 15f; patienceLeft = 8f; }
+        else { sleepNeeded = 10f; patienceLeft = 25f; }
+    }
+
+    private void CheckForLeave()
+    {
+        if (patienceLeft < 0 && Mathf.Clamp(Mathf.Abs(patienceLeft), 0, waitingPatience) == waitingPatience)
+        {
+            RemoveCustomer();
+        }
+    }
+
+    private void RunWaitingSequence()
+    {
+        if (!patienceBar)
+        {
+            InstantiatePatienceBar();
+            waitingPatience = patienceLeft;
+        }
+        SetPatienceBar(patienceLeft);
+        Countdown(ref patienceLeft);
+    }
+
+    private void InstantiatePatienceBar()
+    {
+        //INSTANTIATE PARENT TRANSFORM
+        patienceObject = Instantiate(patiencePF, UICanvas.transform);
+        patienceObject.name = patiencePF.name;
+        patienceBar = patienceObject.GetComponent<PatienceCountdownUI>();
+
+        SetPosition();
+
+        //INSTANTIATE FILL
+        GameObject fill = Instantiate(fillPF, patienceObject.transform);
+        fill.name = fillPF.name;
+    }
+
+    private void SetPosition()
+    {
+        //PLACE PARENT TO PROPER PLACE ABOVE CUSTOMER
+        float rectTransPos_x = transform.position.x * 10f;
+        float rectTransPos_y = transform.position.y * 10f + 5f;
+        patienceObject.GetComponent<RectTransform>().anchoredPosition = new Vector3(rectTransPos_x, rectTransPos_y, 0f);
+    }
+
+    private void Countdown(ref float countdownVariable, out bool bonus, out bool penalty, float maxValue = 10, float minValueBeforeStop = -30f, float countdownRate = 1)
+    {
+        if (countdownVariable < minValueBeforeStop) { countdownVariable = maxValue; }
+        maxValue = countdownVariable;
+        //countdownVariable -= Time.deltaTime * countdownRate;
+        countdownVariable = Mathf.Clamp(countdownVariable - Time.deltaTime * countdownRate, minValueBeforeStop, maxValue);
+        bonus = countdownVariable > 0 ? true : false;
+        penalty = countdownVariable == minValueBeforeStop ? true : false;
+    }
+
+    private void Countdown(ref float countdownVariable, float maxValue = 10, float minValueBeforeStop = -30f, float countdownRate = 1)
+    {
+        Countdown(ref countdownVariable, out _, out _,maxValue, minValueBeforeStop, countdownRate);
+    }    
+
+    private void SetPatienceBar(float patienceLeft)
+    {
+        patienceBar.SetStartingPatience(patienceLeft);
+        patienceBar.SetPatience(patienceLeft);
+        SetPosition();
+    }
+
+    private void RemoveCustomer()
+    {
+        Destroy(this.gameObject);
+        Destroy(patienceObject);
+    }
+
+    private void DestroyPatienceBar()
+    {
+        Destroy(patienceObject);
     }
 
     private void MoveCustomer(string customerDestination, out Vector3Int destinationVector)
@@ -378,19 +531,12 @@ public class Customer : MonoBehaviour
         MoveCustomer(customerDestination, out _);
     }
 
-    private string ChoosePayingPoint()
+    public Vector3Int FindCustomerDest(string destinationName)
     {
-        List<Transform> payingList = PayingCustomerManager.Instance.payingList;
-        foreach(Transform tr in payingList)
-        {
-            if (tr.childCount == 0)
-            {
-                transform.SetParent(tr);
-                return tr.name;
-            }
-        }
-        return bedObject.name;
-    }
+        Vector3Int destinationVector = GameManager.Instance.customerPosition[destinationName];
+
+        return destinationVector;
+    }    
 
     private bool DoChangingAnimation()
     {
@@ -433,9 +579,8 @@ public class Customer : MonoBehaviour
     {
         countdownOn = true;
         sleepNeeded -= Time.deltaTime;
-        mustWakeUp = (Mathf.Sign(sleepNeeded) == -1) ? true : false;
-
-        violationMeter = Mathf.Abs(Mathf.Ceil(sleepNeeded / 4f));
+        violationCounter = Mathf.Abs(Mathf.Ceil(sleepNeeded / 4f));
+        mustWakeUp = (violationCounter == 0) ? true : false;       
 
         return sleepNeeded;
     }
@@ -450,15 +595,48 @@ public class Customer : MonoBehaviour
         }
         
         StopMeritDemerit();
-        GameObject go = Instantiate(dirtySheetsObject, bedObject.transform);
-        go.name = dirtySheetsObject.name;
+        GameObject go = Instantiate(dirtySheetsPF, bedObject.transform);
+        go.name = dirtySheetsPF.name;
         
     }
 
     private void StopMeritDemerit()
     {
-        countdownOn = false;        
-        mustWakeUp = false;        
+        countdownOn = false;         
+        mustWakeUp = false;
+
+        payment -= violationCounter;
+    }
+
+    private string ChoosePayingPoint()
+    {
+        List<Transform> payingList = PayingCustomerManager.Instance.payingList;
+        foreach (Transform tr in payingList)
+        {
+            if (tr.childCount == 0)
+            {
+                transform.SetParent(tr);
+                return tr.name;
+            }
+        }
+        return bedObject.name;
+    }
+
+    public void AccountPayment(bool bonusAvailable, bool penaltyAvailable, float paymentToAdd)
+    {
+        //CHECK FOR TIPS
+        if (bonusAvailable)
+        {
+            tipCounter++;
+            //Debug.Log("Play +1 animation above player head");
+        }
+        else if (penaltyAvailable)
+        {
+            tipCounter--;
+        }
+
+        //ADD PAYMENTS FOR SERVICES
+        payment += paymentToAdd;
     }
 
     #endregion

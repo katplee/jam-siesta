@@ -302,7 +302,7 @@ GameObject:
   - component: {fileID: 73282056}
   - component: {fileID: 73282057}
   m_Layer: 0
-  m_Name: WAITING_LINE_1
+  m_Name: WAITING_LINE
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -7903,7 +7903,7 @@ GameObject:
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &544805538
 Transform:
   m_ObjectHideFlags: 0
@@ -7978,6 +7978,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c76bac5782fa093409768d52b3a6381d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  waitingList: []
 --- !u!1 &586129606
 GameObject:
   m_ObjectHideFlags: 0
@@ -9135,7 +9136,7 @@ GameObject:
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1009490094
 Transform:
   m_ObjectHideFlags: 0
@@ -9343,7 +9344,7 @@ GameObject:
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1082104253
 Transform:
   m_ObjectHideFlags: 0
@@ -9583,7 +9584,7 @@ GameObject:
   - component: {fileID: 1141752674}
   - component: {fileID: 1141752675}
   m_Layer: 0
-  m_Name: Waiting Line_2
+  m_Name: WAITING_LINE_2
   m_TagString: Untagged
   m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -9612,7 +9613,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1141752673}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 497c29a2a548614409d70eff82cc916c, type: 3}
+  m_Script: {fileID: 11500000, guid: eaf711e009a77e04bb9d98f5f0970f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1160732182
@@ -9701,7 +9702,7 @@ GameObject:
   - component: {fileID: 1354815614}
   - component: {fileID: 1354815615}
   m_Layer: 0
-  m_Name: Customer Manager
+  m_Name: Customer Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9753,7 +9754,7 @@ GameObject:
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1355333751
 Transform:
   m_ObjectHideFlags: 0
@@ -9791,7 +9792,7 @@ GameObject:
   - component: {fileID: 1443036428}
   - component: {fileID: 1443036429}
   m_Layer: 0
-  m_Name: Waiting Line_5
+  m_Name: WAITING_LINE_5
   m_TagString: Untagged
   m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -9820,7 +9821,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1443036427}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 497c29a2a548614409d70eff82cc916c, type: 3}
+  m_Script: {fileID: 11500000, guid: eaf711e009a77e04bb9d98f5f0970f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1496438643
@@ -10413,6 +10414,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 835eac82734ac494a81adfc0f22bef5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dirtySheetsPF: {fileID: 6294583161511196011, guid: a6078a357317e604b83b829ea7d7ccfe,
+    type: 3}
+  patiencePF: {fileID: 1058314599036918962, guid: a652130958d9f824986fe8a12ea0e508,
+    type: 3}
   alarmPF: {fileID: 7832125768816338908, guid: 556ef01744b8d7a46a0b5aa54aa35eb3, type: 3}
   fillPF: {fileID: 5893250248613511533, guid: d7f57f905b9174f48b1ce0ec7d2bb662, type: 3}
 --- !u!4 &1666113837
@@ -10708,7 +10713,7 @@ GameObject:
   - component: {fileID: 1797811661}
   - component: {fileID: 1797811662}
   m_Layer: 0
-  m_Name: Waiting Line_4
+  m_Name: WAITING_LINE_4
   m_TagString: Untagged
   m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -10737,7 +10742,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1797811660}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 497c29a2a548614409d70eff82cc916c, type: 3}
+  m_Script: {fileID: 11500000, guid: eaf711e009a77e04bb9d98f5f0970f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1798895406
@@ -10751,7 +10756,7 @@ GameObject:
   - component: {fileID: 1798895407}
   - component: {fileID: 1798895408}
   m_Layer: 0
-  m_Name: Waiting Line_3
+  m_Name: WAITING_LINE_3
   m_TagString: Untagged
   m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -10780,7 +10785,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1798895406}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 497c29a2a548614409d70eff82cc916c, type: 3}
+  m_Script: {fileID: 11500000, guid: eaf711e009a77e04bb9d98f5f0970f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1855113392
@@ -11124,6 +11129,7 @@ MonoBehaviour:
     m_Bits: 512
   camera: {fileID: 519420031}
   playerTransform: {fileID: 952596869}
+  income: 0
 --- !u!114 &1914766220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11429,7 +11435,7 @@ GameObject:
   - component: {fileID: 2125352245}
   - component: {fileID: 2125352246}
   m_Layer: 0
-  m_Name: Waiting Line_1
+  m_Name: WAITING_LINE_1
   m_TagString: Untagged
   m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -11458,6 +11464,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 2125352244}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 497c29a2a548614409d70eff82cc916c, type: 3}
+  m_Script: {fileID: 11500000, guid: eaf711e009a77e04bb9d98f5f0970f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
