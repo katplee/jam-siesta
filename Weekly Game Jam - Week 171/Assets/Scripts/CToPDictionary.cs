@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class CToPDictionary : Singleton<CToPDictionary>
 {
+    /*
     public Dictionary<Customer.customerState, string> cToPPosition =
         new Dictionary<Customer.customerState, string>()
         {
@@ -15,5 +16,5 @@ public class CToPDictionary : Singleton<CToPDictionary>
             { Customer.customerState.WAIT_CASHIER, "PAYING_LINE" },
             { Customer.customerState.RECEIVE_SUITCASE, "PAYING_LINE" },
         };
-
+    */
 }

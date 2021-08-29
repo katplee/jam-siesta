@@ -7,6 +7,7 @@ using UnityEngine.Tilemaps;
 
 public class GameManager : Singleton<GameManager>
 {
+    /*
     public List<GameObject> clickRecord;
     public Transform clickDividerTransform;
     public GameObject lastClickedCustomer = null;
@@ -26,7 +27,6 @@ public class GameManager : Singleton<GameManager>
     public Dictionary<string, Vector3Int> customerPosition = new Dictionary<string, Vector3Int>();
     private Dictionary<Customer.customerState, string> playerPosDict;
 
-    /*
     public enum objectType
     {
         NONE,
@@ -38,7 +38,6 @@ public class GameManager : Singleton<GameManager>
         CLEAN_SHEETS_CABINET,
         LAUNDRY
     }
-    */
 
     private void Start()
     {
@@ -156,9 +155,7 @@ public class GameManager : Singleton<GameManager>
         if(!lastClickedCustomer) { lastClickedCustomer = null; }
         if(!clickedObject) { clickedObject = null; }
 
-        /*
-         * InvalidOperationException: Collection was modified; enumeration operation may not execute.
-         */
+        //InvalidOperationException: Collection was modified; enumeration operation may not execute.
     }
 
     public void AddClickDivider()
@@ -177,5 +174,5 @@ public class GameManager : Singleton<GameManager>
     {
         income += payment;
     }
-
+    */
 }

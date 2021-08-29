@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SleepingPodsArray : Singleton<SleepingPodsArray>
 {  
+    /*
     [SerializeField]
     private Dictionary<GameObject, string> podsDictionary = new Dictionary<GameObject, string>();
 
@@ -11,4 +12,5 @@ public class SleepingPodsArray : Singleton<SleepingPodsArray>
     {
         get { return podsDictionary; }
     }
+    */
 }

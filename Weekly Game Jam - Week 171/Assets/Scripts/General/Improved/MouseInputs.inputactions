@@ -1,0 +1,33 @@
+{
+    "name": "MouseInputs",
+    "maps": [
+        {
+            "name": "ActionObjects",
+            "id": "6715a309-4f9b-4c60-8f1a-3582295337bd",
+            "actions": [
+                {
+                    "name": "LeftClick",
+                    "type": "PassThrough",
+                    "id": "a3012f66-7a97-4325-a3d3-d59607245c2a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "d0dbd4f0-9529-41f3-9f07-c04a19edcabc",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
