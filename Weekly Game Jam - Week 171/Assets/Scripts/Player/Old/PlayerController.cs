@@ -28,7 +28,7 @@ public class PlayerController : Singleton<PlayerController>
         playerTilemap = transform.parent.GetComponent<Tilemap>();
     }
 
-    public void AnimatePlayer(Transform destination)
+    public void TransportPlayer(Transform destination)
     {
         DefinePath(destination);
 
@@ -45,6 +45,7 @@ public class PlayerController : Singleton<PlayerController>
     public bool MovePlayerBy(Vector3Int moveVector)
     {
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, speed * Time.deltaTime);
+        AnimatePlayer(transform.position, movePoint.position);
 
         if (Vector3.Distance(transform.position, movePoint.position) <= 0.05f)
         {
@@ -56,6 +57,7 @@ public class PlayerController : Singleton<PlayerController>
                 if(currentPosition == endPosition)
                 {
                     OnMoveComplete?.Invoke();
+                    return false;
                 }
             }
 
@@ -69,7 +71,16 @@ public class PlayerController : Singleton<PlayerController>
 
     private void MovePointBy(Vector3 moveDistance)
     {
+
         movePoint.position += moveDistance;
+    }
+
+    private void AnimatePlayer(Vector3 from, Vector3 to)
+    {
+        Vector3 normalized = Vector3.Normalize(to - from);
+        
+        animator.SetFloat("Horizontal", normalized.x);
+        animator.SetFloat("Vertical", normalized.y);
     }
 
     public void ResetPath()

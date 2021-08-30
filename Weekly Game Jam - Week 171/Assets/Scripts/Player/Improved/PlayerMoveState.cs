@@ -31,8 +31,6 @@ public class PlayerMoveState : StateMachineBehaviour
         Vector3Int moveVector = ComputeMoveVector(currentPosition);
         if (PlayerController.Instance.MovePlayerBy(moveVector))
         {
-            if(finalPath.Count == 0) { return; }
-
             currentPosition = finalPath.Pop();
         }
     }
