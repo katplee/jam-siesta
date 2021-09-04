@@ -21,6 +21,12 @@ public class MouseInputsController : MonoBehaviour
 
         //click the left mouse button to interact with other objects in the scene
         mouseInputs.ActionObjects.LeftClick.performed += AssessClickedObject;
+        mouseInputs.ActionObjects.LeftClick.performed += InvokeClickResponse;
+    }
+
+    private void InvokeClickResponse(InputAction.CallbackContext obj)
+    {
+        GameManager.InvokeMouseResponse();
     }
 
     private void AssessClickedObject(InputAction.CallbackContext obj)

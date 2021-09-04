@@ -7,6 +7,63 @@ using UnityEngine.Tilemaps;
 
 public class GameManager : Singleton<GameManager>
 {
+    public static event Action OnMouseClick;
+
+    private Dictionary<Vector3Int, CustomerNode> customerNodes =
+        new Dictionary<Vector3Int, CustomerNode>();
+    private Dictionary<Vector3Int, PlayerNode> playerNodes =
+        new Dictionary<Vector3Int, PlayerNode>();
+
+    public static void InvokeMouseResponse()
+    {
+        //Debug.Log("hello");
+        OnMouseClick?.Invoke();
+    }
+
+    public MNode RefreshNodeParent<T>(T element)
+        where T : Element
+    {
+        Vector3Int currentPosition = element.GetPositionInTilemap();
+
+        if(element as Player)
+        {
+            if (playerNodes.ContainsKey(currentPosition))
+            {
+                MNode newParent = playerNodes[currentPosition].ParentObject(element.gameObject);
+                return newParent;
+            }
+        }
+        else
+        {
+            if (customerNodes.ContainsKey(currentPosition))
+            {
+                MNode newParent = customerNodes[currentPosition].ParentObject(element.gameObject);
+                return newParent;
+            }
+        }
+        return null;
+    }
+
+    public void AddNode<T>(string type, Vector3Int position, T node)
+        where T : MNode
+    {
+        switch (type)
+        {
+            case "CustomerNode":
+                customerNodes.Add(position, node as CustomerNode);
+                break;
+
+            case "PlayerNode":
+                playerNodes.Add(position, node as PlayerNode);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+
+
     /*
     public List<GameObject> clickRecord;
     public Transform clickDividerTransform;

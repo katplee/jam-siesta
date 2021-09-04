@@ -5,8 +5,16 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
-public class Customer : MonoBehaviour
+public class Customer : Element
 {
+    public override Tilemap Tilemap { get; set; }
+
+    private void Start()
+    {
+        Tilemap = TilemapManager.Instance.playerTileMap;
+        ReceiveItem(GetComponentInChildren<ItemTransferrable>());
+    }
+
     /*
     public customerState State { get; set; }
     public enum customerState

@@ -62,7 +62,7 @@ public class PlayerMoveState : StateMachineBehaviour
         return finalPath.Peek() - currentPosition;
     }
 
-    private void ExitMoveState()
+    private void ExitMoveState(MNode node)
     {
         AnimatorManager.Animator.SetFloat("Speed", 0f);
     }

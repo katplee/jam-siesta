@@ -1,9 +1,92 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class CustomerController : MonoBehaviour
 {
+    public static event Action OnItemPress;
+    public static event Action OnMoveComplete;
+
+    private Animator animator = null;
+
+    private Transform movePoint = null;
+    public Vector3Int startPosition { get; private set; }
+    public Vector3Int endPosition { get; private set; }
+    private float speed = 5f;
+    private Tilemap customerTilemap = null;
+
+    private void Awake()
+    {
+        //player animation-related variables
+        animator = GetComponent<Animator>();
+
+        //navigation-related variables
+        movePoint = transform.GetChild(0);
+        movePoint.parent = null;
+        customerTilemap = TilemapManager.Instance.customerTileMap;
+    }
+
+    public void TransportCustomer(Transform destination)
+    {
+        DefinePath(destination);
+
+        //change animator parameter
+        animator.SetFloat("Speed", 1f);
+    }
+
+    private void DefinePath(Transform destination)
+    {
+        startPosition = customerTilemap.WorldToCell(transform.position);
+        endPosition = customerTilemap.WorldToCell(destination.position);
+    }
+
+    public bool MoveCustomerBy(Vector3Int moveVector)
+    {
+        AnimateCustomer(transform.position, movePoint.position);
+        transform.position = Vector3.MoveTowards(transform.position, movePoint.position, speed * Time.deltaTime);
+
+        if (Vector3.Distance(transform.position, movePoint.position) <= 0.05f)
+        {
+            MovePointBy(moveVector);
+
+            if (moveVector == Vector3Int.zero)
+            {
+                Vector3Int currentPosition = customerTilemap.WorldToCell(transform.position);
+                if (currentPosition == endPosition)
+                {
+                    OnMoveComplete?.Invoke();
+                    return false;
+                }
+            }
+
+            return true;
+            //move point is moving towards current destination
+            //stack containing path must pop
+        }
+
+        return false;
+    }
+
+    private void MovePointBy(Vector3 moveDistance)
+    {
+        movePoint.position += moveDistance;
+    }
+
+    private void AnimateCustomer(Vector3 from, Vector3 to)
+    {
+        Vector3 normalized = Vector3.Normalize(to - from);
+
+        animator.SetFloat("Horizontal", normalized.x);
+        animator.SetFloat("Vertical", normalized.y);
+    }
+
+    public void ResetPath()
+    {
+        endPosition = Vector3Int.zero;
+    }
+
     /*
     public Transform movePoint;
     private float speed = 5.0f;
