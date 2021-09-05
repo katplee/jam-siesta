@@ -24,6 +24,14 @@ public class Player : Element
     private void Awake()
     {
         Tilemap = TilemapManager.Instance.playerTilemap;
-
     }
+
+    public bool DropItemTo(ItemClickable storage, ItemTransferrable itemType)
+    {
+        if (!ReleaseItem(itemType, out List<ItemTransferrable> items)) { return false; }
+
+        bool dropped = storage.ReceiveItem(items);
+
+        return dropped;
+    }    
 }

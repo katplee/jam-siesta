@@ -7,4 +7,5 @@ public class WaitingCustomerManager : Singleton<WaitingCustomerManager>
 {
     public static event Action OnCustomerUpdate;
 
+
 }

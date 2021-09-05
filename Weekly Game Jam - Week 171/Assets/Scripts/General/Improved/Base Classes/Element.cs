@@ -18,38 +18,47 @@ public abstract class Element : MonoBehaviour
 
     public bool GiveItemTo(Element receiver, ItemTransferrable itemType)
     {
-        if (!ReleaseItem(itemType, out ItemTransferrable item)) { return false; }
+        if (!ReleaseItem(itemType, out List<ItemTransferrable> items)) { return false; }
 
-        bool received = receiver.ReceiveItem(item);
+        ItemTransferrable[] itemsArray = items.ToArray();
+
+        bool received = receiver.ReceiveItem(itemsArray);
 
         return received;
     }
 
-    public bool ReceiveItem(ItemTransferrable item)
+    public bool ReceiveItem(ItemTransferrable[] items)
     {
-        //item was not received
-        if (this as Player && itemsInHand.Count == 2) { return false; }
-        else if (this as Customer && itemsInHand.Count == 1) { return false; }
-        else { itemsInHand.Add(item); }
+        //problem down the line: what if at the moment, only 1 item can be received by the player?
+        //can the player go back to it again at another time?
 
-        item.transform.SetParent(transform);
+        bool received = false;
 
-        return true;
-    }
-
-    private bool ReleaseItem<T>(T itemType, out ItemTransferrable item)
-        where T : ItemTransferrable
-    {
-        foreach (ItemTransferrable i in itemsInHand)
+        foreach (ItemTransferrable item in items)
         {
-            if(i as T)
-            {
-                item = i;
-                return itemsInHand.Remove(i);
-            }
+            if (this as Player && itemsInHand.Count == 2) { received = received || false; }
+            else if (this as Customer && itemsInHand.Count == 1) { received = received || false; }
+            
+            else { itemsInHand.Add(item); received = received || true; }
+            item.transform.SetParent(transform);
+            item.SetOwner(); //sets the parent game element as the parent
         }
 
-        item = null;
-        return false;
+        return received;
+    }
+
+    protected bool ReleaseItem<T>(T itemType, out List<ItemTransferrable> items)
+        where T : ItemTransferrable
+    {
+        List<ItemTransferrable> itemsOfType = new List<ItemTransferrable>();
+
+        foreach (ItemTransferrable i in itemsInHand)
+        {
+            if (i as T) { itemsOfType.Add(i); itemsInHand.Remove(i); }
+        }
+
+        bool released = (itemsOfType.Count != 0) ? true : false;
+        items = itemsOfType;
+        return released;
     }
 }

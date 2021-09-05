@@ -10,9 +10,13 @@ public class CustomerSpawner : Singleton<CustomerSpawner>
     private int spawnEvery = 0; //time between spawns
     private float spawnIn = 0f; //remaining time until next spawn
 
-    private void Start()
+    private void Awake()
     {
         SetTimers();
+    }
+
+    private void Start()
+    {
         InvokeRepeating("SpawnCustomer", 0f, spawnEvery);
     }
 

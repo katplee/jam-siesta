@@ -8,7 +8,7 @@ public class BagDepositState : StateMachineBehaviour
     
     //parameters related to completion of task
     private Vector3Int dropoffPoint = new Vector3Int(-8, 5, 0);
-    private Luggage dropoffItem;
+    private Luggage dropoffItem = null;
     private Player receiver = null;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state

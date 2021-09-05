@@ -12,7 +12,7 @@ public class Customer : Element
     private void Awake()
     {
         Tilemap = TilemapManager.Instance.customerTilemap;
-        ReceiveItem(GetComponentInChildren<ItemTransferrable>());
+        ReceiveItem(GetComponentsInChildren<ItemTransferrable>());
     }
 
     /*

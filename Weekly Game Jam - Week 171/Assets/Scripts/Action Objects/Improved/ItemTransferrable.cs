@@ -15,6 +15,11 @@ public class ItemTransferrable : MonoBehaviour, IUserInterface
     private void Awake()
     {
         item = gameObject;
+        SetOwner();
+    }
+
+    public void SetOwner()
+    {
         owner = transform.parent.GetComponent<Element>();
     }
 
