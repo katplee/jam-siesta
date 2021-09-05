@@ -6,11 +6,10 @@ using UnityEngine.Tilemaps;
 
 public class CustomerController : MonoBehaviour
 {
-    public static event Action OnItemPress;
-    public static event Action OnMoveComplete;
+    public event Action<MNode> OnMoveComplete;
 
+    private Customer customer = null;
     private Animator animator = null;
-
     private Transform movePoint = null;
     public Vector3Int startPosition { get; private set; }
     public Vector3Int endPosition { get; private set; }
@@ -20,17 +19,30 @@ public class CustomerController : MonoBehaviour
     private void Awake()
     {
         //player animation-related variables
+        customer = GetComponent<Customer>();
         animator = GetComponent<Animator>();
 
         //navigation-related variables
         movePoint = transform.GetChild(0);
         movePoint.parent = null;
-        customerTilemap = TilemapManager.Instance.customerTileMap;
+        customerTilemap = TilemapManager.Instance.customerTilemap;
+    }
+
+    public void InvokeEvent()
+    {
+        MNode node = GameManager.Instance.RefreshNodeParent(customer);
+        OnMoveComplete?.Invoke(node);
     }
 
     public void TransportCustomer(Transform destination)
     {
+        //if the path has not been reset aka the player is moving, cancel transport operation
+        if (endPosition != Vector3Int.zero) { return; }
+
         DefinePath(destination);
+
+        //if the player is already in the destination
+        if (endPosition == startPosition) { ResetPath(); return; }
 
         //change animator parameter
         animator.SetFloat("Speed", 1f);
@@ -56,7 +68,8 @@ public class CustomerController : MonoBehaviour
                 Vector3Int currentPosition = customerTilemap.WorldToCell(transform.position);
                 if (currentPosition == endPosition)
                 {
-                    OnMoveComplete?.Invoke();
+                    MNode node = GameManager.Instance.RefreshNodeParent(customer);
+                    OnMoveComplete?.Invoke(node);
                     return false;
                 }
             }

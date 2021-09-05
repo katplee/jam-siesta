@@ -10,7 +10,7 @@ public class PlayerNode : MNode
     private void Awake()
     {
         //set the position and child order field parameter
-        Tilemap = TilemapManager.Instance.playerTileMap;
+        Tilemap = TilemapManager.Instance.playerTilemap;
         SetPositionInTilemap();
 
         //add this node to the dictionary of customer nodes

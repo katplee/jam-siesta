@@ -5,6 +5,6 @@ using UnityEngine.Tilemaps;
 
 public class TilemapManager : Singleton<TilemapManager>
 {
-    public Tilemap playerTileMap;
-    public Tilemap customerTileMap;
+    public Tilemap playerTilemap;
+    public Tilemap customerTilemap;
 }

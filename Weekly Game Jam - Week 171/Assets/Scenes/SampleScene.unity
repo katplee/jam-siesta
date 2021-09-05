@@ -164,6 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaf711e009a77e04bb9d98f5f0970f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  occupant: {fileID: 0}
 --- !u!1 &44337745
 GameObject:
   m_ObjectHideFlags: 0
@@ -237,6 +238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bca4f817515ebe40a55f4fb64a70f6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  occupant: {fileID: 0}
 --- !u!1 &73282055
 GameObject:
   m_ObjectHideFlags: 0
@@ -323,6 +325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bca4f817515ebe40a55f4fb64a70f6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  occupant: {fileID: 0}
 --- !u!1 &156689090
 GameObject:
   m_ObjectHideFlags: 0
@@ -6249,6 +6252,15 @@ Tilemap:
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
       m_AllTileFlags: 1073741825
+  - first: {x: -12, y: 1, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 1
+      m_TileSpriteIndex: 0
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      m_AllTileFlags: 1073741825
   - first: {x: -11, y: 1, z: 0}
     second:
       serializedVersion: 2
@@ -6361,6 +6373,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 0
+      m_TileSpriteIndex: 0
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      m_AllTileFlags: 1073741825
+  - first: {x: -12, y: 2, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 1
       m_TileSpriteIndex: 0
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
@@ -6483,6 +6504,15 @@ Tilemap:
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
       m_AllTileFlags: 1073741825
+  - first: {x: -12, y: 3, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 1
+      m_TileSpriteIndex: 0
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      m_AllTileFlags: 1073741825
   - first: {x: -11, y: 3, z: 0}
     second:
       serializedVersion: 2
@@ -6600,6 +6630,15 @@ Tilemap:
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
       m_AllTileFlags: 1073741825
+  - first: {x: -12, y: 4, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 1
+      m_TileSpriteIndex: 0
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      m_AllTileFlags: 1073741825
   - first: {x: -11, y: 4, z: 0}
     second:
       serializedVersion: 2
@@ -6712,6 +6751,15 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 0
+      m_TileSpriteIndex: 0
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      m_AllTileFlags: 1073741825
+  - first: {x: -12, y: 5, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 1
       m_TileSpriteIndex: 0
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
@@ -7396,12 +7444,14 @@ Tilemap:
   m_TileAssetArray:
   - m_RefCount: 337
     m_Data: {fileID: 11400000, guid: 036060519c4212343b7788185af7a978, type: 2}
+  - m_RefCount: 5
+    m_Data: {fileID: 11400000, guid: 51f9006c338bb2d4fa91c9e8ce16cf8d, type: 2}
   m_TileSpriteArray:
-  - m_RefCount: 337
+  - m_RefCount: 342
     m_Data: {fileID: -1328245000158916608, guid: 530de182ec44a3c41bb79c711ca5782c,
       type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 337
+  - m_RefCount: 342
     m_Data:
       e00: 1
       e01: 0
@@ -7420,7 +7470,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 337
+  - m_RefCount: 342
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
@@ -7748,6 +7798,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaf711e009a77e04bb9d98f5f0970f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  occupant: {fileID: 0}
 --- !u!1 &661478834
 GameObject:
   m_ObjectHideFlags: 0
@@ -7791,6 +7842,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaf711e009a77e04bb9d98f5f0970f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  occupant: {fileID: 0}
 --- !u!1 &728425077
 GameObject:
   m_ObjectHideFlags: 0
@@ -7909,6 +7961,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaf711e009a77e04bb9d98f5f0970f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  occupant: {fileID: 0}
 --- !u!1 &871640565
 GameObject:
   m_ObjectHideFlags: 0
@@ -8202,7 +8255,6 @@ GameObject:
   - component: {fileID: 952596874}
   - component: {fileID: 952596873}
   - component: {fileID: 952596872}
-  - component: {fileID: 952596876}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -8366,18 +8418,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &952596876
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 952596868}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0855af8a0f53a954f8daf9fa5c19e813, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &968810832
 GameObject:
   m_ObjectHideFlags: 0
@@ -8651,6 +8691,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bca4f817515ebe40a55f4fb64a70f6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  occupant: {fileID: 0}
 --- !u!1 &1052575193
 GameObject:
   m_ObjectHideFlags: 0
@@ -8859,6 +8900,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bca4f817515ebe40a55f4fb64a70f6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  occupant: {fileID: 0}
 --- !u!1 &1141752673
 GameObject:
   m_ObjectHideFlags: 0
@@ -8902,6 +8944,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaf711e009a77e04bb9d98f5f0970f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  occupant: {fileID: 0}
 --- !u!1 &1160732182
 GameObject:
   m_ObjectHideFlags: 0
@@ -8945,6 +8988,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaf711e009a77e04bb9d98f5f0970f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  occupant: {fileID: 0}
 --- !u!1 &1305529873
 GameObject:
   m_ObjectHideFlags: 0
@@ -9096,6 +9140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaf711e009a77e04bb9d98f5f0970f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  occupant: {fileID: 0}
 --- !u!1 &1579833674
 GameObject:
   m_ObjectHideFlags: 0
@@ -9139,6 +9184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaf711e009a77e04bb9d98f5f0970f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  occupant: {fileID: 0}
 --- !u!1 &1583270894
 GameObject:
   m_ObjectHideFlags: 0
@@ -9182,6 +9228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaf711e009a77e04bb9d98f5f0970f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  occupant: {fileID: 0}
 --- !u!1 &1598658265
 GameObject:
   m_ObjectHideFlags: 0
@@ -9260,6 +9307,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bca4f817515ebe40a55f4fb64a70f6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  occupant: {fileID: 0}
 --- !u!1 &1615242584
 GameObject:
   m_ObjectHideFlags: 0
@@ -9303,8 +9351,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3ad140c84d2784409dab86bd8328156, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerTileMap: {fileID: 300605656}
-  customerTileMap: {fileID: 338310672}
+  playerTilemap: {fileID: 300605656}
+  customerTilemap: {fileID: 338310672}
 --- !u!1 &1665987517
 GameObject:
   m_ObjectHideFlags: 0
@@ -9474,6 +9522,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaf711e009a77e04bb9d98f5f0970f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  occupant: {fileID: 0}
 --- !u!1 &1789555531
 GameObject:
   m_ObjectHideFlags: 0
@@ -9674,6 +9723,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaf711e009a77e04bb9d98f5f0970f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  occupant: {fileID: 0}
 --- !u!1 &1798895406
 GameObject:
   m_ObjectHideFlags: 0
@@ -9717,6 +9767,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaf711e009a77e04bb9d98f5f0970f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  occupant: {fileID: 0}
 --- !u!1 &1866859213
 GameObject:
   m_ObjectHideFlags: 0
@@ -10135,3 +10186,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaf711e009a77e04bb9d98f5f0970f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  occupant: {fileID: 0}

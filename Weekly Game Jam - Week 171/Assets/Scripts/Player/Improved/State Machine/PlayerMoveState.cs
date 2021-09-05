@@ -5,6 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class PlayerMoveState : StateMachineBehaviour
 {
+    private Animator animator = null;
     private Stack<Vector3Int> finalPath = null;
     private Vector3Int currentPosition = new Vector3Int();
 
@@ -13,11 +14,13 @@ public class PlayerMoveState : StateMachineBehaviour
     {
         SubscribeEvents();
 
+        this.animator = animator;
+
         //get inputs for navigation
         Vector3Int startPosition = PlayerController.Instance.startPosition;
         Vector3Int endPosition = PlayerController.Instance.endPosition;
         currentPosition = startPosition;
-        Tilemap playerTileMap = TilemapManager.Instance.playerTileMap;
+        Tilemap playerTileMap = TilemapManager.Instance.playerTilemap;
 
         AstarAlgorithm navigation = new AstarAlgorithm(startPosition, endPosition, playerTileMap);
         finalPath = navigation.FindPath();
@@ -64,7 +67,7 @@ public class PlayerMoveState : StateMachineBehaviour
 
     private void ExitMoveState(MNode node)
     {
-        AnimatorManager.Animator.SetFloat("Speed", 0f);
+        animator.SetFloat("Speed", 0f);
     }
 
     private void SubscribeEvents()

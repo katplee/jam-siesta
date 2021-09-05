@@ -13,7 +13,7 @@ public class CustomerNode : MNode
         SubscribeEvents();
 
         //set the position and child order field parameter
-        Tilemap = TilemapManager.Instance.customerTileMap;
+        Tilemap = TilemapManager.Instance.customerTilemap;
         SetPositionInTilemap();
         childOrder = transform.GetSiblingIndex();
 

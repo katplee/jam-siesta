@@ -29,6 +29,11 @@ public class PlayerController : Singleton<PlayerController>
         playerTilemap = transform.parent.GetComponent<Tilemap>();
     }
 
+    private void Start()
+    {
+        GameManager.Instance.RefreshNodeParent(player);
+    }
+
     public void TransportPlayer(Transform destination)
     {
 

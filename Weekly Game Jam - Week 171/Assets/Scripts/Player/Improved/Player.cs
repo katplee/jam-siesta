@@ -21,11 +21,9 @@ public class Player : Element
 
     public override Tilemap Tilemap { get; set; }
 
-    private void Start()
+    private void Awake()
     {
-        Tilemap = TilemapManager.Instance.playerTileMap;
-        Position = GetPositionInTilemap();
-        GameManager.Instance.RefreshNodeParent(this);
-    }
+        Tilemap = TilemapManager.Instance.playerTilemap;
 
+    }
 }

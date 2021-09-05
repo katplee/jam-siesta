@@ -9,9 +9,9 @@ public class Customer : Element
 {
     public override Tilemap Tilemap { get; set; }
 
-    private void Start()
+    private void Awake()
     {
-        Tilemap = TilemapManager.Instance.playerTileMap;
+        Tilemap = TilemapManager.Instance.customerTilemap;
         ReceiveItem(GetComponentInChildren<ItemTransferrable>());
     }
 
