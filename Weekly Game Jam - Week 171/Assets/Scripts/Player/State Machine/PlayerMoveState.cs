@@ -5,17 +5,12 @@ using UnityEngine.Tilemaps;
 
 public class PlayerMoveState : StateMachineBehaviour
 {
-    private Animator animator = null;
     private Stack<Vector3Int> finalPath = null;
     private Vector3Int currentPosition = new Vector3Int();
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        SubscribeEvents();
-
-        this.animator = animator;
-
         //get inputs for navigation
         Vector3Int startPosition = PlayerController.Instance.startPosition;
         Vector3Int endPosition = PlayerController.Instance.endPosition;
@@ -42,8 +37,6 @@ public class PlayerMoveState : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         PlayerController.Instance.ResetPath();
-
-        UnsubscribeEvents();
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()
@@ -63,20 +56,5 @@ public class PlayerMoveState : StateMachineBehaviour
         if(finalPath.Count == 0) { return Vector3Int.zero; }
 
         return finalPath.Peek() - currentPosition;
-    }
-
-    private void ExitMoveState(MNode node)
-    {
-        animator.SetFloat("Speed", 0f);
-    }
-
-    private void SubscribeEvents()
-    {
-        PlayerController.OnMoveComplete += ExitMoveState;
-    }
-
-    private void UnsubscribeEvents()
-    {
-        PlayerController.OnMoveComplete -= ExitMoveState;
     }
 }

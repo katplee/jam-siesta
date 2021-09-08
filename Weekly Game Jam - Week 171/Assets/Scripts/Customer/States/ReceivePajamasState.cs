@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GetPajamasState : StateMachineBehaviour
+public class ReceivePajamasState : StateMachineBehaviour
 {
     /*
      * checkPoint : the location at which the customer must go to before the state changes
@@ -15,17 +15,16 @@ public class GetPajamasState : StateMachineBehaviour
     
     //parameters related to completion of task
     //private Vector3Int checkPoint = new Vector3Int(-12, 5, 0);
-    private Vector3Int dropoffPoint = new Vector3Int(-10, 3, 0);
-    private Pajamas pickUpItem = new Pajamas();
-    private Player receiver = null;
+    private Vector3Int dropoffPoint = new Vector3Int(-10, 5, 0);
+    private Pajamas pickUpItem = null;
+    private Customer receiver = null;
 
-    
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         SubscribeEvents();
 
         this.animator = animator;
-        receiver = Player.Instance;
+        receiver = animator.gameObject.GetComponent<Customer>();
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
@@ -50,10 +49,10 @@ public class GetPajamasState : StateMachineBehaviour
 
     private bool TransferItem()
     {
-        //ItemClickable giver = animator.gameObject.GetComponent<Customer>();
-        //bool transfered = giver.GiveItemTo(receiver, dropoffItem);
+        Player giver = Player.Instance;
+        bool transfered = giver.GiveItemTo(receiver, pickUpItem);
 
-        return false;
+        return transfered;
     }
 
     private void SubscribeEvents()

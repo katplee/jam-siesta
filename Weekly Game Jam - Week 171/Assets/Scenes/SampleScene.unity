@@ -339,7 +339,6 @@ GameObject:
   - component: {fileID: 156689093}
   - component: {fileID: 156689094}
   - component: {fileID: 156689095}
-  - component: {fileID: 156689092}
   - component: {fileID: 156689096}
   m_Layer: 9
   m_Name: Luggage
@@ -364,18 +363,6 @@ Transform:
   m_Father: {fileID: 1598658266}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &156689092
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 156689090}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7cea3912b5139947b763da9b61296e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!212 &156689093
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8126,7 +8113,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 871640565}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7cea3912b5139947b763da9b61296e6, type: 3}
+  m_Script: {fileID: 11500000, guid: 72b3174f34bb455448f7b95c11c03ac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!212 &871640570

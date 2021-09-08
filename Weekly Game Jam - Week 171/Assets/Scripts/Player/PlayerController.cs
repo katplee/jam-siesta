@@ -14,6 +14,7 @@ public class PlayerController : Singleton<PlayerController>
     private Transform movePoint = null;
     public Vector3Int startPosition { get; private set; }
     public Vector3Int endPosition { get; private set; }
+    private MNode positionNode = null;
     private float speed = 5f;
     private Tilemap playerTilemap = null; 
 
@@ -69,8 +70,8 @@ public class PlayerController : Singleton<PlayerController>
                 Vector3Int currentPosition = playerTilemap.WorldToCell(transform.position);
                 if(currentPosition == endPosition)
                 {
-                    MNode node = GameManager.Instance.RefreshNodeParent(player);
-                    OnMoveComplete?.Invoke(node);
+                    positionNode = GameManager.Instance.RefreshNodeParent(player);
+                    animator.SetFloat("Speed", 0f);
                     return false;
                 }
             }
@@ -82,6 +83,8 @@ public class PlayerController : Singleton<PlayerController>
 
         return false;
     }
+
+
 
     private void MovePointBy(Vector3 moveDistance)
     {
@@ -99,5 +102,6 @@ public class PlayerController : Singleton<PlayerController>
     public void ResetPath()
     {
         endPosition = Vector3Int.zero;
+        OnMoveComplete?.Invoke(positionNode);
     }
 }
