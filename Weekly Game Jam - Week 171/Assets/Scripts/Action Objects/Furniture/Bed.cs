@@ -1,9 +1,31 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bed : MonoBehaviour
-{    
+public class Bed : ItemClickable
+{
+    public override void OnClick()
+    {
+        //make sure that the player clicked an object with WAITING tag before this object
+        if (Player.Instance.GetActiveTag(out Customer customer) as Waiting)
+        {
+            //transport customer to corresponding customer node
+            customer.GetComponent<CustomerController>().TransportCustomer(customerNode);
+        }
+
+        //transport player to corresponding node
+        base.OnClick();
+    }
+
+    /*
+    protected override void Interact()
+    {
+        Player giver = Player.Instance;
+        giver.DropItemTo(this, content);
+    }
+    */
+
     /*
     public bool IsAvailable { get; set; }
     public bool IsDirty { get; set; }

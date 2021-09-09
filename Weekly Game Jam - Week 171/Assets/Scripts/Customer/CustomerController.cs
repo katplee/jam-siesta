@@ -14,6 +14,7 @@ public class CustomerController : MonoBehaviour
     private Transform movePoint = null;
     public Vector3Int startPosition { get; private set; }
     public Vector3Int endPosition { get; private set; }
+    private MNode positionNode = null;
     private float speed = 5f;
     private Tilemap customerTilemap = null;
 
@@ -34,8 +35,8 @@ public class CustomerController : MonoBehaviour
     {
         //updates the player node assigned to the customer
         clickable.UpdateChildNode();
-        MNode node = GameManager.Instance.RefreshNodeParent(customer);
-        OnMoveComplete?.Invoke(node);
+        positionNode = GameManager.Instance.RefreshNodeParent(customer);
+        OnMoveComplete?.Invoke(positionNode);
     }
 
     public void TransportCustomer(Transform destination)
@@ -58,6 +59,27 @@ public class CustomerController : MonoBehaviour
         endPosition = customerTilemap.WorldToCell(destination.position);
     }
 
+
+    public void TransportPlayer(Vector3Int destination)
+    {
+        //if the path has not been reset aka the player is moving, cancel transport operation
+        if (endPosition != Vector3Int.zero) { return; }
+
+        DefinePath(destination);
+
+        //if the player is already in the destination
+        if (endPosition == startPosition) { ResetPath(); return; }
+
+        //change animator parameter
+        animator.SetFloat("Speed", 1f);
+    }
+
+    private void DefinePath(Vector3Int destination)
+    {
+        startPosition = customerTilemap.WorldToCell(transform.position);
+        endPosition = destination;
+    }
+
     public bool MoveCustomerBy(Vector3Int moveVector)
     {
         AnimateCustomer(transform.position, movePoint.position);
@@ -72,7 +94,8 @@ public class CustomerController : MonoBehaviour
                 Vector3Int currentPosition = customerTilemap.WorldToCell(transform.position);
                 if (currentPosition == endPosition)
                 {
-                    InvokeMoveCompleteEvent();
+                    //positionNode = GameManager.Instance.RefreshNodeParent(customer);
+                    animator.SetFloat("Speed", 0f);
                     return false;
                 }
             }
@@ -100,6 +123,7 @@ public class CustomerController : MonoBehaviour
 
     public void ResetPath()
     {
+        InvokeMoveCompleteEvent();
         endPosition = Vector3Int.zero;
     }
 

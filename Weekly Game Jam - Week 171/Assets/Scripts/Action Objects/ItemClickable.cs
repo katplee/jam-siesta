@@ -6,9 +6,10 @@ using UnityEngine.Tilemaps;
 
 public class ItemClickable : Clickable, IUserInterface
 {
-    private Transform node = null;
-    public Transform container { get; private set; } = null;
+    protected Transform playerNode = null;
+    protected Transform customerNode = null;
     private Tilemap playerTilemap = null;
+    public Transform container { get; private set; } = null;
     private List<ItemTransferrable> itemsInStock = new List<ItemTransferrable>();
 
     public string label
@@ -20,7 +21,9 @@ public class ItemClickable : Clickable, IUserInterface
     {
         SubscribeEvent();
 
-        node = GetComponentInChildren<MNode>().transform;
+        playerNode = GetComponentInChildren<PlayerNode>().transform;
+        customerNode = (GetComponentInChildren<CustomerNode>()) ?
+            GetComponentInChildren<CustomerNode>().transform : null;
         container = (GetComponentInChildren<ItemContainer>()) ?
             GetComponentInChildren<ItemContainer>().transform : transform;
         playerTilemap = TilemapManager.Instance.playerTilemap;
@@ -34,7 +37,7 @@ public class ItemClickable : Clickable, IUserInterface
     public Vector3Int GetPositionInTileMap()
     {
         //returns the position of the corresponding node, not of the item
-        Vector3Int position = playerTilemap.WorldToCell(node.position);
+        Vector3Int position = playerTilemap.WorldToCell(playerNode.position);
         return position;
     }
 
@@ -42,7 +45,8 @@ public class ItemClickable : Clickable, IUserInterface
     {
         //the player is brought to the node corresponding to the item clicked
         //note: position conversion to cell position will be done inside the move player method
-        PlayerController.Instance.TransportPlayer(node);
+        PlayerController.Instance.TransportPlayer(playerNode);
+        Player.Instance.RestartTags();
     }
 
     protected virtual void OnInteractionWithItem(MNode playerPosition)

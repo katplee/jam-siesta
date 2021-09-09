@@ -14,8 +14,6 @@ public class CustomerMoveState : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        SubscribeEvents();
-
         customer = animator.gameObject.GetComponent<Customer>();
         controller = customer.GetComponent<CustomerController>();
         this.animator = animator;
@@ -46,8 +44,6 @@ public class CustomerMoveState : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         controller.ResetPath();
-
-        UnsubscribeEvents();
     }
 
     private Vector3Int ComputeMoveVector(Vector3Int currentPosition)
@@ -55,20 +51,5 @@ public class CustomerMoveState : StateMachineBehaviour
         if (finalPath.Count == 0) { return Vector3Int.zero; }
 
         return finalPath.Peek() - currentPosition;
-    }
-
-    private void ExitMoveState(MNode node)
-    {
-        animator.SetFloat("Speed", 0f);
-    }
-
-    private void SubscribeEvents()
-    {
-        controller.OnMoveComplete += ExitMoveState;
-    }
-
-    private void UnsubscribeEvents()
-    {
-        controller.OnMoveComplete -= ExitMoveState;
     }
 }

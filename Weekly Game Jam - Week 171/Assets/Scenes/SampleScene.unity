@@ -2425,15 +2425,6 @@ Tilemap:
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
       m_AllTileFlags: 1073741825
-  - first: {x: -10, y: 0, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      m_AllTileFlags: 1073741825
   - first: {x: -9, y: 0, z: 0}
     second:
       serializedVersion: 2
@@ -3694,15 +3685,6 @@ Tilemap:
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
       m_AllTileFlags: 1073741825
-  - first: {x: -5, y: 6, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      m_AllTileFlags: 1073741825
   - first: {x: -3, y: 6, z: 0}
     second:
       serializedVersion: 2
@@ -4191,14 +4173,14 @@ Tilemap:
       m_AllTileFlags: 1073741825
   m_AnimatedTiles: {}
   m_TileAssetArray:
-  - m_RefCount: 403
+  - m_RefCount: 401
     m_Data: {fileID: 11400000, guid: 036060519c4212343b7788185af7a978, type: 2}
   m_TileSpriteArray:
-  - m_RefCount: 403
+  - m_RefCount: 401
     m_Data: {fileID: -1328245000158916608, guid: 530de182ec44a3c41bb79c711ca5782c,
       type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 403
+  - m_RefCount: 401
     m_Data:
       e00: 1
       e01: 0
@@ -4217,7 +4199,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 403
+  - m_RefCount: 401
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
@@ -9898,7 +9880,6 @@ GameObject:
   - component: {fileID: 1866859217}
   - component: {fileID: 1866859216}
   - component: {fileID: 1866859218}
-  - component: {fileID: 1866859219}
   m_Layer: 9
   m_Name: Bed_1
   m_TagString: Bed
@@ -10029,18 +10010,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3479da7b057bd8148b810b60e50785ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1866859219
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1866859213}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7cea3912b5139947b763da9b61296e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1914766217

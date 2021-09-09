@@ -10,12 +10,14 @@ public class PajamasShelf : ItemClickable
     private ItemTransferrable GenerateContent()
     {
         contentObject = new GameObject();
-        GameObject go = Instantiate(contentObject, container);
+        GameObject go = contentObject;
+        go.transform.SetParent(container);
         go.name = content.GetType().Name;
         Pajamas component = go.AddComponent<Pajamas>();
         return component;
     }
 
+    //give player a set of pajamas
     protected override void Interact()
     {
         ItemTransferrable[] item = new ItemTransferrable[] { GenerateContent() };

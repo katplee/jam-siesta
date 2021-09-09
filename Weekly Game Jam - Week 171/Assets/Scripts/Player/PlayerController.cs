@@ -35,6 +35,12 @@ public class PlayerController : Singleton<PlayerController>
         GameManager.Instance.RefreshNodeParent(player);
     }
 
+    public void InvokeMoveCompleteEvent()
+    {
+        positionNode = GameManager.Instance.RefreshNodeParent(player);
+        OnMoveComplete?.Invoke(positionNode);
+    }
+
     public void TransportPlayer(Transform destination)
     {
 
@@ -56,6 +62,26 @@ public class PlayerController : Singleton<PlayerController>
         endPosition = playerTilemap.WorldToCell(destination.position);
     }
 
+    public void TransportPlayer(Vector3Int destination)
+    {
+        //if the path has not been reset aka the player is moving, cancel transport operation
+        if (endPosition != Vector3Int.zero) { return; }
+
+        DefinePath(destination);
+
+        //if the player is already in the destination
+        if (endPosition == startPosition) { ResetPath(); return; }
+
+        //change animator parameter
+        animator.SetFloat("Speed", 1f);
+    }
+
+    private void DefinePath(Vector3Int destination)
+    {
+        startPosition = playerTilemap.WorldToCell(transform.position);
+        endPosition = destination;
+    }
+
     public bool MovePlayerBy(Vector3Int moveVector)
     {
         AnimatePlayer(transform.position, movePoint.position);
@@ -70,7 +96,6 @@ public class PlayerController : Singleton<PlayerController>
                 Vector3Int currentPosition = playerTilemap.WorldToCell(transform.position);
                 if(currentPosition == endPosition)
                 {
-                    positionNode = GameManager.Instance.RefreshNodeParent(player);
                     animator.SetFloat("Speed", 0f);
                     return false;
                 }
@@ -101,7 +126,7 @@ public class PlayerController : Singleton<PlayerController>
 
     public void ResetPath()
     {
+        InvokeMoveCompleteEvent();
         endPosition = Vector3Int.zero;
-        OnMoveComplete?.Invoke(positionNode);
     }
 }

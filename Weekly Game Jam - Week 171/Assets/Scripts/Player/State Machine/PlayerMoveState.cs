@@ -39,18 +39,6 @@ public class PlayerMoveState : StateMachineBehaviour
         PlayerController.Instance.ResetPath();
     }
 
-    // OnStateMove is called right after Animator.OnAnimatorMove()
-    //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    // Implement code that processes and affects root motion
-    //}
-
-    // OnStateIK is called right after Animator.OnAnimatorIK()
-    //override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    // Implement code that sets up animation IK (inverse kinematics)
-    //}
-
     private Vector3Int ComputeMoveVector(Vector3Int currentPosition)
     {
         if(finalPath.Count == 0) { return Vector3Int.zero; }

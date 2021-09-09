@@ -17,7 +17,8 @@ public class CustomerSpawner : Singleton<CustomerSpawner>
 
     private void Start()
     {
-        InvokeRepeating("SpawnCustomer", 0f, spawnEvery);
+        SpawnCustomer();
+        //InvokeRepeating("SpawnCustomer", 0f, spawnEvery);
     }
 
     private void SetTimers()

@@ -43,7 +43,7 @@ public class DepositBagState : StateMachineBehaviour
     private bool TransferItem()
     {
         Customer giver = animator.gameObject.GetComponent<Customer>();
-        bool transfered = giver.GiveItemTo(receiver, dropoffItem);
+        bool transfered = giver.GiveItemTo<Luggage>(receiver);
 
         return transfered;
     }

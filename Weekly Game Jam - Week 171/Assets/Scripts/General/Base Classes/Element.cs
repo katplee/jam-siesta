@@ -22,9 +22,10 @@ public abstract class Element : MonoBehaviour, IUserInterface
         return position;
     }
 
-    public bool GiveItemTo(Element receiver, ItemTransferrable itemType)
+    public bool GiveItemTo<T>(Element receiver)
+        where T : ItemTransferrable
     {
-        if (!ReleaseItem(itemType, out List<ItemTransferrable> items)) { return false; }
+        if (!ReleaseItem<T>(out List<ItemTransferrable> items)) { return false; }
 
         ItemTransferrable[] itemsArray = items.ToArray();
 
@@ -44,16 +45,18 @@ public abstract class Element : MonoBehaviour, IUserInterface
         {
             if (this as Player && itemsInHand.Count == 2) { received = received || false; }
             else if (this as Customer && itemsInHand.Count == 1) { received = received || false; }
-            
-            else { itemsInHand.Add(item); received = received || true; }
-            item.transform.SetParent(transform);
-            item.SetOwner(); //sets the parent game element as the parent
-        }
 
+            else
+            {
+                itemsInHand.Add(item); received = received || true;
+                item.transform.SetParent(transform);
+                item.SetOwner(); //sets the parent game element as the parent
+            }
+        }
         return received;
     }
 
-    protected bool ReleaseItem<T>(T itemType, out List<ItemTransferrable> items)
+    protected bool ReleaseItem<T>(out List<ItemTransferrable> items)
         where T : ItemTransferrable
     {
         List<ItemTransferrable> itemsOfType = new List<ItemTransferrable>();

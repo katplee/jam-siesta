@@ -6,7 +6,6 @@ using UnityEngine.Tilemaps;
 public class Player : Element
 {
     private static Player instance;
-
     public static Player Instance
     {
         get
@@ -19,6 +18,10 @@ public class Player : Element
         }
     }
 
+    //customer-related parameters
+    private Tag activeTag = null;
+    private Customer selectedCustomer = null;
+
     public override Tilemap Tilemap { get; set; }
 
     private void Awake()
@@ -26,12 +29,33 @@ public class Player : Element
         Tilemap = TilemapManager.Instance.playerTilemap;
     }
 
-    public bool DropItemTo(ItemClickable storage, ItemTransferrable itemType)
+    public bool DropItemTo<T>(ItemClickable storage)
+        where T : ItemTransferrable
     {
-        if (!ReleaseItem(itemType, out List<ItemTransferrable> items)) { return false; }
+        if (!ReleaseItem<T>(out List<ItemTransferrable> items)) { return false; }
 
         bool dropped = storage.ReceiveItem(items);
 
         return dropped;
-    }    
+    }
+
+    public Tag SelectCustomer(Customer customer, Tag customerTag)
+    {
+        activeTag = customerTag;
+        selectedCustomer = customer;
+        return activeTag;
+    }
+
+    public void RestartTags()
+    {
+        activeTag = null;
+        selectedCustomer = null;
+    }
+
+    public Tag GetActiveTag(out Customer customer)
+    {
+        if(activeTag != null) { customer = selectedCustomer; }
+        else { customer = null; }
+        return activeTag;
+    }
 }
