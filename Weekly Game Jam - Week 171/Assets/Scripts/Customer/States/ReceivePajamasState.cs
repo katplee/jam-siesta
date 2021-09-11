@@ -50,7 +50,7 @@ public class ReceivePajamasState : StateMachineBehaviour
     private bool TransferItem()
     {
         Player giver = Player.Instance;
-        bool transfered = giver.GiveItemTo<Pajamas>(receiver);
+        bool transfered = giver.GiveItemTo(receiver, pickUpItem);
 
         return transfered;
     }

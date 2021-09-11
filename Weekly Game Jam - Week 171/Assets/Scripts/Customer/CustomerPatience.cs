@@ -14,12 +14,11 @@ public class CustomerPatience : MonoBehaviour
     private void Awake()
     {
         _patience = patience;
-
     }
 
     private void Update()
     {
-        UpdatePatience();
+        //UpdatePatience();
     }
 
     private void SetPatience(UIPatience patience)

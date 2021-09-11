@@ -8,6 +8,7 @@ public class ItemClickable : Clickable, IUserInterface
 {
     protected Transform playerNode = null;
     protected Transform customerNode = null;
+    protected Transform itemNode = null;
     private Tilemap playerTilemap = null;
     public Transform container { get; private set; } = null;
     private List<ItemTransferrable> itemsInStock = new List<ItemTransferrable>();
@@ -24,6 +25,8 @@ public class ItemClickable : Clickable, IUserInterface
         playerNode = GetComponentInChildren<PlayerNode>().transform;
         customerNode = (GetComponentInChildren<CustomerNode>()) ?
             GetComponentInChildren<CustomerNode>().transform : null;
+        itemNode = (GetComponentInChildren<ItemNode>()) ?
+            GetComponentInChildren<ItemNode>().transform : null;
         container = (GetComponentInChildren<ItemContainer>()) ?
             GetComponentInChildren<ItemContainer>().transform : transform;
         playerTilemap = TilemapManager.Instance.playerTilemap;
@@ -68,6 +71,11 @@ public class ItemClickable : Clickable, IUserInterface
         }
 
         return true;
+    }
+
+    public ItemNode GetItemNode()
+    {
+        return itemNode.GetComponent<ItemNode>();
     }
 
     private void SubscribeEvent()

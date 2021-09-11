@@ -60,7 +60,7 @@ public class CustomerController : MonoBehaviour
     }
 
 
-    public void TransportPlayer(Vector3Int destination)
+    public void TransportCustomer(Vector3Int destination)
     {
         //if the path has not been reset aka the player is moving, cancel transport operation
         if (endPosition != Vector3Int.zero) { return; }

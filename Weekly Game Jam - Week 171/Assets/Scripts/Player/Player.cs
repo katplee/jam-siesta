@@ -29,10 +29,10 @@ public class Player : Element
         Tilemap = TilemapManager.Instance.playerTilemap;
     }
 
-    public bool DropItemTo<T>(ItemClickable storage)
+    public bool DropItemTo<T>(ItemClickable storage, T itemType)
         where T : ItemTransferrable
     {
-        if (!ReleaseItem<T>(out List<ItemTransferrable> items)) { return false; }
+        if (!ReleaseItem(itemType, out List<ItemTransferrable> items)) { return false; }
 
         bool dropped = storage.ReceiveItem(items);
 

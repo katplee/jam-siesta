@@ -9,11 +9,32 @@ public class Customer : Element
 {
     public override Tilemap Tilemap { get; set; }
 
+    //customer-related parameters
+    private float changingTime = 3f;
+    private float sleepNeeded = 5f;
+    private float sleepAllowance = 3f; //the amount of time by which the customer must be woken up to avoid penalty
+
+
     private void Awake()
     {
         Tilemap = TilemapManager.Instance.customerTilemap;
 
         ReceiveItem(GetComponentsInChildren<ItemTransferrable>());
+    }
+
+    public float GetChangingTime()
+    {
+        return changingTime;
+    }
+
+    public float GetSleepNeeded()
+    {
+        return sleepNeeded;
+    }
+
+    public float GetSleepAllowance()
+    {
+        return sleepAllowance;
     }
 
     /*

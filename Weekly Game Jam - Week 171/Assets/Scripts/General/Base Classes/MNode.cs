@@ -10,12 +10,6 @@ public abstract class MNode : MonoBehaviour
     public Vector3Int Position { get; set; } = new Vector3Int();
     public GameObject occupant = null;
 
-    protected void SetPositionInTilemap()
-    {
-        Vector3Int position = Tilemap.WorldToCell(transform.position);
-        Position = position;
-    }
-
     public void MoveToPositionInTilemap(Vector3 position)
     {
         transform.position = position;

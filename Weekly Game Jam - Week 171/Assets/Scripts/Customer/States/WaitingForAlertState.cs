@@ -1,11 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AssignPodState : StateMachineBehaviour
+public class WaitingForAlertState : StateMachineBehaviour
 {
     /*
-     * checkPoint : the location at which the customer must go to before (can be a vector or a destination node name/item clickable)
+     * checkPoint : the location at which the customer must go to before 
      * dropoffPoint : the location at which the player must go to before receiving an item/before a state change
      * dropoffItem : the item which will be given/received by the receiver
      * receiver : the receipient of the item to be transferred
@@ -14,25 +15,34 @@ public class AssignPodState : StateMachineBehaviour
     private Customer customer = null;
     private CustomerController controller = null;
     private Animator animator = null;
+    private Pod pod = null;
+    private DresserAlarm alarm = null;
 
     //parameters related to completion of task
-    //private Vector3Int checkPoint = new Vector3Int(-10, 0, 0);
-    private Bed checkPoint = new Bed();
+    private ItemNode checkPoint = null;
     //private Vector3Int dropoffPoint = new Vector3Int(-8, 5, 0);
     //private Luggage dropoffItem = new Luggage();
     //private Player receiver = null;
 
-    // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         customer = animator.gameObject.GetComponent<Customer>();
         controller = customer.GetComponent<CustomerController>();
         this.animator = animator;
+        pod = customer.GetComponentInParent<Pod>();
+        alarm = pod.GetComponentInChildren<DresserAlarm>();
+
+        checkPoint = customer.GetComponentInParent<Bed>().GetItemNode();
 
         SubscribeEvents();
+
+        //do the things necessary for the state
+        PerformStateProcesses();
+        
+        //move the customer to the waiting for pod node
+        controller.TransportCustomer(checkPoint.GetPositionInTileMap());
     }
 
-    // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         UnsubscribeEvents();
@@ -40,16 +50,16 @@ public class AssignPodState : StateMachineBehaviour
 
     private void CheckForEndState(MNode node)
     {
-        if (CheckCustomerPositionRequirements(node))
-        {
-            Destroy(customer.GetComponent<Waiting>());
-            animator.SetTrigger("MoveState");
-        }
+        animator.gameObject.AddComponent<Sleeping>();
+        animator.SetTrigger("MoveState");
     }
 
-    private bool CheckCustomerPositionRequirements(MNode node)
+    //private void AnimateElement() { }
+    //private void TransferItem() { }
+
+    private void PerformStateProcesses()
     {
-        return customer.GetComponentInParent(checkPoint.GetType());
+        alarm.SetAlarmParameters(customer.GetSleepNeeded(), customer.GetSleepAllowance());
     }
 
     private void SubscribeEvents()

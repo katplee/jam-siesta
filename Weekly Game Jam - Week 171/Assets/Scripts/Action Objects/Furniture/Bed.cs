@@ -14,9 +14,11 @@ public class Bed : ItemClickable
             customer.GetComponent<CustomerController>().TransportCustomer(customerNode);
         }
 
-        //transport player to corresponding node
+        //transport player to corresponding player node
         base.OnClick();
     }
+
+
 
     /*
     protected override void Interact()

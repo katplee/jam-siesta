@@ -31,7 +31,7 @@ public class WaitingForPodState : StateMachineBehaviour
         SubscribeEvents();
 
         //move the customer to the waiting for pod node
-        controller.TransportPlayer(checkPoint);
+        controller.TransportCustomer(checkPoint);
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state

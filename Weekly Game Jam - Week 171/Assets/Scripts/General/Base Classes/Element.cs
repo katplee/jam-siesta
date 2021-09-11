@@ -6,7 +6,6 @@ using UnityEngine.Tilemaps;
 public abstract class Element : MonoBehaviour, IUserInterface
 {
     protected GameObject location = null;
-    public Vector3Int Position { get; set; }
     public abstract Tilemap Tilemap { get; set; }
 
     public string label
@@ -22,10 +21,10 @@ public abstract class Element : MonoBehaviour, IUserInterface
         return position;
     }
 
-    public bool GiveItemTo<T>(Element receiver)
+    public bool GiveItemTo<T>(Element receiver, T itemType)
         where T : ItemTransferrable
     {
-        if (!ReleaseItem<T>(out List<ItemTransferrable> items)) { return false; }
+        if (!ReleaseItem<T>(itemType, out List<ItemTransferrable> items)) { return false; }
 
         ItemTransferrable[] itemsArray = items.ToArray();
 
@@ -56,7 +55,7 @@ public abstract class Element : MonoBehaviour, IUserInterface
         return received;
     }
 
-    protected bool ReleaseItem<T>(out List<ItemTransferrable> items)
+    protected bool ReleaseItem<T>(T itemType, out List<ItemTransferrable> items)
         where T : ItemTransferrable
     {
         List<ItemTransferrable> itemsOfType = new List<ItemTransferrable>();

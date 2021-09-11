@@ -14,11 +14,10 @@ public class CustomerNode : MNode
 
         //set the position and child order field parameter
         Tilemap = TilemapManager.Instance.customerTilemap;
-        SetPositionInTilemap();
         childOrder = transform.GetSiblingIndex();
 
         //add this node to the dictionary of customer nodes
-        GameManager.Instance.AddNode(GetType().Name, Position, this);
+        GameManager.Instance.AddNode(GetType().Name, GetPositionInTileMap(), this);
     }
 
     private void OnDestroy()

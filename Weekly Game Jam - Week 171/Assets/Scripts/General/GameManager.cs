@@ -49,6 +49,7 @@ public class GameManager : Singleton<GameManager>
     {
         switch (type)
         {
+            case "ItemNode":
             case "CustomerNode":
                 customerNodes.Add(position, node as CustomerNode);
                 break;
