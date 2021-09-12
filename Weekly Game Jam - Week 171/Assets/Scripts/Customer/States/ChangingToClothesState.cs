@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AlertState : StateMachineBehaviour
+public class ChangingToClothesState : StateMachineBehaviour
 {
     /*
      * checkPoint : the location at which the customer must go to before 
@@ -13,25 +13,28 @@ public class AlertState : StateMachineBehaviour
 
     private Customer customer = null;
     private CustomerController controller = null;
+    private SpriteRenderer renderer = null;
     private Animator animator = null;
     private Pod pod = null;
-    private DresserAlarm alarm = null;
+    private Bed bed = null;
+    private float blinkingTime = 0f;
     private bool end = false;
 
     //parameters related to completion of task
-    private CustomerNode checkPoint = new CustomerNode();
+    //private Vector3Int checkPoint = new Vector3Int(-12, 5, 0);
     //private Vector3Int dropoffPoint = new Vector3Int(-8, 5, 0);
-    //private Luggage dropoffItem = new Luggage();
+    private Pajamas dropoffItem = new Pajamas();
     //private Player receiver = null;
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         customer = animator.gameObject.GetComponent<Customer>();
         controller = customer.GetComponent<CustomerController>();
+        renderer = customer.GetComponent<SpriteRenderer>();
         this.animator = animator;
         pod = customer.GetComponentInParent<Pod>();
-        alarm = pod.GetComponentInChildren<DresserAlarm>();
-        alarm.ToggleVisibility();
+        bed = pod.GetComponentInChildren<Bed>();
+        blinkingTime = customer.GetChangingTime();
 
         SubscribeEvents();
     }
@@ -50,27 +53,42 @@ public class AlertState : StateMachineBehaviour
 
     private void CheckForEndState(MNode node)
     {
-        if (CheckCustomerPositionRequirements (node))
+        if (AnimateElement())
         {
-            Destroy(customer.GetComponent<Sleeping>());
-            animator.SetTrigger("MoveState");
+            bool end = TransferItem();
+            if (end) { animator.SetTrigger("MoveState"); }
         }
     }
 
-    private void AnimateElement()
+    private bool AnimateElement()
     {
-        if (alarm.UpdateAlarm()) { return; }
-        
-        end = true;
+        if (!end)
+        {
+            blinkingTime -= Time.deltaTime;
+            bool blink = (renderer.enabled) ? false : true;
+            renderer.enabled = blink;
+
+            if (Mathf.Max(blinkingTime, 0) != 0) { return false; }
+
+            renderer.enabled = true;
+
+            end = true;
+
+            controller.InvokeMoveCompleteEvent();
+        }
+
+        return true;
     }
 
-    //private void TransferItem() { }
+    private bool TransferItem()
+    {
+        Customer giver = customer;
+        bool transfered = giver.DropItemTo(bed, dropoffItem);
+
+        return transfered;
+    }
+    
     //private void PerformStateProcesses() { }
-
-    private bool CheckCustomerPositionRequirements(MNode node)
-    {
-        return node.GetComponent(checkPoint.GetType());
-    }
 
     private void SubscribeEvents()
     {

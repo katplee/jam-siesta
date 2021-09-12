@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaitingCustomerManager : Singleton<WaitingCustomerManager>
+public class WaitingManager : Singleton<WaitingManager>
 {
     public static event Action OnCustomerUpdate;
 

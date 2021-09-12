@@ -2,8 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PayingCustomerManager : Singleton<PayingCustomerManager>
+public class PayingManager : Singleton<PayingManager>
 {
+    public Transform HighestAvailableNode(CustomerController caller)
+    {
+        Transform lastNode = null;
+
+        foreach (Transform node in transform)
+        {
+            CustomerNode customerNode = null;
+            if(node.TryGetComponent(out customerNode))
+            {
+                bool occupied = customerNode.IsOccupied();
+                if (!occupied) { return node; }
+            }
+            customerNode.Queue(caller);
+            lastNode = node;
+        }
+
+        //if there are no more nodes available in the paying line, the last one will be returned
+        return lastNode;
+    }
+
     /*
     public List<Transform> payingList;
 

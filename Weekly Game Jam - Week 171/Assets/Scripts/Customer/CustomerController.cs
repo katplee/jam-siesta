@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class CustomerController : MonoBehaviour
+public class CustomerController : Controller
 {
     public event Action<MNode> OnMoveComplete;
 
@@ -44,6 +44,9 @@ public class CustomerController : MonoBehaviour
         //if the path has not been reset aka the player is moving, cancel transport operation
         if (endPosition != Vector3Int.zero) { return; }
 
+        if (destination.TryGetComponent(out CustomerNode node) && node.IsOccupied())
+        { node.Queue(this); return; }
+
         DefinePath(destination);
 
         //if the player is already in the destination
@@ -59,11 +62,14 @@ public class CustomerController : MonoBehaviour
         endPosition = customerTilemap.WorldToCell(destination.position);
     }
 
-
     public void TransportCustomer(Vector3Int destination)
     {
         //if the path has not been reset aka the player is moving, cancel transport operation
         if (endPosition != Vector3Int.zero) { return; }
+
+        MNode _destination = GameManager.Instance.SearchEquivalentNode(destination, customer.label);
+        if (_destination.TryGetComponent(out CustomerNode node) && node.IsOccupied())
+        { node.Queue(this); return; }
 
         DefinePath(destination);
 
@@ -123,8 +129,8 @@ public class CustomerController : MonoBehaviour
 
     public void ResetPath()
     {
-        InvokeMoveCompleteEvent();
         endPosition = Vector3Int.zero;
+        InvokeMoveCompleteEvent();
     }
 
     /*

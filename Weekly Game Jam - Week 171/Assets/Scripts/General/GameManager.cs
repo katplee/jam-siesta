@@ -16,7 +16,6 @@ public class GameManager : Singleton<GameManager>
 
     public static void InvokeMouseResponse()
     {
-        //Debug.Log("hello");
         OnMouseClick?.Invoke();
     }
 
@@ -61,6 +60,21 @@ public class GameManager : Singleton<GameManager>
             default:
                 break;
         }
+    }
+
+    public MNode SearchEquivalentNode(Vector3Int coordinates, string nodeType)
+    {
+        switch (nodeType)
+        {
+            case "Customer":
+                customerNodes.TryGetValue(coordinates, out CustomerNode value);
+                return value; 
+
+            default:
+                break;
+        }
+
+        return null;
     }
 
     public MNode SearchClosestNode(Vector3Int source, string closestNodeType)

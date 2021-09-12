@@ -5,10 +5,8 @@ using UnityEngine.Tilemaps;
 
 public abstract class MNode : MonoBehaviour
 {
-    //the node's position is in cell coordinates
     public abstract Tilemap Tilemap { get; set; }
-    public Vector3Int Position { get; set; } = new Vector3Int();
-    public GameObject occupant = null;
+    protected GameObject occupant = null;
 
     public void MoveToPositionInTilemap(Vector3 position)
     {
@@ -21,7 +19,7 @@ public abstract class MNode : MonoBehaviour
         return position;
     }
 
-    public MNode ParentObject(GameObject child)
+    public virtual MNode ParentObject(GameObject child)
     {
         //set the original parent's occupant to null
         bool parentExists = child.transform.parent.TryGetComponent(out MNode oldParent);
@@ -35,6 +33,12 @@ public abstract class MNode : MonoBehaviour
         occupant = child;
 
         return this;
+    }
+
+    public bool IsOccupied()
+    {
+        bool occupied = (occupant != null) ? true : false;
+        return occupied;
     }
 
     public void UnparentObject()

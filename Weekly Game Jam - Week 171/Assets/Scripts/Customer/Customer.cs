@@ -12,8 +12,7 @@ public class Customer : Element
     //customer-related parameters
     private float changingTime = 3f;
     private float sleepNeeded = 5f;
-    private float sleepAllowance = 3f; //the amount of time by which the customer must be woken up to avoid penalty
-
+    private float sleepAllowance = 3f;
 
     private void Awake()
     {

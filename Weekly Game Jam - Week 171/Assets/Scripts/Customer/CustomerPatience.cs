@@ -39,6 +39,15 @@ public class CustomerPatience : MonoBehaviour
         return true;
     }
 
+    public void DeactivatePatience()
+    {
+        Canvas patience = GetComponentInChildren<Canvas>();
+        if (patience.GetComponentInChildren<UIPatience>())
+        {
+            patience.enabled = false;
+        }
+    }
+
     public void DeclareThis<T>(string type, T UIObject)
         where T : IUserInterface
     {

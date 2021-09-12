@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaitingForPodState : StateMachineBehaviour
+public class FrontPayQueueState : StateMachineBehaviour
 {
     /*
      * checkPoint : the location at which the customer must go to before 
@@ -16,11 +16,12 @@ public class WaitingForPodState : StateMachineBehaviour
     private Animator animator = null;
 
     //parameters related to completion of task
-    private Vector3Int checkPoint = new Vector3Int(-10, 0, 0);
+    private Vector3Int checkPoint = new Vector3Int(-12, -6, 0);
     //private Vector3Int dropoffPoint = new Vector3Int(-8, 5, 0);
     //private Luggage dropoffItem = new Luggage();
     //private Player receiver = null;
 
+    // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         customer = animator.gameObject.GetComponent<Customer>();
@@ -29,10 +30,11 @@ public class WaitingForPodState : StateMachineBehaviour
 
         SubscribeEvents();
 
-        //move the customer to the waiting for pod node
-        controller.TransportCustomer(checkPoint);
+        //signals the end of necessary variable-setting
+        controller.InvokeMoveCompleteEvent();
     }
 
+    // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         UnsubscribeEvents();
@@ -42,7 +44,7 @@ public class WaitingForPodState : StateMachineBehaviour
     {
         if (CheckCustomerPositionRequirements(node))
         {
-            animator.gameObject.AddComponent<Waiting>();
+            //animator.gameObject.AddComponent<Waiting>();
             animator.SetTrigger("MoveState");
         }
     }

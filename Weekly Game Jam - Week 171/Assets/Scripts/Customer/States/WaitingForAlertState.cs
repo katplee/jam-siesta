@@ -39,7 +39,7 @@ public class WaitingForAlertState : StateMachineBehaviour
         //do the things necessary for the state
         PerformStateProcesses();
         
-        //move the customer to the waiting for pod node
+        //move the customer to the item node
         controller.TransportCustomer(checkPoint.GetPositionInTileMap());
     }
 

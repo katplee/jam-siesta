@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaitingForPodState : StateMachineBehaviour
+public class ExitState : StateMachineBehaviour
 {
     /*
-     * checkPoint : the location at which the customer must go to before 
+     * checkPoint : the location at which the customer must go to before a state change
      * dropoffPoint : the location at which the player must go to before receiving an item/before a state change
      * dropoffItem : the item which will be given/received by the receiver
      * receiver : the receipient of the item to be transferred
@@ -16,7 +16,7 @@ public class WaitingForPodState : StateMachineBehaviour
     private Animator animator = null;
 
     //parameters related to completion of task
-    private Vector3Int checkPoint = new Vector3Int(-10, 0, 0);
+    private Vector3Int checkPoint = new Vector3Int(-11, -9, 0);
     //private Vector3Int dropoffPoint = new Vector3Int(-8, 5, 0);
     //private Luggage dropoffItem = new Luggage();
     //private Player receiver = null;
@@ -42,8 +42,7 @@ public class WaitingForPodState : StateMachineBehaviour
     {
         if (CheckCustomerPositionRequirements(node))
         {
-            animator.gameObject.AddComponent<Waiting>();
-            animator.SetTrigger("MoveState");
+            Destroy(customer.gameObject);
         }
     }
 

@@ -18,6 +18,15 @@ public class Bed : ItemClickable
         base.OnClick();
     }
 
+    protected override void Interact()
+    {
+        if (GetComponentInChildren<Sleeping>())
+        {
+            Sleeping tag = GetComponentInChildren<Sleeping>();
+            CustomerController controller = tag.gameObject.GetComponent<CustomerController>();
+            controller.TransportCustomer(customerNode);
+        }
+    }
 
 
     /*

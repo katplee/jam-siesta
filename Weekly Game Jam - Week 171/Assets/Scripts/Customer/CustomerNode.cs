@@ -6,6 +6,7 @@ using UnityEngine.Tilemaps;
 public class CustomerNode : MNode
 {
     public override Tilemap Tilemap { get; set; }
+    private Queue<CustomerController> waitList = new Queue<CustomerController>();
     private int childOrder = -1;
 
     private void Awake()
@@ -18,6 +19,38 @@ public class CustomerNode : MNode
 
         //add this node to the dictionary of customer nodes
         GameManager.Instance.AddNode(GetType().Name, GetPositionInTileMap(), this);
+    }
+
+    public override MNode ParentObject(GameObject child)
+    {
+        //set the original parent's occupant to null
+        bool parentExists = child.transform.parent.TryGetComponent(out MNode oldParent);
+        if (parentExists)
+        {
+            oldParent.UnparentObject();
+            (oldParent as CustomerNode).Dequeue();
+        }
+
+        //set the new parent's occupant to child, and re-parent the child
+        child.transform.SetParent(transform);
+        occupant = child;
+
+        return this; 
+    }
+
+    public void Queue(CustomerController controller)
+    {
+        waitList.Enqueue(controller);
+    }
+
+    private void Dequeue()
+    {
+        if (waitList.Count != 0)
+        {
+            //calls the first customer in the waitlist to approach node
+            CustomerController customer = waitList.Dequeue();
+            customer.TransportCustomer(transform);
+        }
     }
 
     private void OnDestroy()
@@ -33,11 +66,11 @@ public class CustomerNode : MNode
 
     private void SubscribeEvents()
     {
-        WaitingCustomerManager.OnCustomerUpdate += MoveToFrontNode;
+        WaitingManager.OnCustomerUpdate += MoveToFrontNode;
     }
 
     private void UnsubscribeEvents()
     {
-        WaitingCustomerManager.OnCustomerUpdate -= MoveToFrontNode;
+        WaitingManager.OnCustomerUpdate -= MoveToFrontNode;
     }
 }

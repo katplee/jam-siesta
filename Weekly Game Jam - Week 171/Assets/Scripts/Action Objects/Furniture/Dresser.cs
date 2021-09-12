@@ -4,8 +4,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Dresser : MonoBehaviour
+public class Dresser : ItemClickable
 {
+    private DresserAlarm alarm = null;
+
+    private new void Awake()
+    {
+        base.Awake();
+        alarm = GetComponent<DresserAlarm>();
+    }
+
+    //turn off the alarm
+    //if a player is sleeping in the pod, automatically wake player up
+    protected override void Interact()
+    {
+        //make sure that a player is sleeping in the bed of the same pod
+        Pod pod = GetComponentInParent<Pod>();
+        Bed bed = pod.GetComponentInChildren<Bed>();
+        Customer customer = bed.GetComponentInChildren<Customer>();
+
+        alarm.TurnOffAlarm();
+
+        if (!customer) { return; }
+        
+        if(!customer.GetComponent<Sleeping>()) { return; }
+
+        //transport player to corresponding bed node to wake player up
+        bed.OnClick();
+    }
+
     /*
     [SerializeField]
     private bool electricitySwitch = true;

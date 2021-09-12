@@ -18,7 +18,7 @@ public class ItemClickable : Clickable, IUserInterface
         get { return name; }
     }
 
-    private void Awake()
+    protected void Awake()
     {
         SubscribeEvent();
 
@@ -75,7 +75,20 @@ public class ItemClickable : Clickable, IUserInterface
 
     public ItemNode GetItemNode()
     {
+        if (!itemNode) { return null; }
         return itemNode.GetComponent<ItemNode>();
+    }
+
+    public CustomerNode GetCustomerNode()
+    {
+        if (!customerNode) { return null; }
+        return customerNode.GetComponent<CustomerNode>();
+    }
+
+    public PlayerNode GetPlayerNode()
+    {
+        if (!playerNode) { return null; }
+        return playerNode.GetComponent<PlayerNode>();
     }
 
     private void SubscribeEvent()

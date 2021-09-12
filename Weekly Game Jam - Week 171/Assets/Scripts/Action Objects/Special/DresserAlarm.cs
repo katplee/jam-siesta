@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -46,6 +47,11 @@ public class DresserAlarm : MonoBehaviour
         return true;
     }
 
+    private void SetAlarm(UIAlarm alarm)
+    {
+        customerAlarm = alarm;
+    }
+
     public void DeclareThis<T>(string type, T UIObject)
         where T : IUserInterface
     {
@@ -60,14 +66,33 @@ public class DresserAlarm : MonoBehaviour
         }
     }
 
-    private void SetAlarm(UIAlarm alarm)
+    public void TurnOffAlarm()
     {
-        customerAlarm = alarm;
+        //hide alarm bar
+        ToggleVisibility("false");
+
+        //turn off the audio sound
+
+        //reset timers
+        alarm = 0f;
+        _alarm = 0f; //current alarm value
+        allowance = 0f;
     }
 
-    public void ToggleVisibility()
+    public void ToggleVisibility(string preference = "")
     {
-        bool toggle = (customerAlarm.gameObject.activeSelf) ? false : true;
-        customerAlarm.gameObject.SetActive(toggle);
+        switch (preference)
+        {
+            case "true":
+                customerAlarm.gameObject.SetActive(true);
+                break;
+            case "false":
+                customerAlarm.gameObject.SetActive(false);
+                break;
+            default:
+                bool toggle = (customerAlarm.gameObject.activeSelf) ? false : true;
+                customerAlarm.gameObject.SetActive(toggle);
+                break;
+        }
     }
 }

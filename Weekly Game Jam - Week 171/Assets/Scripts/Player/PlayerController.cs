@@ -4,8 +4,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class PlayerController : Singleton<PlayerController>
+public class PlayerController : Controller
 {
+    private static PlayerController instance;
+    public static PlayerController Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<PlayerController>();
+            }
+            return instance;
+        }
+    }
+
     public static event Action OnItemPress;
     public static event Action<MNode> OnMoveComplete;
 
@@ -43,9 +56,8 @@ public class PlayerController : Singleton<PlayerController>
 
     public void TransportPlayer(Transform destination)
     {
-
         //if the path has not been reset aka the player is moving, cancel transport operation
-        if(endPosition != Vector3Int.zero) { return; }
+        if (endPosition != Vector3Int.zero) { return; }
 
         DefinePath(destination);
 
@@ -126,7 +138,7 @@ public class PlayerController : Singleton<PlayerController>
 
     public void ResetPath()
     {
-        InvokeMoveCompleteEvent();
         endPosition = Vector3Int.zero;
+        InvokeMoveCompleteEvent();
     }
 }

@@ -17,19 +17,19 @@ public class CustomerSpawner : Singleton<CustomerSpawner>
 
     private void Start()
     {
-        SpawnCustomer();
-        //InvokeRepeating("SpawnCustomer", 0f, spawnEvery);
+        //SpawnCustomer();
+        InvokeRepeating("SpawnCustomer", 0f, spawnEvery);
     }
 
     private void SetTimers()
     {
         //spawnEvery = 3 * Random.Range(1, 4);
-        spawnEvery = 10;
+        spawnEvery = 20;
     }
 
     private void SpawnCustomer()
     {
-        Transform queue = WaitingCustomerManager.Instance.transform;
+        Transform queue = WaitingManager.Instance.transform;
 
         for (int i = 0; i < queue.childCount; i++)
         {
@@ -37,8 +37,6 @@ public class CustomerSpawner : Singleton<CustomerSpawner>
             if (!mNode.GetComponentInChildren<Customer>())
             {
                 GameObject _customer = Instantiate(customer, mNode);
-                mNode.GetComponent<CustomerNode>().ParentObject(_customer);
-
                 break;
             }
         }

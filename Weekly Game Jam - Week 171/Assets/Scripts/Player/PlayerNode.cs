@@ -13,6 +13,9 @@ public class PlayerNode : MNode
         Tilemap = TilemapManager.Instance.playerTilemap;
 
         //add this node to the dictionary of customer nodes
+        //except if it is the designated player node of a customer
+        if (GetComponentInParent<Customer>()) { return; }
+
         GameManager.Instance.AddNode(GetType().Name, GetPositionInTileMap(), this);
     }
 }

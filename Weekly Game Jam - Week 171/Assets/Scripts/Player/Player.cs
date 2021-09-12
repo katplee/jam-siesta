@@ -29,16 +29,6 @@ public class Player : Element
         Tilemap = TilemapManager.Instance.playerTilemap;
     }
 
-    public bool DropItemTo<T>(ItemClickable storage, T itemType)
-        where T : ItemTransferrable
-    {
-        if (!ReleaseItem(itemType, out List<ItemTransferrable> items)) { return false; }
-
-        bool dropped = storage.ReceiveItem(items);
-
-        return dropped;
-    }
-
     public Tag SelectCustomer(Customer customer, Tag customerTag)
     {
         activeTag = customerTag;
