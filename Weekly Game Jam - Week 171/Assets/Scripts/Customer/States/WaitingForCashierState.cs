@@ -27,7 +27,7 @@ public class WaitingForCashierState : StateMachineBehaviour
         controller = customer.GetComponent<CustomerController>();
         this.animator = animator;
 
-        checkPoint = PayingManager.Instance.HighestAvailableNode(controller);
+        checkPoint = PayingManager.Instance.GetHighestAvailableNode(controller);
 
         SubscribeEvents();
 
@@ -35,15 +35,11 @@ public class WaitingForCashierState : StateMachineBehaviour
         controller.TransportCustomer(checkPoint);
     }
 
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        UnsubscribeEvents();
-    }
-
     private void CheckForEndState(MNode node)
     {
         if (CheckCustomerPositionRequirements(node))
         {
+            UnsubscribeEvents();
             animator.SetTrigger("MoveState");
         }
     }

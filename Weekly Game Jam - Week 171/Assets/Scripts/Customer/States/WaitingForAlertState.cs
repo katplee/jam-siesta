@@ -43,14 +43,10 @@ public class WaitingForAlertState : StateMachineBehaviour
         controller.TransportCustomer(checkPoint.GetPositionInTileMap());
     }
 
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        UnsubscribeEvents();
-    }
-
     private void CheckForEndState(MNode node)
     {
         animator.gameObject.AddComponent<Sleeping>();
+        UnsubscribeEvents();
         animator.SetTrigger("MoveState");
     }
 

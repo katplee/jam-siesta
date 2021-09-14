@@ -43,13 +43,9 @@ public class ChangingToPajamasState : StateMachineBehaviour
         AnimateElement();
     }
 
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        UnsubscribeEvents();
-    }
-
     private void CheckForEndState(MNode node)
     {
+        UnsubscribeEvents();
         animator.SetTrigger("MoveState");
     }
 

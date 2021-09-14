@@ -45,4 +45,10 @@ public abstract class MNode : MonoBehaviour
     {
         occupant = null;
     }
+
+    public GameObject GetOccupant()
+    {
+        if (occupant) { return occupant; }
+        return null;
+    }
 }

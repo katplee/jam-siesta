@@ -31,6 +31,12 @@ public abstract class Element : MonoBehaviour, IUserInterface
         return dropped;
     }
 
+    public bool GetItemFrom<T>(ItemClickable storage, T itemType)
+        where T : ItemTransferrable
+    {
+
+    }
+
     public bool GiveItemTo<T>(Element receiver, T itemType)
         where T : ItemTransferrable
     {

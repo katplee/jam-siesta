@@ -11,8 +11,6 @@ public class CustomerNode : MNode
 
     private void Awake()
     {
-        SubscribeEvents();
-
         //set the position and child order field parameter
         Tilemap = TilemapManager.Instance.customerTilemap;
         childOrder = transform.GetSiblingIndex();
@@ -51,26 +49,5 @@ public class CustomerNode : MNode
             CustomerController customer = waitList.Dequeue();
             customer.TransportCustomer(transform);
         }
-    }
-
-    private void OnDestroy()
-    {
-        UnsubscribeEvents();
-    }
-
-    private void MoveToFrontNode()
-    {
-        Transform frontNode = transform.root.GetChild(childOrder - 1);
-        frontNode.GetComponent<CustomerNode>().ParentObject(occupant);
-    }
-
-    private void SubscribeEvents()
-    {
-        WaitingManager.OnCustomerUpdate += MoveToFrontNode;
-    }
-
-    private void UnsubscribeEvents()
-    {
-        WaitingManager.OnCustomerUpdate -= MoveToFrontNode;
     }
 }

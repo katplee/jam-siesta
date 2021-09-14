@@ -4,17 +4,13 @@ using UnityEngine;
 
 public class PajamasShelf : ItemClickable
 {
-    private Pajamas content = new Pajamas();
-    private GameObject contentObject;
-
-    private ItemTransferrable GenerateContent()
+    private new void Awake()
     {
-        contentObject = new GameObject();
-        GameObject go = contentObject;
-        go.transform.SetParent(container);
-        go.name = content.GetType().Name;
-        Pajamas component = go.AddComponent<Pajamas>();
-        return component;
+        //set the content
+        content = new Pajamas();
+
+        //do the usual parameter-setting
+        base.Awake();
     }
 
     //give player a set of pajamas

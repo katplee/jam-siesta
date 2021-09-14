@@ -39,16 +39,11 @@ public class FrontQueueState : StateMachineBehaviour
         controller.InvokeMoveCompleteEvent();
     }
 
-    // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        UnsubscribeEvents();    
-    }
-
     private void CheckForEndState(MNode node)
     {
         if (CheckCustomerPositionRequirements(node))
         {
+            UnsubscribeEvents();    
             animator.SetTrigger("MoveState");
         }
     }

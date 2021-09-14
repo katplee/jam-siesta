@@ -33,16 +33,12 @@ public class WaitingForPodState : StateMachineBehaviour
         controller.TransportCustomer(checkPoint);
     }
 
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        UnsubscribeEvents();
-    }
-
     private void CheckForEndState(MNode node)
     {
         if (CheckCustomerPositionRequirements(node))
         {
             animator.gameObject.AddComponent<Waiting>();
+            UnsubscribeEvents();
             animator.SetTrigger("MoveState");
         }
     }

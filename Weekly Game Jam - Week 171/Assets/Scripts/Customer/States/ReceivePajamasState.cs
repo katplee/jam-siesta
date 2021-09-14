@@ -27,18 +27,16 @@ public class ReceivePajamasState : StateMachineBehaviour
         receiver = animator.gameObject.GetComponent<Customer>();
     }
 
-    // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        UnsubscribeEvents();
-    }
-
     private void CheckForEndState(MNode node)
     {
         if (CheckPlayerPositionRequirements(node))
         {
             bool end = TransferItem();
-            if (end) { animator.SetTrigger("MoveState"); }
+            if (end)
+            {
+                UnsubscribeEvents();
+                animator.SetTrigger("MoveState"); 
+            }
         }
     }
 

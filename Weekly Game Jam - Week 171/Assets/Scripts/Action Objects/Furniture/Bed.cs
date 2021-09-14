@@ -5,6 +5,15 @@ using UnityEngine;
 
 public class Bed : ItemClickable
 {
+    private new void Awake()
+    {
+        //set the content
+        content = new Sheets();
+
+        //do the usual parameter-setting
+        base.Awake();
+    }
+
     public override void OnClick()
     {
         //make sure that the player clicked an object with WAITING tag before this object
@@ -26,8 +35,18 @@ public class Bed : ItemClickable
             CustomerController controller = tag.gameObject.GetComponent<CustomerController>();
             controller.TransportCustomer(customerNode);
         }
+
+        if (GetComponentInChildren<ItemTransferrable>())
+        {
+            Player receiver = Player.Instance;
+            //receiver.ReceiveItem(item);
+        }
     }
 
+    public void LeaveDirtySheets()
+    {
+        GenerateContent();
+    }
 
     /*
     protected override void Interact()

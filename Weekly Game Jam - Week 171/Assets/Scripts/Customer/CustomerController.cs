@@ -15,6 +15,8 @@ public class CustomerController : Controller
     public Vector3Int startPosition { get; private set; }
     public Vector3Int endPosition { get; private set; }
     private MNode positionNode = null;
+    private MNode _positionNode = null;
+
     private float speed = 5f;
     private Tilemap customerTilemap = null;
 
@@ -29,6 +31,8 @@ public class CustomerController : Controller
         movePoint = GetComponentInChildren<MovePoint>().transform;
         movePoint.parent = null;
         customerTilemap = TilemapManager.Instance.customerTilemap;
+
+        GameManager.Instance.RefreshNodeParent(customer);
     }
 
     public void InvokeMoveCompleteEvent()
@@ -131,6 +135,11 @@ public class CustomerController : Controller
     {
         endPosition = Vector3Int.zero;
         InvokeMoveCompleteEvent();
+    }
+
+    public void DeleteMovePoint()
+    {
+        Destroy(movePoint.gameObject);
     }
 
     /*

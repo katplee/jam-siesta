@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PayingManager : Singleton<PayingManager>
 {
-    public Transform HighestAvailableNode(CustomerController caller)
+    public Transform GetHighestAvailableNode(CustomerController caller)
     {
         Transform lastNode = null;
 

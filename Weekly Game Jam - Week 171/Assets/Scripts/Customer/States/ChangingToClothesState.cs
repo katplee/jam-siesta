@@ -46,17 +46,16 @@ public class ChangingToClothesState : StateMachineBehaviour
         AnimateElement();
     }
 
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        UnsubscribeEvents();
-    }
-
     private void CheckForEndState(MNode node)
     {
         if (AnimateElement())
         {
             bool end = TransferItem();
-            if (end) { animator.SetTrigger("MoveState"); }
+            if (end) 
+            {
+                UnsubscribeEvents();
+                animator.SetTrigger("MoveState"); 
+            }
         }
     }
 
@@ -84,6 +83,7 @@ public class ChangingToClothesState : StateMachineBehaviour
     {
         Customer giver = customer;
         bool transfered = giver.DropItemTo(bed, dropoffItem);
+        bed.LeaveDirtySheets();
 
         return transfered;
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -11,7 +12,10 @@ public class ItemClickable : Clickable, IUserInterface
     protected Transform itemNode = null;
     private Tilemap playerTilemap = null;
     public Transform container { get; private set; } = null;
+    protected ItemTransferrable content = null;
+    protected GameObject contentObject;
     private List<ItemTransferrable> itemsInStock = new List<ItemTransferrable>();
+
 
     public string label
     {
@@ -52,6 +56,15 @@ public class ItemClickable : Clickable, IUserInterface
         Player.Instance.RestartTags();
     }
 
+    protected ItemTransferrable GenerateContent()
+    {
+        contentObject = new GameObject();
+        contentObject.transform.SetParent(container);
+        contentObject.name = content.GetType().Name;
+        ItemTransferrable component = contentObject.AddComponent(content.GetType()) as ItemTransferrable;
+        return component;
+    }
+
     protected virtual void OnInteractionWithItem(MNode playerPosition)
     {
         if (GetPositionInTileMap() == playerPosition.GetPositionInTileMap())
@@ -71,6 +84,23 @@ public class ItemClickable : Clickable, IUserInterface
         }
 
         return true;
+    }
+
+    public bool ReleaseItem(out List<ItemTransferrable> items)
+    {
+        List<ItemTransferrable> itemsOfType = new List<ItemTransferrable>();
+        List<ItemTransferrable> _itemsInHand = new List<ItemTransferrable>(itemsInHand);
+
+        foreach (ItemTransferrable i in itemsInHand)
+        {
+            if (i as T) { itemsOfType.Add(i); _itemsInHand.Remove(i); }
+        }
+
+        itemsInHand = _itemsInHand;
+
+        bool released = (itemsOfType.Count != 0) ? true : false;
+        items = itemsOfType;
+        return released;
     }
 
     public ItemNode GetItemNode()

@@ -24,21 +24,27 @@ public class CustomerSpawner : Singleton<CustomerSpawner>
     private void SetTimers()
     {
         //spawnEvery = 3 * Random.Range(1, 4);
-        spawnEvery = 20;
+        spawnEvery = 10;
     }
 
     private void SpawnCustomer()
     {
         Transform queue = WaitingManager.Instance.transform;
+        GameObject _customer = null;
+        Transform mNode = null;
 
         for (int i = 0; i < queue.childCount; i++)
         {
-            Transform mNode = queue.GetChild(i);
+            mNode = queue.GetChild(i);
             if (!mNode.GetComponentInChildren<Customer>())
             {
-                GameObject _customer = Instantiate(customer, mNode);
+                _customer = Instantiate(customer, mNode);
                 break;
             }
+            //if there are no more vacant spots
         }
+
+        CustomerController controller = _customer.GetComponentInChildren<CustomerController>();
+        WaitingManager.Instance.SetQueueDestination(controller);
     }
 }
