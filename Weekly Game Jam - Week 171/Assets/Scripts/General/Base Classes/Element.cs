@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 public abstract class Element : MonoBehaviour, IUserInterface
 {
-    protected GameObject location = null;
+    protected Transform location = null;
     public abstract Tilemap Tilemap { get; set; }
 
     public string label
@@ -14,6 +14,13 @@ public abstract class Element : MonoBehaviour, IUserInterface
     }
 
     protected List<ItemTransferrable> itemsInHand = new List<ItemTransferrable>();
+
+    public Transform UpdateLocation()
+    {
+        MNode location = GameManager.Instance.SearchEquivalentNode(GetPositionInTilemap(), label);
+        this.location = location.transform;
+        return this.location;
+    }
 
     public Vector3Int GetPositionInTilemap()
     {
@@ -24,7 +31,7 @@ public abstract class Element : MonoBehaviour, IUserInterface
     public bool DropItemTo<T>(ItemClickable storage, T itemType)
         where T : ItemTransferrable
     {
-        if (!ReleaseItem(itemType, out List<ItemTransferrable> items)) { return false; }
+        if (!ReleaseItem(10, itemType, out List<ItemTransferrable> items)) { return false; }
 
         bool dropped = storage.ReceiveItem(items);
 
@@ -34,13 +41,27 @@ public abstract class Element : MonoBehaviour, IUserInterface
     public bool GetItemFrom<T>(ItemClickable storage, T itemType)
         where T : ItemTransferrable
     {
+        int canReceive = 0;
+        if (this as Player) { canReceive = 2 - itemsInHand.Count; }
+        else if (this as Customer) { canReceive = 1 - itemsInHand.Count; }
 
+        if (!storage.ReleaseItem(canReceive, itemType, out List<ItemTransferrable> items)) { return false; }
+
+        ItemTransferrable[] itemsArray = items.ToArray();
+
+        bool received = ReceiveItem(itemsArray);
+
+        return received;
     }
 
     public bool GiveItemTo<T>(Element receiver, T itemType)
         where T : ItemTransferrable
     {
-        if (!ReleaseItem<T>(itemType, out List<ItemTransferrable> items)) { return false; }
+        int canReceive = 0;
+        if (receiver as Player) { canReceive = 2 - receiver.itemsInHand.Count; }
+        else if (receiver as Customer) { canReceive = 1 - receiver.itemsInHand.Count; }
+
+        if (!ReleaseItem<T>(canReceive, itemType, out List<ItemTransferrable> items)) { return false; }
 
         ItemTransferrable[] itemsArray = items.ToArray();
 
@@ -53,6 +74,7 @@ public abstract class Element : MonoBehaviour, IUserInterface
     {
         //problem down the line: what if at the moment, only 1 item can be received by the player?
         //can the player go back to it again at another time?
+        //add an additional step where the receiver will return the items to the giver!
 
         bool received = false;
 
@@ -71,7 +93,7 @@ public abstract class Element : MonoBehaviour, IUserInterface
         return received;
     }
 
-    protected bool ReleaseItem<T>(T itemType, out List<ItemTransferrable> items)
+    protected bool ReleaseItem<T>(int quantity, T itemType, out List<ItemTransferrable> items)
         where T : ItemTransferrable
     {
         List<ItemTransferrable> itemsOfType = new List<ItemTransferrable>();
@@ -79,9 +101,11 @@ public abstract class Element : MonoBehaviour, IUserInterface
 
         foreach (ItemTransferrable i in itemsInHand)
         {
-            if (i as T) { itemsOfType.Add(i); _itemsInHand.Remove(i); }
-        }
+            if(quantity == 0) { break; }
 
+            if (i as T) { itemsOfType.Add(i); _itemsInHand.Remove(i); quantity--; }
+        }
+         
         itemsInHand = _itemsInHand;
 
         bool released = (itemsOfType.Count != 0) ? true : false;

@@ -5,10 +5,12 @@ using UnityEngine;
 
 public class Bed : ItemClickable
 {
+    private Pajamas _content = null;
+
     private new void Awake()
     {
-        //set the content
         content = new Sheets();
+        //set the content
 
         //do the usual parameter-setting
         base.Awake();
@@ -16,19 +18,34 @@ public class Bed : ItemClickable
 
     public override void OnClick()
     {
+        bool terminate = false;
         //make sure that the player clicked an object with WAITING tag before this object
         if (Player.Instance.GetActiveTag(out Customer customer) as Waiting)
         {
+
+            foreach (Transform item in transform)
+            {
+                //terminate operation if bed is dirty with sheets and pajamas
+                if (item.GetComponent<Sheets>()) { terminate = true; }
+                if (item.GetComponent<Pajamas>()) { terminate = true; }
+                
+                //terminate operation if pod is occupied by another customer
+                if (GetComponentInChildren<Customer>()) { terminate = true; }
+            }
+
             //transport customer to corresponding customer node
-            customer.GetComponent<CustomerController>().TransportCustomer(customerNode);
+            if (!terminate) { customer.GetComponent<CustomerController>().TransportCustomer(customerNode); }
         }
 
         //transport player to corresponding player node
-        base.OnClick();
+        if (!terminate) { base.OnClick(); }
+        else { Player.Instance.RestartTags(); }
+
     }
 
     protected override void Interact()
     {
+        //wake a sleeping customer up
         if (GetComponentInChildren<Sleeping>())
         {
             Sleeping tag = GetComponentInChildren<Sleeping>();
@@ -36,16 +53,20 @@ public class Bed : ItemClickable
             controller.TransportCustomer(customerNode);
         }
 
+        //clean sheets
         if (GetComponentInChildren<ItemTransferrable>())
         {
+            Debug.Log("yay");
             Player receiver = Player.Instance;
-            //receiver.ReceiveItem(item);
+            receiver.GetItemFrom(this, content as Sheets);
+            receiver.GetItemFrom(this, _content);
         }
     }
 
-    public void LeaveDirtySheets()
+    public ItemTransferrable LeaveDirtySheets()
     {
-        GenerateContent();
+        ItemTransferrable sheets = GenerateContent();
+        return sheets;
     }
 
     /*

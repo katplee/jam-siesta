@@ -10,8 +10,8 @@ public class Dresser : ItemClickable
 
     private new void Awake()
     {
-        base.Awake();
         alarm = GetComponent<DresserAlarm>();
+        base.Awake();
     }
 
     //turn off the alarm

@@ -24,7 +24,7 @@ public class CustomerSpawner : Singleton<CustomerSpawner>
     private void SetTimers()
     {
         //spawnEvery = 3 * Random.Range(1, 4);
-        spawnEvery = 10;
+        spawnEvery = 20;
     }
 
     private void SpawnCustomer()

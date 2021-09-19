@@ -82,10 +82,14 @@ public class ChangingToClothesState : StateMachineBehaviour
     private bool TransferItem()
     {
         Customer giver = customer;
-        bool transfered = giver.DropItemTo(bed, dropoffItem);
-        bed.LeaveDirtySheets();
+        bool transferred = giver.DropItemTo(bed, dropoffItem);
 
-        return transfered;
+        if (!transferred) { return false; }
+
+        Sheets sheets = bed.LeaveDirtySheets() as Sheets;
+        transferred = bed.ReceiveItem(new List<ItemTransferrable>() { sheets });
+
+        return transferred;
     }
     
     //private void PerformStateProcesses() { }

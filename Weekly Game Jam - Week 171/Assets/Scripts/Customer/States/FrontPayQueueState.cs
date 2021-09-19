@@ -30,6 +30,14 @@ public class FrontPayQueueState : StateMachineBehaviour
 
         SubscribeEvents();
 
+        //if in case while transit, player at the front node exited
+        Transform checkPoint = PayingManager.Instance.GetHighestAvailableNode(controller);
+        if(Vector3.Normalize(checkPoint.position - customer.transform.position) == Vector3.down)
+        {
+            controller.TransportCustomer(checkPoint);
+            return;
+        }
+
         //signals the end of necessary variable-setting
         controller.InvokeMoveCompleteEvent();
     }

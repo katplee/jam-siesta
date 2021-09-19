@@ -121,8 +121,6 @@ public class PlayerController : Controller
         return false;
     }
 
-
-
     private void MovePointBy(Vector3 moveDistance)
     {
         movePoint.position += moveDistance;

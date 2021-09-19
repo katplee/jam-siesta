@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LuggageShelf : ItemClickable
 {
-    private Luggage content = null;
+    private new Luggage content = null;
 
     //deposit all luggages being held
     protected override void Interact()

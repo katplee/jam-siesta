@@ -39,6 +39,7 @@ public class CustomerController : Controller
     {
         //updates the player node assigned to the customer
         clickable.UpdateChildNode();
+        customer.UpdateLocation();
         positionNode = GameManager.Instance.RefreshNodeParent(customer);
         OnMoveComplete?.Invoke(positionNode);
     }

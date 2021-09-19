@@ -86,17 +86,20 @@ public class ItemClickable : Clickable, IUserInterface
         return true;
     }
 
-    public bool ReleaseItem(out List<ItemTransferrable> items)
+    public bool ReleaseItem<T>(int quantity, T itemType, out List<ItemTransferrable> items)
+        where T : ItemTransferrable
     {
         List<ItemTransferrable> itemsOfType = new List<ItemTransferrable>();
-        List<ItemTransferrable> _itemsInHand = new List<ItemTransferrable>(itemsInHand);
+        List<ItemTransferrable> _itemsInStock = new List<ItemTransferrable>(itemsInStock);
 
-        foreach (ItemTransferrable i in itemsInHand)
+        foreach (ItemTransferrable i in itemsInStock)
         {
-            if (i as T) { itemsOfType.Add(i); _itemsInHand.Remove(i); }
+            if (quantity == 0) { break; }
+
+            if (i as T) { itemsOfType.Add(i); _itemsInStock.Remove(i); quantity--; }
         }
 
-        itemsInHand = _itemsInHand;
+        itemsInStock = _itemsInStock;
 
         bool released = (itemsOfType.Count != 0) ? true : false;
         items = itemsOfType;

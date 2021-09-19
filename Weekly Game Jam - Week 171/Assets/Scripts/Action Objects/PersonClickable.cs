@@ -32,7 +32,7 @@ public class PersonClickable : Clickable
 
     public void UpdateChildNode()
     {
-        MNode _node = GameManager.Instance.SearchClosestNode(node.GetPositionInTileMap(), element.label);
+        MNode _node = GameManager.Instance.SearchClosestNode(element.GetPositionInTilemap(), element.label);
         node.MoveToPositionInTilemap(_node.transform.position);
     }
     
