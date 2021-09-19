@@ -21,11 +21,18 @@ public class CustomerNode : MNode
 
     public override MNode ParentObject(GameObject child)
     {
+        TileBase floor = Tilemap.GetTile(new Vector3Int(0, 11, 0));
+
         //set the original parent's occupant to null
         bool parentExists = child.transform.parent.TryGetComponent(out MNode oldParent);
         if (parentExists)
         {
             oldParent.UnparentObject();
+
+            Debug.Log(oldParent.GetPositionInTileMap());
+            //set the old tile at the old parent node to be active
+            Tilemap.SetTile(oldParent.GetPositionInTileMap(), floor);
+
             (oldParent as CustomerNode).Dequeue();
         }
 
@@ -33,7 +40,16 @@ public class CustomerNode : MNode
         child.transform.SetParent(transform);
         occupant = child;
 
-        return this; 
+        //set the tile at the new parent node to be null
+        Tilemap.SetTile(GetPositionInTileMap(), null);
+
+        return this;
+    }
+
+    public void MakeTileActive(Vector3Int tile)
+    {
+        TileBase floor = Tilemap.GetTile(new Vector3Int(0, 11, 0));
+        Tilemap.SetTile(tile, floor);
     }
 
     public void Queue(CustomerController controller)

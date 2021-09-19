@@ -21,16 +21,25 @@ public abstract class MNode : MonoBehaviour
 
     public virtual MNode ParentObject(GameObject child)
     {
+        TileBase floor = Tilemap.GetTile(new Vector3Int(0, 11, 0));
+
         //set the original parent's occupant to null
         bool parentExists = child.transform.parent.TryGetComponent(out MNode oldParent);
         if (parentExists)
         {
             oldParent.UnparentObject();
+
+            //set the old tile at the old parent node to be active
+            Tilemap.SetTile(oldParent.GetPositionInTileMap(), floor);
         }
 
         //set the new parent's occupant to child, and re-parent the child
         child.transform.SetParent(transform);
         occupant = child;
+
+        //set the tile at the new parent node to be null
+        Tilemap.SetTile(GetPositionInTileMap(), null);
+
 
         return this;
     }

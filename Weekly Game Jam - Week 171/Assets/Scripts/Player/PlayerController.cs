@@ -22,6 +22,8 @@ public class PlayerController : Controller
     public static event Action OnItemPress;
     public static event Action<MNode> OnMoveComplete;
 
+    private Queue<Transform> path = new Queue<Transform>();
+
     private Player player = null;
     private Animator animator = null;
     private Transform movePoint = null;
@@ -29,7 +31,7 @@ public class PlayerController : Controller
     public Vector3Int endPosition { get; private set; }
     private MNode positionNode = null;
     private float speed = 5f;
-    private Tilemap playerTilemap = null; 
+    private Tilemap playerTilemap = null;
 
     private void Awake()
     {
@@ -52,12 +54,22 @@ public class PlayerController : Controller
     {
         positionNode = GameManager.Instance.RefreshNodeParent(player);
         OnMoveComplete?.Invoke(positionNode);
+        
+        if(path.Count == 0) { return; }
+
+        //go to the next path in the queue if there is a destination queued
+        Transform nextDestination = DequeuePath();
+        TransportPlayer(nextDestination);
     }
 
     public void TransportPlayer(Transform destination)
     {
         //if the path has not been reset aka the player is moving, cancel transport operation
-        if (endPosition != Vector3Int.zero) { return; }
+        if (endPosition != Vector3Int.zero) { AddPath(destination); return; }
+
+        //even if destination is added at a time when endPosition has already been set to zero, add to
+        //the end of the queue if there is a queue
+        //if(path.Count != 0) { AddPath(destination); return; }
 
         DefinePath(destination);
 
@@ -103,10 +115,10 @@ public class PlayerController : Controller
         {
             MovePointBy(moveVector);
 
-            if(moveVector == Vector3Int.zero)
+            if (moveVector == Vector3Int.zero)
             {
                 Vector3Int currentPosition = playerTilemap.WorldToCell(transform.position);
-                if(currentPosition == endPosition)
+                if (currentPosition == endPosition)
                 {
                     animator.SetFloat("Speed", 0f);
                     return false;
@@ -129,7 +141,7 @@ public class PlayerController : Controller
     private void AnimatePlayer(Vector3 from, Vector3 to)
     {
         Vector3 normalized = Vector3.Normalize(to - from);
-        
+
         animator.SetFloat("Horizontal", normalized.x);
         animator.SetFloat("Vertical", normalized.y);
     }
@@ -138,5 +150,16 @@ public class PlayerController : Controller
     {
         endPosition = Vector3Int.zero;
         InvokeMoveCompleteEvent();
+    }
+
+    private void AddPath(Transform path)
+    {
+        this.path.Enqueue(path);
+    }
+
+    private Transform DequeuePath()
+    {
+        Transform next = path.Dequeue();
+        return next;
     }
 }

@@ -38,8 +38,18 @@ public class ExitState : StateMachineBehaviour
         if (CheckCustomerPositionRequirements(node))
         {
             UnsubscribeEvents();
+            SetExitTileActive();
             controller.DeleteMovePoint();
             Destroy(customer.gameObject);
+        }
+    }
+
+    private void SetExitTileActive()
+    {
+        bool parentExists = customer.transform.parent.TryGetComponent(out CustomerNode oldParent);
+        if (parentExists)
+        {
+            oldParent.MakeTileActive(checkPoint);
         }
     }
 

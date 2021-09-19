@@ -40,7 +40,6 @@ public class Bed : ItemClickable
         //transport player to corresponding player node
         if (!terminate) { base.OnClick(); }
         else { Player.Instance.RestartTags(); }
-
     }
 
     protected override void Interact()
@@ -56,7 +55,6 @@ public class Bed : ItemClickable
         //clean sheets
         if (GetComponentInChildren<ItemTransferrable>())
         {
-            Debug.Log("yay");
             Player receiver = Player.Instance;
             receiver.GetItemFrom(this, content as Sheets);
             receiver.GetItemFrom(this, _content);
