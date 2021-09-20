@@ -7,6 +7,7 @@ using Random = UnityEngine.Random;
 public class CustomerSpawner : Singleton<CustomerSpawner>
 {
     [SerializeField] private GameObject customer = null;
+    private Queue<GameObject> customersToSpawn = new Queue<GameObject>();
     private int spawnEvery = 0; //time between spawns
     private float spawnIn = 0f; //remaining time until next spawn
 
@@ -41,10 +42,55 @@ public class CustomerSpawner : Singleton<CustomerSpawner>
                 _customer = Instantiate(customer, mNode);
                 break;
             }
-            //if there are no more vacant spots
         }
 
-        CustomerController controller = _customer.GetComponentInChildren<CustomerController>();
+        if (!_customer)
+        {
+            //if there are no available waiting nodes left, instantiate, set destination but temporarily hide
+            _customer = Instantiate(customer, mNode);
+            Queue(_customer);
+        }
+
+        CustomerController controller = _customer.GetComponent<CustomerController>();
         WaitingManager.Instance.SetQueueDestination(controller);
+    }
+
+    private void Queue(GameObject customer)
+    {
+        CustomerPatience patience = customer.GetComponent<CustomerPatience>();
+        SpriteRenderer renderer = customer.GetComponent<SpriteRenderer>();
+        
+        Debug.Log(patience.GetInstanceID());
+
+        customersToSpawn.Enqueue(customer);
+        renderer.enabled = false;
+        patience.SetPatienceInteractibility(false);
+    }
+
+    public CustomerController Dequeue()
+    {
+        if (customersToSpawn.Count != 0)
+        {
+            //calls the first customer in the to-spawn list
+            GameObject customer = customersToSpawn.Dequeue();
+
+            CustomerController controller = customer.GetComponent<CustomerController>();
+            Debug.Log(controller.GetInstanceID());
+            CustomerPatience patience = customer.GetComponent<CustomerPatience>();
+            SpriteRenderer renderer = customer.GetComponent<SpriteRenderer>();
+
+            renderer.enabled = true;
+            patience.SetPatienceInteractibility(true);
+
+            return controller;
+        }
+
+        return null;
+    }
+
+    public bool HasCustomersToSpawn()
+    {
+        bool spawn = (customersToSpawn.Count != 0) ? true : false;
+        return spawn;
     }
 }

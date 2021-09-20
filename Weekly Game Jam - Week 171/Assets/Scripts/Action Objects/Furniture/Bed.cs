@@ -6,11 +6,13 @@ using UnityEngine;
 public class Bed : ItemClickable
 {
     private Pajamas _content = null;
+    private PlayerController playerController = null;
 
     private new void Awake()
     {
-        content = new Sheets();
         //set the content
+        content = new Sheets();
+        playerController = PlayerController.Instance;
 
         //do the usual parameter-setting
         base.Awake();
@@ -18,17 +20,29 @@ public class Bed : ItemClickable
 
     public override void OnClick()
     {
+        //check if player is about to serve a waiting customer
+        bool terminate = CheckWaiting();
+
+        //do not approach the bed if player is currently in motion or if the bed is still dirty
+        //and therefore, cannot be assigned to a new customer
+        if (playerController.IsMoving() || terminate) { Player.Instance.RestartTags(); return; }
+
+        //transport player to corresponding player node
+        if (!terminate) { base.OnClick(); }
+    }
+
+    private bool CheckWaiting()
+    {
         bool terminate = false;
         //make sure that the player clicked an object with WAITING tag before this object
         if (Player.Instance.GetActiveTag(out Customer customer) as Waiting)
         {
-
             foreach (Transform item in transform)
             {
                 //terminate operation if bed is dirty with sheets and pajamas
                 if (item.GetComponent<Sheets>()) { terminate = true; }
                 if (item.GetComponent<Pajamas>()) { terminate = true; }
-                
+
                 //terminate operation if pod is occupied by another customer
                 if (GetComponentInChildren<Customer>()) { terminate = true; }
             }
@@ -36,10 +50,7 @@ public class Bed : ItemClickable
             //transport customer to corresponding customer node
             if (!terminate) { customer.GetComponent<CustomerController>().TransportCustomer(customerNode); }
         }
-
-        //transport player to corresponding player node
-        if (!terminate) { base.OnClick(); }
-        else { Player.Instance.RestartTags(); }
+        return terminate;
     }
 
     protected override void Interact()
@@ -52,19 +63,33 @@ public class Bed : ItemClickable
             controller.TransportCustomer(customerNode);
         }
 
-        //clean sheets
+        //clean bed, retrieve sheets and pajamas
         if (GetComponentInChildren<ItemTransferrable>())
         {
             Player receiver = Player.Instance;
-            receiver.GetItemFrom(this, content as Sheets);
-            receiver.GetItemFrom(this, _content);
+
+            //retrieve the sheets and change it to a dirty item transferrable
+            bool received = receiver.GetItemFrom(this, content as Sheets, out List<ItemTransferrable> sheets);
+            if (received) { AddDirtyTag(sheets); }
+
+            //retrieve the pajamas and change it to a dirty item transferrable
+            received = receiver.GetItemFrom(this, _content, out List<ItemTransferrable> pajamas);
+            if (received) { AddDirtyTag(pajamas); }
         }
     }
 
-    public ItemTransferrable LeaveDirtySheets()
+    public ItemTransferrable LeaveSheets()
     {
         ItemTransferrable sheets = GenerateContent();
         return sheets;
+    }
+
+    private void AddDirtyTag(List<ItemTransferrable> clean)
+    {
+        foreach (ItemTransferrable item in clean)
+        {
+            item.gameObject.AddComponent<Dirty>();
+        }
     }
 
     /*

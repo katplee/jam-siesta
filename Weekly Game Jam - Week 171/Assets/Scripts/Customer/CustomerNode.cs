@@ -9,7 +9,7 @@ public class CustomerNode : MNode
     private Queue<CustomerController> waitList = new Queue<CustomerController>();
     private int childOrder = -1;
 
-    private void Awake()
+    protected void Awake()
     {
         //set the position and child order field parameter
         Tilemap = TilemapManager.Instance.customerTilemap;
@@ -29,7 +29,6 @@ public class CustomerNode : MNode
         {
             oldParent.UnparentObject();
 
-            Debug.Log(oldParent.GetPositionInTileMap());
             //set the old tile at the old parent node to be active
             Tilemap.SetTile(oldParent.GetPositionInTileMap(), floor);
 
@@ -46,10 +45,10 @@ public class CustomerNode : MNode
         return this;
     }
 
-    public void MakeTileActive(Vector3Int tile)
+    public void MakeTileActive()
     {
         TileBase floor = Tilemap.GetTile(new Vector3Int(0, 11, 0));
-        Tilemap.SetTile(tile, floor);
+        Tilemap.SetTile(GetPositionInTileMap(), floor);
     }
 
     public void Queue(CustomerController controller)
@@ -57,7 +56,7 @@ public class CustomerNode : MNode
         waitList.Enqueue(controller);
     }
 
-    private void Dequeue()
+    protected virtual void Dequeue()
     {
         if (waitList.Count != 0)
         {

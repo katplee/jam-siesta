@@ -43,6 +43,11 @@ public class CustomerController : Controller
         OnMoveComplete?.Invoke(positionNode);
     }
 
+    public void InvokeSpecialMoveCompleteEvent(MNode positionNode)
+    {
+        OnMoveComplete?.Invoke(positionNode);
+    }
+
     public void TransportCustomer(Transform destination)
     {
         //if the path has not been reset aka the player is moving, cancel transport operation

@@ -50,6 +50,7 @@ public class FrontQueueState : StateMachineBehaviour
 
     private bool CheckCustomerPositionRequirements(MNode node)
     {
+        if (!node) { return false; }
         return node.GetPositionInTileMap() == checkPoint;
     }
 

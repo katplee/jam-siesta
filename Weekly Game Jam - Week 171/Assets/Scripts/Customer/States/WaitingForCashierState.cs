@@ -39,6 +39,7 @@ public class WaitingForCashierState : StateMachineBehaviour
     {
         if (CheckCustomerPositionRequirements(node))
         {
+            animator.gameObject.AddComponent<Paying>();
             UnsubscribeEvents();
             animator.SetTrigger("MoveState");
         }

@@ -46,10 +46,10 @@ public class ExitState : StateMachineBehaviour
 
     private void SetExitTileActive()
     {
-        bool parentExists = customer.transform.parent.TryGetComponent(out CustomerNode oldParent);
-        if (parentExists)
+        bool exists = customer.transform.parent.TryGetComponent(out CustomerNode node);
+        if (exists)
         {
-            oldParent.MakeTileActive(checkPoint);
+            node.MakeTileActive();
         }
     }
 

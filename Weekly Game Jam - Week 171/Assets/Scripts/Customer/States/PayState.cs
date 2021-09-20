@@ -41,7 +41,7 @@ public class PayState : StateMachineBehaviour
             if (end) 
             {
                 renderer.enabled = false;
-                patience.DeactivatePatience();
+                patience.SetPatienceInteractibility(false);
                 UnsubscribeEvents();
                 animator.SetTrigger("MoveState");
             }

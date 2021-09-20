@@ -39,12 +39,12 @@ public class CustomerPatience : MonoBehaviour
         return true;
     }
 
-    public void DeactivatePatience()
+    public void SetPatienceInteractibility(bool status)
     {
         Canvas patience = GetComponentInChildren<Canvas>();
         if (patience.GetComponentInChildren<UIPatience>())
         {
-            patience.enabled = false;
+            patience.enabled = status;
         }
     }
 

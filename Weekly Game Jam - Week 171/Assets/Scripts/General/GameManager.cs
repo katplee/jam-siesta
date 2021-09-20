@@ -36,7 +36,7 @@ public class GameManager : Singleton<GameManager>
         {
             if (customerNodes.ContainsKey(currentPosition))
             {
-                MNode newParent = customerNodes[currentPosition].ParentObject(element.gameObject);
+                MNode newParent = (customerNodes[currentPosition] as CustomerNode).ParentObject(element.gameObject);
                 return newParent;
             }
         }
@@ -50,6 +50,7 @@ public class GameManager : Singleton<GameManager>
         {
             case "ItemNode":
             case "CustomerNode":
+            case "FifthWaitingNode":
                 customerNodes.Add(position, node as CustomerNode);
                 break;
 

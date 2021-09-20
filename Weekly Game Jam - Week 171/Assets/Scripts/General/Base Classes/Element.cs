@@ -31,26 +31,27 @@ public abstract class Element : MonoBehaviour, IUserInterface
     public bool DropItemTo<T>(ItemClickable storage, T itemType)
         where T : ItemTransferrable
     {
-        if (!ReleaseItem(10, itemType, out List<ItemTransferrable> items)) { return false; }
+        if (!ReleaseItem(10, itemType, false, out List<ItemTransferrable> items)) { return false; }
 
         bool dropped = storage.ReceiveItem(items);
 
         return dropped;
     }
 
-    public bool GetItemFrom<T>(ItemClickable storage, T itemType)
+    public bool GetItemFrom<T>(ItemClickable storage, T itemType, out List<ItemTransferrable> items)
         where T : ItemTransferrable
     {
         int canReceive = 0;
         if (this as Player) { canReceive = 2 - itemsInHand.Count; }
         else if (this as Customer) { canReceive = 1 - itemsInHand.Count; }
 
-        if (!storage.ReleaseItem(canReceive, itemType, out List<ItemTransferrable> items)) { return false; }
+        if (!storage.ReleaseItem(canReceive, itemType, out List<ItemTransferrable> _items)) { items = null; return false; }
 
-        ItemTransferrable[] itemsArray = items.ToArray();
+        ItemTransferrable[] itemsArray = _items.ToArray();
 
         bool received = ReceiveItem(itemsArray);
 
+        items = _items;
         return received;
     }
 
@@ -61,7 +62,8 @@ public abstract class Element : MonoBehaviour, IUserInterface
         if (receiver as Player) { canReceive = 2 - receiver.itemsInHand.Count; }
         else if (receiver as Customer) { canReceive = 1 - receiver.itemsInHand.Count; }
 
-        if (!ReleaseItem<T>(canReceive, itemType, out List<ItemTransferrable> items)) { return false; }
+        if (!ReleaseItem<T>(canReceive, itemType, true, out List<ItemTransferrable> items)) { return false; }
+
 
         ItemTransferrable[] itemsArray = items.ToArray();
 
@@ -93,7 +95,7 @@ public abstract class Element : MonoBehaviour, IUserInterface
         return received;
     }
 
-    protected bool ReleaseItem<T>(int quantity, T itemType, out List<ItemTransferrable> items)
+    protected bool ReleaseItem<T>(int quantity, T itemType, bool mustBeClean, out List<ItemTransferrable> items)
         where T : ItemTransferrable
     {
         List<ItemTransferrable> itemsOfType = new List<ItemTransferrable>();
@@ -101,11 +103,13 @@ public abstract class Element : MonoBehaviour, IUserInterface
 
         foreach (ItemTransferrable i in itemsInHand)
         {
-            if(quantity == 0) { break; }
+            if (quantity == 0) { break; }
 
+            if (mustBeClean && i.GetComponent<Dirty>()) { continue; }
+            
             if (i as T) { itemsOfType.Add(i); _itemsInHand.Remove(i); quantity--; }
         }
-         
+
         itemsInHand = _itemsInHand;
 
         bool released = (itemsOfType.Count != 0) ? true : false;

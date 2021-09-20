@@ -162,4 +162,10 @@ public class PlayerController : Controller
         Transform next = path.Dequeue();
         return next;
     }
+
+    public bool IsMoving()
+    {
+        bool moving = (endPosition != Vector3Int.zero) ? true : false;
+        return moving;
+    }
 }

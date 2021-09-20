@@ -86,7 +86,7 @@ public class ChangingToClothesState : StateMachineBehaviour
 
         if (!transferred) { return false; }
 
-        Sheets sheets = bed.LeaveDirtySheets() as Sheets;
+        Sheets sheets = bed.LeaveSheets() as Sheets;
         transferred = bed.ReceiveItem(new List<ItemTransferrable>() { sheets });
 
         return transferred;
