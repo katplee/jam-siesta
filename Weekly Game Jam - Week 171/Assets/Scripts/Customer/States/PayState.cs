@@ -12,53 +12,81 @@ public class PayState : StateMachineBehaviour
      */
 
     private Customer customer = null;
+    private PlayerNode playerNode = null;
     private CustomerPatience patience = null;
+    private CustomerSatisfaction satisfaction = null;
     private SpriteRenderer renderer = null;
     private Animator animator = null;
+    private bool end = false;
 
     //parameters related to completion of task
     //private Vector3Int checkPoint = new Vector3Int(-12, 5, 0);
     private Vector3Int dropoffPoint = new Vector3Int(-10, -6, 0);
-    private Pajamas pickUpItem = null;
-    private Player receiver = null;
+    private Luggage pickUpItem = null;
+    private Customer receiver = null;
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         customer = animator.gameObject.GetComponent<Customer>();
-        patience = customer.GetComponent<CustomerPatience>();
+        playerNode = customer.GetComponentInChildren<PlayerNode>();
+        patience = customer.patience;
+        satisfaction = customer.satisfaction;
         renderer = customer.GetComponent<SpriteRenderer>();
         this.animator = animator;
-        receiver = Player.Instance;
+        receiver = customer;
 
         SubscribeEvents();
+        
+        //turn the patience counter back on
+        patience.SetPatienceInteractibility(true);
+    }
+
+    public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        if (end) { return; }
+
+        AnimateElement();
     }
 
     private void CheckForEndState(MNode node)
     {
-        if (CheckPlayerPositionRequirements(node))
+        if (CheckPlayerPositionRequirements(node, out float ticketValue))
         {
             bool end = TransferItem();
-            if (end) 
+            float _ticketValue = playerNode.GetTicketValue();
+            if (end || _ticketValue != 0) 
             {
+                //update customer satisfaction
+                float grade = patience.ResetPatience();
+                satisfaction.ComputeSatisfaction(grade, ticketValue);
+                satisfaction.ComputeSatisfaction(-1, _ticketValue);
+
                 renderer.enabled = false;
-                patience.SetPatienceInteractibility(false);
                 UnsubscribeEvents();
                 animator.SetTrigger("MoveState");
             }
         }
     }
 
-    private bool CheckPlayerPositionRequirements(MNode node)
+    private void AnimateElement()
     {
+        if (patience.UpdatePatience()) { return; }
+
+        end = true;
+    }
+
+    private bool CheckPlayerPositionRequirements(MNode node, out float ticketValue)
+    {
+        ticketValue = node.GetTicketValue();
         return node.GetPositionInTileMap() == dropoffPoint;
     }
 
     private bool TransferItem()
     {
-        Customer giver = customer;
-        //bool transfered = giver.GiveItemTo(receiver, pickUpItem);
+        Player giver = Player.Instance;
+        bool transfered = giver.GiveItemTo(receiver, pickUpItem);
 
-        return true;
+        return transfered;
     }
 
     private void SubscribeEvents()

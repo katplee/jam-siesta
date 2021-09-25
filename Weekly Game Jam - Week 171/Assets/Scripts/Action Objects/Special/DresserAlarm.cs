@@ -7,6 +7,7 @@ public class DresserAlarm : MonoBehaviour
 {
     //patience-related user interface parameters
     private UIAlarm customerAlarm = null;
+    private Canvas canvas = null;
 
     //patience amount parameters
     private float alarm = 0f;
@@ -19,11 +20,16 @@ public class DresserAlarm : MonoBehaviour
         ToggleVisibility();
     }
 
-    public void SetAlarmParameters(float alarm, float allowance)
+    public void SetParameters(float alarm, float allowance)
     {
         this.alarm = alarm;
-        _alarm = this.alarm;
+        _alarm = alarm;
         this.allowance = allowance;
+    }
+
+    private void SetAlarm(UIAlarm alarm)
+    {
+        customerAlarm = alarm;
     }
 
     public bool UpdateAlarm()
@@ -33,12 +39,15 @@ public class DresserAlarm : MonoBehaviour
 
         if (Mathf.Max(_alarm, 0) == 0 && allowance != 0)
         {
+            //this is the right time to wake up customer
+            _alarm = 0; //to avoid problems with the customer index setting
             allowance = Mathf.Max(allowance - Time.deltaTime, 0);
             customerAlarm.ChangeFillAmount(1f, 1f);
             customerAlarm.ChangeFillColor(true);
         }
         else
         {
+            //alarm counts down or counts up
             _alarm -= Time.deltaTime;
             customerAlarm.ChangeFillAmount(Mathf.Abs(_alarm), alarm);
             customerAlarm.ChangeFillColor(false);
@@ -47,9 +56,23 @@ public class DresserAlarm : MonoBehaviour
         return true;
     }
 
-    private void SetAlarm(UIAlarm alarm)
+    public void ToggleVisibility(string preference = "")
     {
-        customerAlarm = alarm;
+        if (!canvas) { canvas = GetComponentInChildren<Canvas>(); }
+
+        switch (preference)
+        {
+            case "true":
+                canvas.enabled = true;
+                break;
+            case "false":
+                canvas.enabled = false;
+                break;
+            default:
+                bool toggle = (canvas.enabled) ? false : true;
+                canvas.enabled = toggle;
+                break;
+        }
     }
 
     public void DeclareThis<T>(string type, T UIObject)
@@ -66,33 +89,17 @@ public class DresserAlarm : MonoBehaviour
         }
     }
 
-    public void TurnOffAlarm()
+    public float ResetAlarm()
     {
-        //hide alarm bar
         ToggleVisibility("false");
-
-        //turn off the audio sound
+        float grade = _alarm / alarm;
+        grade = (grade == 0) ? 1 : -1;
 
         //reset timers
-        alarm = 0f;
+        _alarm = 0f;
         _alarm = 0f; //current alarm value
         allowance = 0f;
-    }
 
-    public void ToggleVisibility(string preference = "")
-    {
-        switch (preference)
-        {
-            case "true":
-                customerAlarm.gameObject.SetActive(true);
-                break;
-            case "false":
-                customerAlarm.gameObject.SetActive(false);
-                break;
-            default:
-                bool toggle = (customerAlarm.gameObject.activeSelf) ? false : true;
-                customerAlarm.gameObject.SetActive(toggle);
-                break;
-        }
+        return grade;
     }
 }

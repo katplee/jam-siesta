@@ -6,6 +6,7 @@ public class LuggageShelf : ItemClickable
 {
     private new Luggage content = null;
     private bool toggle = false;
+    private Customer luggageOwner = null;
 
     public override void OnClick()
     {
@@ -19,10 +20,11 @@ public class LuggageShelf : ItemClickable
     private bool CheckPaying()
     {
         bool terminate = false;
-        //make sure that the player clicked an object with AITING tag before this object
+        //make sure that the player clicked an object with WAITING tag before this object
         if (Player.Instance.GetActiveTag(out Customer customer) as Paying)
         {
             toggle = true;
+            luggageOwner = customer;
         }
         return terminate;
     }
@@ -32,8 +34,22 @@ public class LuggageShelf : ItemClickable
     {
         if (toggle)
         {
+            //get player's destination
+            PlayerNode destination = luggageOwner.GetComponentInChildren<PlayerNode>();
+
+            //check if player will be issued a ticket for losing luggage
             Player receiver = Player.Instance;
-            receiver.GetItemFrom(this, content, out List<ItemTransferrable> items);
+            if (!receiver.GetItemFrom(this, 1, content, out List<ItemTransferrable> items, luggageOwner)) 
+            {
+                destination.gameObject.AddComponent<LostLuggageTicket>();
+                destination.SetTicket();
+            }
+
+            Player.Instance.GetComponent<PlayerController>().TransportPlayer(destination.GetPositionInTileMap());
+
+            //restart toggle and customer
+            toggle = false;
+            luggageOwner = null;
         }
         else
         {

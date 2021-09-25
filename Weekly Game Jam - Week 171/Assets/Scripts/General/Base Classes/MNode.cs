@@ -7,6 +7,16 @@ public abstract class MNode : MonoBehaviour
 {
     public abstract Tilemap Tilemap { get; set; }
     protected GameObject occupant = null;
+    private Ticket nodeTicket = null;
+
+    protected virtual void Awake()
+    {
+        //get the ticket in the node
+        SetTicket();
+
+        //add this node to the dictionary of customer nodes
+        GameManager.Instance.AddNode(GetType().Name, GetPositionInTileMap(), this);
+    }
 
     public void MoveToPositionInTilemap(Vector3 position)
     {
@@ -40,7 +50,6 @@ public abstract class MNode : MonoBehaviour
         //set the tile at the new parent node to be null
         Tilemap.SetTile(GetPositionInTileMap(), null);
 
-
         return this;
     }
 
@@ -59,5 +68,17 @@ public abstract class MNode : MonoBehaviour
     {
         if (occupant) { return occupant; }
         return null;
+    }
+
+    public void SetTicket()
+    {
+        //get the ticket associated to this node
+        nodeTicket = GetComponent<Ticket>();
+    }
+
+    public float GetTicketValue()
+    {
+        if (!nodeTicket) { return 0; }
+        return nodeTicket.value; 
     }
 }

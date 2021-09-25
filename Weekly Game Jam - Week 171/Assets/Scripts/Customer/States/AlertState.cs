@@ -27,13 +27,14 @@ public class AlertState : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         customer = animator.gameObject.GetComponent<Customer>();
-        controller = customer.GetComponent<CustomerController>();
+        controller = customer.controller;
         this.animator = animator;
         pod = customer.GetComponentInParent<Pod>();
         alarm = pod.GetComponentInChildren<DresserAlarm>();
-        alarm.ToggleVisibility();
 
         SubscribeEvents();
+
+        alarm.ToggleVisibility();
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

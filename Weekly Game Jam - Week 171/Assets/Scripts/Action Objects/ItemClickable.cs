@@ -22,7 +22,7 @@ public class ItemClickable : Clickable, IUserInterface
         get { return name; }
     }
 
-    protected void Awake()
+    protected virtual void Awake()
     {
         SubscribeEvent();
 
@@ -86,7 +86,7 @@ public class ItemClickable : Clickable, IUserInterface
         return true;
     }
 
-    public bool ReleaseItem<T>(int quantity, T itemType, out List<ItemTransferrable> items)
+    public bool ReleaseItem<T>(int quantity, T itemType, Element owner, out List<ItemTransferrable> items)
         where T : ItemTransferrable
     {
         List<ItemTransferrable> itemsOfType = new List<ItemTransferrable>();
@@ -95,6 +95,8 @@ public class ItemClickable : Clickable, IUserInterface
         foreach (ItemTransferrable i in itemsInStock)
         {
             if (quantity == 0) { break; }
+
+            if (owner) { if (i.GetOwner() != owner) { continue; } }
 
             if (i as T) { itemsOfType.Add(i); _itemsInStock.Remove(i); quantity--; }
         }

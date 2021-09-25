@@ -55,7 +55,7 @@ public class WaitingForAlertState : StateMachineBehaviour
 
     private void PerformStateProcesses()
     {
-        alarm.SetAlarmParameters(customer.GetSleepNeeded(), customer.GetSleepAllowance());
+        alarm.SetParameters(customer.GetSleepNeeded(), customer.GetSleepAllowance());
     }
 
     private void SubscribeEvents()

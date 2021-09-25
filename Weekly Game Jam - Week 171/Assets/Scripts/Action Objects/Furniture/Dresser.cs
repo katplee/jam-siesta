@@ -6,11 +6,16 @@ using UnityEngine.UI;
 
 public class Dresser : ItemClickable
 {
+    private Pod pod = null;
+    private Bed bed = null;
     private DresserAlarm alarm = null;
 
     private new void Awake()
     {
+        pod = GetComponentInParent<Pod>();
+        bed = pod.GetComponentInChildren<Bed>();
         alarm = GetComponent<DresserAlarm>();
+
         base.Awake();
     }
 
@@ -19,18 +24,27 @@ public class Dresser : ItemClickable
     protected override void Interact()
     {
         //make sure that a player is sleeping in the bed of the same pod
-        Pod pod = GetComponentInParent<Pod>();
-        Bed bed = pod.GetComponentInChildren<Bed>();
         Customer customer = bed.GetComponentInChildren<Customer>();
 
-        alarm.TurnOffAlarm();
+        UpdateCustomerSatisfaction(customer);
 
         if (!customer) { return; }
-        
-        if(!customer.GetComponent<Sleeping>()) { return; }
+
+        if (!customer.GetComponent<Sleeping>()) { return; }
 
         //transport player to corresponding bed node to wake player up
         bed.OnClick();
+    }
+
+    public void UpdateCustomerSatisfaction(Customer customer)
+    {
+        //customer is in the bed's item node at this point
+        MNode node = GameManager.Instance.SearchEquivalentNode(customer.GetPositionInTilemap(), customer.label);
+        float ticketValue = node.GetTicketValue();
+
+        //it is assumed that when this function is called that the customer's patience meter is on and active
+        float grade = alarm.ResetAlarm();
+        customer.satisfaction.ComputeSatisfaction(grade, ticketValue);
     }
 
     /*

@@ -40,15 +40,19 @@ public class Bed : ItemClickable
             foreach (Transform item in transform)
             {
                 //terminate operation if bed is dirty with sheets and pajamas
-                if (item.GetComponent<Sheets>()) { terminate = true; }
-                if (item.GetComponent<Pajamas>()) { terminate = true; }
+                if (item.GetComponent<Sheets>()) { terminate = true; break; }
+                if (item.GetComponent<Pajamas>()) { terminate = true; break; }
 
                 //terminate operation if pod is occupied by another customer
-                if (GetComponentInChildren<Customer>()) { terminate = true; }
+                if (GetComponentInChildren<Customer>()) { terminate = true; break; }
             }
 
             //transport customer to corresponding customer node
-            if (!terminate) { customer.GetComponent<CustomerController>().TransportCustomer(customerNode); }
+            if (!terminate) 
+            {
+                customer.UpdateCustomerSatisfaction();
+                customer.controller.TransportCustomer(customerNode); 
+            }
         }
         return terminate;
     }
@@ -69,11 +73,11 @@ public class Bed : ItemClickable
             Player receiver = Player.Instance;
 
             //retrieve the sheets and change it to a dirty item transferrable
-            bool received = receiver.GetItemFrom(this, content as Sheets, out List<ItemTransferrable> sheets);
+            bool received = receiver.GetItemFrom(this, -1, content as Sheets, out List<ItemTransferrable> sheets);
             if (received) { AddDirtyTag(sheets); }
 
             //retrieve the pajamas and change it to a dirty item transferrable
-            received = receiver.GetItemFrom(this, _content, out List<ItemTransferrable> pajamas);
+            received = receiver.GetItemFrom(this, -1, _content, out List<ItemTransferrable> pajamas);
             if (received) { AddDirtyTag(pajamas); }
         }
     }

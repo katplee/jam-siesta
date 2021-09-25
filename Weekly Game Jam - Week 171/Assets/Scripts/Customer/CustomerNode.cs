@@ -9,14 +9,14 @@ public class CustomerNode : MNode
     private Queue<CustomerController> waitList = new Queue<CustomerController>();
     private int childOrder = -1;
 
-    protected void Awake()
+    protected override void Awake()
     {
         //set the position and child order field parameter
         Tilemap = TilemapManager.Instance.customerTilemap;
         childOrder = transform.GetSiblingIndex();
 
         //add this node to the dictionary of customer nodes
-        GameManager.Instance.AddNode(GetType().Name, GetPositionInTileMap(), this);
+        base.Awake();
     }
 
     public override MNode ParentObject(GameObject child)

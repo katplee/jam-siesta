@@ -217,6 +217,7 @@ GameObject:
   m_Component:
   - component: {fileID: 73282056}
   - component: {fileID: 73282057}
+  - component: {fileID: 73282058}
   m_Layer: 0
   m_Name: PNode
   m_TagString: Untagged
@@ -248,6 +249,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8bca4f817515ebe40a55f4fb64a70f6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &73282058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 73282055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7c5822ca4effaa499160f4a51f747ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &88558162
@@ -8082,6 +8095,7 @@ GameObject:
   m_Component:
   - component: {fileID: 768183418}
   - component: {fileID: 768183419}
+  - component: {fileID: 768183420}
   m_Layer: 0
   m_Name: CUSTOMER_TOUR_CHECKPOINT
   m_TagString: Untagged
@@ -8113,6 +8127,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eaf711e009a77e04bb9d98f5f0970f83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &768183420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 768183417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7c5822ca4effaa499160f4a51f747ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &871640565
@@ -8770,6 +8796,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1023895611}
   - component: {fileID: 1023895612}
+  - component: {fileID: 1023895613}
   m_Layer: 0
   m_Name: PNode
   m_TagString: Untagged
@@ -8801,6 +8828,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8bca4f817515ebe40a55f4fb64a70f6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1023895613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1023895610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7c5822ca4effaa499160f4a51f747ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1025207334
@@ -10090,6 +10129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1865300649}
   - component: {fileID: 1865300650}
+  - component: {fileID: 1865300651}
   m_Layer: 0
   m_Name: INode
   m_TagString: Untagged
@@ -10121,6 +10161,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c862f9eedea8ad04489f3a19fef8da10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1865300651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1865300648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 401e6cdb6a0322e4f89a7b3ea7d2eced, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1866859213

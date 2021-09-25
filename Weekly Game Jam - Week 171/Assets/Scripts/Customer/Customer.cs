@@ -5,20 +5,66 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
+public enum CustomerType
+{
+    //arranged according to sleep needed
+    Null,
+    Salaryman,
+    Parent,
+    Student,
+    Other
+}
+
 public class Customer : Element
 {
     public override Tilemap Tilemap { get; set; }
+    public CustomerController controller{ get; private set; } = null;
+    public CustomerPatience patience { get; private set; } = null;
+    public CustomerSatisfaction satisfaction { get; private set; } = null;
 
     //customer-related parameters
+    private CustomerType type = CustomerType.Null;
     private float changingTime = 3f;
-    private float sleepNeeded = 5f;
-    private float sleepAllowance = 3f;
+    private float sleepNeeded = 3f;
+    private float sleepAllowance = 1f;
 
     private void Awake()
     {
         Tilemap = TilemapManager.Instance.customerTilemap;
+        controller = GetComponent<CustomerController>();
+        patience = GetComponent<CustomerPatience>();
+        satisfaction = GetComponent<CustomerSatisfaction>();
+
+        CallToInitialize();
 
         ReceiveItem(GetComponentsInChildren<ItemTransferrable>());
+    }
+
+    private void CallToInitialize()
+    {
+        //index connects the patience parameters and the customer parameters
+        int index = Random.Range(1, 5);
+
+        SetParameters(index);
+        patience.SetParameters(index);
+    }
+
+    private void SetParameters(int sleepIndex)
+    {
+        type = (CustomerType)sleepIndex;
+        sleepNeeded *= sleepIndex;
+        sleepAllowance *= sleepIndex;
+    }
+
+    //this function is called whenever the conditions are a bit difficult to stop the patience timer within a customer state
+    public void UpdateCustomerSatisfaction()
+    {
+        MNode node = GameManager.Instance.SearchEquivalentNode(GetPositionInTilemap(), label);
+        float ticketValue = node.GetTicketValue();
+
+        //it is assumed that when this function is called that the customer's patience meter is on and active
+        float grade = patience.ResetPatience();
+        satisfaction.ComputeSatisfaction(grade, ticketValue);
     }
 
     public float GetChangingTime()

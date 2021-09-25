@@ -38,14 +38,12 @@ public abstract class Element : MonoBehaviour, IUserInterface
         return dropped;
     }
 
-    public bool GetItemFrom<T>(ItemClickable storage, T itemType, out List<ItemTransferrable> items)
+    public bool GetItemFrom<T>(ItemClickable storage, int quantity, T itemType, out List<ItemTransferrable> items, Element owner = null)
         where T : ItemTransferrable
     {
-        int canReceive = 0;
-        if (this as Player) { canReceive = 2 - itemsInHand.Count; }
-        else if (this as Customer) { canReceive = 1 - itemsInHand.Count; }
+        quantity = ComputeQuantity(quantity);
 
-        if (!storage.ReleaseItem(canReceive, itemType, out List<ItemTransferrable> _items)) { items = null; return false; }
+        if (!storage.ReleaseItem(quantity, itemType, owner, out List<ItemTransferrable> _items)) { items = _items; return false; }
 
         ItemTransferrable[] itemsArray = _items.ToArray();
 
@@ -58,12 +56,9 @@ public abstract class Element : MonoBehaviour, IUserInterface
     public bool GiveItemTo<T>(Element receiver, T itemType)
         where T : ItemTransferrable
     {
-        int canReceive = 0;
-        if (receiver as Player) { canReceive = 2 - receiver.itemsInHand.Count; }
-        else if (receiver as Customer) { canReceive = 1 - receiver.itemsInHand.Count; }
+        int quantity = receiver.ComputeQuantity(-1);
 
-        if (!ReleaseItem<T>(canReceive, itemType, true, out List<ItemTransferrable> items)) { return false; }
-
+        if (!ReleaseItem<T>(quantity, itemType, true, out List<ItemTransferrable> items)) { return false; }
 
         ItemTransferrable[] itemsArray = items.ToArray();
 
@@ -89,7 +84,7 @@ public abstract class Element : MonoBehaviour, IUserInterface
             {
                 itemsInHand.Add(item); received = received || true;
                 item.transform.SetParent(transform);
-                item.SetOwner(); //sets the parent game element as the parent
+                //item.SetOwner(); //sets the parent game element as the parent
             }
         }
         return received;
@@ -106,7 +101,7 @@ public abstract class Element : MonoBehaviour, IUserInterface
             if (quantity == 0) { break; }
 
             if (mustBeClean && i.GetComponent<Dirty>()) { continue; }
-            
+
             if (i as T) { itemsOfType.Add(i); _itemsInHand.Remove(i); quantity--; }
         }
 
@@ -115,5 +110,18 @@ public abstract class Element : MonoBehaviour, IUserInterface
         bool released = (itemsOfType.Count != 0) ? true : false;
         items = itemsOfType;
         return released;
+    }
+
+    private int ComputeQuantity(int required)
+    {
+        int output;
+        int canReceive = 0;
+        if (this as Player) { canReceive = 2 - itemsInHand.Count; }
+        else if (this as Customer) { canReceive = 1 - itemsInHand.Count; }
+
+        if (required < 0) { output = canReceive; }
+        else { output = Mathf.Min(required, canReceive); }
+
+        return output;
     }
 }

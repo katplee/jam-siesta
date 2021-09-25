@@ -18,7 +18,9 @@ public class FrontQueueState : StateMachineBehaviour
     
     private Customer customer = null;
     private CustomerController controller = null;
+    private CustomerPatience patience = null;
     private Animator animator = null;
+    private bool end = false;
 
     //parameters related to completion of task
     private Vector3Int checkPoint = new Vector3Int(-12, 5, 0);
@@ -30,13 +32,21 @@ public class FrontQueueState : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         customer = animator.gameObject.GetComponent<Customer>();
-        controller = customer.GetComponent<CustomerController>();
+        controller = customer.controller;
+        patience = customer.patience;
         this.animator = animator;
 
         SubscribeEvents();
 
         //signals the end of necessary variable-setting
         controller.InvokeMoveCompleteEvent();
+    }
+
+    public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        if (end) { return; }
+
+        AnimateElement();
     }
 
     private void CheckForEndState(MNode node)
@@ -46,6 +56,13 @@ public class FrontQueueState : StateMachineBehaviour
             UnsubscribeEvents();    
             animator.SetTrigger("MoveState");
         }
+    }
+
+    private void AnimateElement()
+    {
+        if (patience.UpdatePatience()) { return; }
+
+        end = true;
     }
 
     private bool CheckCustomerPositionRequirements(MNode node)
