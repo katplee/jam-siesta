@@ -17,11 +17,12 @@ public class CustomerSatisfaction : MonoBehaviour
         customer = GetComponent<Customer>();
     }
 
-    public void ComputeSatisfaction(float grade, float ticketValue)
+    public float ComputeSatisfaction(float grade, float ticketValue)
     {
         float sign = Mathf.Sign(grade);
         //demerit and merit functions might not be needed after all, since sign is multiplied to ticket value
         satisfactionIndex += sign * ticketValue;
+        return satisfactionIndex;
     }
 
     public void Demerit(float demerit)

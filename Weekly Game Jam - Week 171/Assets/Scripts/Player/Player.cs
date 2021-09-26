@@ -18,6 +18,8 @@ public class Player : Element
         }
     }
 
+    public PlayerPerformance performance { get; private set; } = null;
+    
     //customer-related parameters
     private Tag activeTag = null;
     private Customer selectedCustomer = null;
@@ -26,6 +28,7 @@ public class Player : Element
 
     private void Awake()
     {
+        performance = GetComponent<PlayerPerformance>();
         Tilemap = TilemapManager.Instance.playerTilemap;
     }
 

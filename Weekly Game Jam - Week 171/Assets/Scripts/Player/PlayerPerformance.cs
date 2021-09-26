@@ -4,15 +4,26 @@ using UnityEngine;
 
 public class PlayerPerformance : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private float money = 0f;
+    private float indexSum = 0f;
+    private int customerCount = 0;
+    private float performance = 5f;
+
+    public float AddCustomerIndex(float index)
     {
-        
+        indexSum += index;
+        return indexSum;
     }
 
-    // Update is called once per frame
-    void Update()
+    public int IncreaseCustomerCount()
     {
-        
+        customerCount++;
+        return customerCount;
+    }
+
+    public float AddCustomerPayment(float payment)
+    {
+        money += payment;
+        return money;
     }
 }

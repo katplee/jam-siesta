@@ -59,7 +59,10 @@ public class PayState : StateMachineBehaviour
                 //update customer satisfaction
                 float grade = patience.ResetPatience();
                 satisfaction.ComputeSatisfaction(grade, ticketValue);
-                satisfaction.ComputeSatisfaction(-1, _ticketValue);
+                float index = satisfaction.ComputeSatisfaction(-1, _ticketValue);
+                float payment = satisfaction.ComputePayment();
+
+                PerformStateProcesses(index, payment);
 
                 renderer.enabled = false;
                 UnsubscribeEvents();
@@ -73,6 +76,18 @@ public class PayState : StateMachineBehaviour
         if (patience.UpdatePatience()) { return; }
 
         end = true;
+    }
+
+    private void PerformStateProcesses(float index, float payment) 
+    {
+        PlayerPerformance performance = Player.Instance.performance;
+
+        //update total customer index and total customer count
+        performance.AddCustomerIndex(index);
+        performance.IncreaseCustomerCount();
+
+        //update total cash
+        performance.AddCustomerPayment(payment);
     }
 
     private bool CheckPlayerPositionRequirements(MNode node, out float ticketValue)
