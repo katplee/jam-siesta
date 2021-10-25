@@ -16,7 +16,7 @@ public class WaitingForPodState : StateMachineBehaviour
     private Animator animator = null;
 
     //parameters related to completion of task
-    private Vector3Int checkPoint = new Vector3Int(-10, 0, 0);
+    private Vector3Int checkPoint = new Vector3Int(-7, 0, 0);
     //private Vector3Int dropoffPoint = new Vector3Int(-8, 5, 0);
     //private Luggage dropoffItem = new Luggage();
     //private Player receiver = null;

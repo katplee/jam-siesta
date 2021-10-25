@@ -26,9 +26,9 @@ public class Dresser : ItemClickable
         //make sure that a player is sleeping in the bed of the same pod
         Customer customer = bed.GetComponentInChildren<Customer>();
 
-        UpdateCustomerSatisfaction(customer);
-
         if (!customer) { return; }
+        
+        UpdateCustomerSatisfaction(customer);
 
         if (!customer.GetComponent<Sleeping>()) { return; }
 

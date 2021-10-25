@@ -22,11 +22,15 @@ public class Customer : Element
     public CustomerPatience patience { get; private set; } = null;
     public CustomerSatisfaction satisfaction { get; private set; } = null;
 
+    private CustomerAnimatorOverrider animationOverrider = null;
+
     //customer-related parameters
+    private CustomerScriptable profile = null;
     private CustomerType type = CustomerType.Null;
     private float changingTime = 3f;
-    private float sleepNeeded = 3f;
-    private float sleepAllowance = 1f;
+    private float sleepNeeded = 0f;
+    private float sleepAllowance = 0f;
+
 
     private void Awake()
     {
@@ -34,27 +38,32 @@ public class Customer : Element
         controller = GetComponent<CustomerController>();
         patience = GetComponent<CustomerPatience>();
         satisfaction = GetComponent<CustomerSatisfaction>();
-
-        CallToInitialize();
+        animationOverrider = GetComponent<CustomerAnimatorOverrider>();
 
         ReceiveItem(GetComponentsInChildren<ItemTransferrable>());
     }
 
-    private void CallToInitialize()
+    public void CallToInitialize(CustomerScriptable profile)
     {
-        //index connects the patience parameters and the customer parameters
-        int index = Random.Range(1, 5);
+        //index connects the patience parameters and the customer parameters    
 
-        SetParameters(index);
-        patience.SetParameters(index);
+        this.profile = profile;
+        type = profile.customerType;
+        int sleepIndex = (int)type;
+
+        SetParameters(profile, sleepIndex);
+        patience.SetParameters(profile, sleepIndex);
+        animationOverrider.SetAnimations(profile.controller);
     }
 
-    private void SetParameters(int sleepIndex)
+    private void SetParameters(CustomerScriptable profile, int sleepIndex)
     {
-        type = (CustomerType)sleepIndex;
-        sleepNeeded *= sleepIndex;
-        sleepAllowance *= sleepIndex;
+        //copy all parameters from the scriptable object
+        sleepNeeded = profile.sleepNeeded * sleepIndex;
+        sleepAllowance = profile.sleepAllowance * sleepIndex;
     }
+
+
 
     //this function is called whenever the conditions are a bit difficult to stop the patience timer within a customer state
     public void UpdateCustomerSatisfaction()

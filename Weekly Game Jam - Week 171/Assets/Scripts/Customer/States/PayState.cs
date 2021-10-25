@@ -21,7 +21,7 @@ public class PayState : StateMachineBehaviour
 
     //parameters related to completion of task
     //private Vector3Int checkPoint = new Vector3Int(-12, 5, 0);
-    private Vector3Int dropoffPoint = new Vector3Int(-10, -6, 0);
+    private Vector3Int dropoffPoint = new Vector3Int(-6, -6, 0);
     private Luggage pickUpItem = null;
     private Customer receiver = null;
 

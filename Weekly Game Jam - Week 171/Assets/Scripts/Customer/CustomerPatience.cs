@@ -10,11 +10,11 @@ public class CustomerPatience : MonoBehaviour
     private Canvas canvas = null;
 
     //patience amount parameters
-    private int patience = 2; //patience of customer in seconds
+    private int patience = 0; //patience of customer in seconds
     private float _patience = 0f; //current patience value
     private bool end = false;
 
-    public void SetParameters(int sleepIndex)
+    public void SetParameters(CustomerScriptable profile, int sleepIndex)
     {
         int patienceIndex = 0;
         switch (sleepIndex)
@@ -31,7 +31,7 @@ public class CustomerPatience : MonoBehaviour
             default: break;
         }
 
-        patience *= patienceIndex;
+        patience = profile.patience * patienceIndex;
         _patience = patience;
     }
 

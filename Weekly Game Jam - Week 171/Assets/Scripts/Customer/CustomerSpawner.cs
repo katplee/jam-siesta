@@ -7,6 +7,7 @@ using Random = UnityEngine.Random;
 public class CustomerSpawner : Singleton<CustomerSpawner>
 {
     [SerializeField] private GameObject customer = null;
+    [SerializeField] private CustomerScriptable[] customerProfiles; //array containing customerscriptables
     private Queue<GameObject> customersToSpawn = new Queue<GameObject>();
     private int spawnEvery = 0; //time between spawns
     private float spawnIn = 0f; //remaining time until next spawn
@@ -31,7 +32,7 @@ public class CustomerSpawner : Singleton<CustomerSpawner>
     private void SpawnCustomer()
     {
         Transform queue = WaitingManager.Instance.transform;
-        GameObject _customer = null;
+        Customer _customer = null;
         Transform mNode = null;
 
         for (int i = 0; i < queue.childCount; i++)
@@ -39,7 +40,7 @@ public class CustomerSpawner : Singleton<CustomerSpawner>
             mNode = queue.GetChild(i);
             if (!mNode.GetComponentInChildren<Customer>())
             {
-                _customer = Instantiate(customer, mNode);
+                _customer = Instantiate(customer, mNode).GetComponent<Customer>();
                 break;
             }
         }
@@ -47,10 +48,15 @@ public class CustomerSpawner : Singleton<CustomerSpawner>
         if (!_customer)
         {
             //if there are no available waiting nodes left, instantiate, set destination but temporarily hide
-            _customer = Instantiate(customer, mNode);
-            Queue(_customer);
+            _customer = Instantiate(customer, mNode).GetComponent<Customer>();
+            Queue(_customer.gameObject);
         }
 
+        //set customer profile
+        int index = Random.Range(0, 8);
+        _customer.CallToInitialize(customerProfiles[index]);
+
+        //set customer destination
         CustomerController controller = _customer.GetComponent<CustomerController>();
         WaitingManager.Instance.SetQueueDestination(controller);
     }

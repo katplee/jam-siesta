@@ -16,7 +16,7 @@ public class FrontPayQueueState : StateMachineBehaviour
     private Animator animator = null;
 
     //parameters related to completion of task
-    private Vector3Int checkPoint = new Vector3Int(-12, -6, 0);
+    private Vector3Int checkPoint = new Vector3Int(-8, -6, 0);
     //private Vector3Int dropoffPoint = new Vector3Int(-8, 5, 0);
     //private Luggage dropoffItem = new Luggage();
     //private Player receiver = null;

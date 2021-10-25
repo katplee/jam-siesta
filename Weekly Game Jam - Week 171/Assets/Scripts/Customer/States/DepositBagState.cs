@@ -13,7 +13,7 @@ public class DepositBagState : StateMachineBehaviour
     private bool end = false;
     
     //parameters related to completion of task
-    private Vector3Int dropoffPoint = new Vector3Int(-10, 5, 0);
+    private Vector3Int dropoffPoint = new Vector3Int(-6, 5, 0);
     private Luggage dropoffItem = null;
     private Player receiver = null;
 
