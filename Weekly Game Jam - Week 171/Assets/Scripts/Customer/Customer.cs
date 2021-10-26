@@ -63,8 +63,6 @@ public class Customer : Element
         sleepAllowance = profile.sleepAllowance * sleepIndex;
     }
 
-
-
     //this function is called whenever the conditions are a bit difficult to stop the patience timer within a customer state
     public void UpdateCustomerSatisfaction()
     {
