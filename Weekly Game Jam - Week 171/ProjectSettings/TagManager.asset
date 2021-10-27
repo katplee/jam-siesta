@@ -42,3 +42,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Tilemap
+    uniqueID: 3989959243
+    locked: 0
+  - name: Action Objects Trigger
+    uniqueID: 1132731411
+    locked: 0
+  - name: Cover Floor, Walls
+    uniqueID: 621391055
+    locked: 0
+  - name: Collidables
+    uniqueID: 438155859
+    locked: 0
