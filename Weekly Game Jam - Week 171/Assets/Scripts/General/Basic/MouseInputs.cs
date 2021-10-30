@@ -1,4 +1,4 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/Scripts/General/Improved/MouseInputs.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/Scripts/General/Basic/MouseInputs.inputactions'
 
 using System;
 using System.Collections;
