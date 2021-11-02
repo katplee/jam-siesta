@@ -17,3 +17,4 @@ MonoBehaviour:
   sleepAllowance: 2
   patience: 2
   controller: {fileID: 22100000, guid: 8eae599263792e64cb00ef634358ee16, type: 2}
+  sleeping: {fileID: 21300000, guid: 137857f225b606a4db6e8902996a4318, type: 3}

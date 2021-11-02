@@ -11,4 +11,5 @@ public class CustomerScriptable : ScriptableObject
     public int patience;
 
     public AnimatorOverrideController controller;
+    public Sprite sleeping;
 }
