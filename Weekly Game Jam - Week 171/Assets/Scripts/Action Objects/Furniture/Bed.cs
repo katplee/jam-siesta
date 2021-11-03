@@ -8,11 +8,17 @@ public class Bed : ItemClickable
     private Pajamas _content = null;
     private PlayerController playerController = null;
 
+    private SpriteRenderer spriteRenderer = null;
+
+    [SerializeField] private Sprite cleanBed = null;
+    [SerializeField] private Sprite dirtyBed = null;
+
     private new void Awake()
     {
         //set the content
         content = new Sheets();
         playerController = PlayerController.Instance;
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         //do the usual parameter-setting
         base.Awake();
@@ -48,10 +54,10 @@ public class Bed : ItemClickable
             }
 
             //transport customer to corresponding customer node
-            if (!terminate) 
+            if (!terminate)
             {
                 customer.UpdateCustomerSatisfaction();
-                customer.controller.TransportCustomer(customerNode); 
+                customer.controller.TransportCustomer(customerNode);
             }
         }
         return terminate;
@@ -64,11 +70,15 @@ public class Bed : ItemClickable
         {
             Sleeping tag = GetComponentInChildren<Sleeping>();
             CustomerController controller = tag.gameObject.GetComponent<CustomerController>();
+
+            //change bed sprite to dirty bed
+            ChangeBedSprite(false);
+
             controller.TransportCustomer(customerNode);
         }
 
         //clean bed, retrieve sheets and pajamas
-        if (GetComponentInChildren<ItemTransferrable>())
+        if (HasItemTransferrableChild())
         {
             Player receiver = Player.Instance;
 
@@ -79,13 +89,31 @@ public class Bed : ItemClickable
             //retrieve the pajamas and change it to a dirty item transferrable
             received = receiver.GetItemFrom(this, -1, _content, out List<ItemTransferrable> pajamas);
             if (received) { AddDirtyTag(pajamas); }
+
+            if (!HasItemTransferrableChild()) { ChangeBedSprite(true); }
         }
+
+    }
+
+    private bool HasItemTransferrableChild()
+    {
+        foreach(Transform transform in transform)
+        {
+            if (transform.GetComponent<ItemTransferrable>()) { return true; }
+        }
+
+        return false;
     }
 
     public ItemTransferrable LeaveSheets()
     {
         ItemTransferrable sheets = GenerateContent();
         return sheets;
+    }
+    
+    private void ChangeBedSprite(bool clean)
+    {
+        spriteRenderer.sprite = clean ? cleanBed : dirtyBed;
     }
 
     private void AddDirtyTag(List<ItemTransferrable> clean)

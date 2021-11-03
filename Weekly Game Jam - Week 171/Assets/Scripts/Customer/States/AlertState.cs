@@ -15,6 +15,7 @@ public class AlertState : StateMachineBehaviour
     private CustomerController controller = null;
     private Animator animator = null;
     private Pod pod = null;
+    private Bed bed = null;
     private DresserAlarm alarm = null;
     private bool end = false;
 
@@ -30,9 +31,13 @@ public class AlertState : StateMachineBehaviour
         controller = customer.controller;
         this.animator = animator;
         pod = customer.GetComponentInParent<Pod>();
+        bed = pod.GetComponentInChildren<Bed>();
         alarm = pod.GetComponentInChildren<DresserAlarm>();
 
         SubscribeEvents();
+
+        //do the things necessary for the state
+        PerformStateProcesses();
 
         alarm.ToggleVisibility();
     }
@@ -62,7 +67,13 @@ public class AlertState : StateMachineBehaviour
     }
 
     //private void TransferItem() { }
-    //private void PerformStateProcesses() { }
+    private void PerformStateProcesses()
+    {
+        //change bed sprite
+        SpriteRenderer spriteRenderer = bed.GetComponent<SpriteRenderer>();
+
+        spriteRenderer.sprite = customer.profile.sleeping;
+    }
 
     private bool CheckCustomerPositionRequirements(MNode node)
     {

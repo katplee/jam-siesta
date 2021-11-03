@@ -25,7 +25,7 @@ public class Customer : Element
     private CustomerAnimatorOverrider animationOverrider = null;
 
     //customer-related parameters
-    private CustomerScriptable profile = null;
+    public CustomerScriptable profile { get; private set; } = null;
     private CustomerType type = CustomerType.Null;
     private float changingTime = 3f;
     private float sleepNeeded = 0f;

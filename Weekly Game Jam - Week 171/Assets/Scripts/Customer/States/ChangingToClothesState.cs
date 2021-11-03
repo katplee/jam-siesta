@@ -92,7 +92,7 @@ public class ChangingToClothesState : StateMachineBehaviour
         return transferred;
     }
     
-    //private void PerformStateProcesses() { }
+    //private void PerformStateProcesses() {}
 
     private void SubscribeEvents()
     {
