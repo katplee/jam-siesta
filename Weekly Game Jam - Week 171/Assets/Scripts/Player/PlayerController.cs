@@ -22,7 +22,7 @@ public class PlayerController : Controller
     public static event Action OnItemPress;
     public static event Action<MNode> OnMoveComplete;
 
-    private Queue<Transform> path = new Queue<Transform>();
+    private List<Transform> path = new List<Transform>();
 
     private Player player = null;
     private Animator animator = null;
@@ -54,24 +54,30 @@ public class PlayerController : Controller
     {
         positionNode = GameManager.Instance.RefreshNodeParent(player);
         OnMoveComplete?.Invoke(positionNode);
-        
-        if(path.Count == 0) { return; }
 
+        //at the front of the queue is the destination where the player is currently in
+        DequeuePath();
+
+        //if there is no more destination queued, return
+        if (path.Count == 0) { return; }
+
+        //if there is still destination queued, peek at the destination which is now at the front
+        Transform nextDestination = path[0];
         //go to the next path in the queue if there is a destination queued
-        Transform nextDestination = DequeuePath();
         TransportPlayer(nextDestination);
     }
 
     public void TransportPlayer(Transform destination, DestinationScriptable destinationInfo = null)
     {
+        //add the destination to the queue and update the task panel
+        if (destinationInfo) { AddPath(destination, destinationInfo); }
         //if the path has not been reset aka the player is moving, cancel transport operation
-        if (endPosition != Vector3Int.zero) { AddPath(destination, destinationInfo); return; }
-        else { UpdateTaskPanel(destinationInfo); }
+        if (endPosition != Vector3Int.zero) { return; }
 
         //even if destination is added at a time when endPosition has already been set to zero, add to
         //the end of the queue if there is a queue
         //if(path.Count != 0) { AddPath(destination); return; }
-
+        
         DefinePath(destination);
 
         //if the player is already in the destination
@@ -155,7 +161,7 @@ public class PlayerController : Controller
 
     private void AddPath(Transform path, DestinationScriptable destination)
     {
-        this.path.Enqueue(path);
+        this.path.Add(path);
         UpdateTaskPanel(destination);
     }
 
@@ -165,10 +171,22 @@ public class PlayerController : Controller
         TaskPanel.Instance.GenerateInstance(destination);
     }
 
-    private Transform DequeuePath()
+    public void DequeuePath(Transform destination)
     {
-        Transform next = path.Dequeue();
-        return next;
+        path.Remove(destination);
+    }
+
+    private Transform IndexOf(Transform destination, List<GameObject> list)
+    {
+        int i = 0;
+
+        foreach (GameObject obj in list)
+        {
+            if (obj == item) { return i; }
+            i++;
+        }
+
+        return -1;
     }
 
     public bool IsMoving()

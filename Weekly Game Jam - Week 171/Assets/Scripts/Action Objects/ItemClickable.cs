@@ -54,11 +54,8 @@ public class ItemClickable : Clickable, IUserInterface
     {
         //the player is brought to the node corresponding to the item clicked
         //note: position conversion to cell position will be done inside the move player method
-        PlayerController.Instance.TransportPlayer(playerNode);
+        PlayerController.Instance.TransportPlayer(playerNode, destination);
         Player.Instance.RestartTags();
-
-        //update the task panel by adding the icon on this clickable item
-
     }
 
     protected ItemTransferrable GenerateContent()

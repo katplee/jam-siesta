@@ -18,7 +18,7 @@ public class TaskPanel : MonoBehaviour
         }
     }
 
-    private Queue<GameObject> destinationQueue = new Queue<GameObject>();
+    private List<GameObject> destinationQueue = new List<GameObject>();
     private Transform slotTemplate = null;
     private Transform container = null;
 
@@ -52,6 +52,7 @@ public class TaskPanel : MonoBehaviour
 
     public void GenerateInstance(DestinationScriptable destination)
     {
+        /*
         if (destinationQueue.Count != 0)
         {
             if (destinationQueue.ElementAt(destinationQueue.Count - 1).name == destination.itemName.GetType().Name)
@@ -60,6 +61,7 @@ public class TaskPanel : MonoBehaviour
                 return;
             }
         }
+        */
 
         //generate the icon that would appear in the UI
         Transform transform = Instantiate(slotTemplate, container);
@@ -68,26 +70,26 @@ public class TaskPanel : MonoBehaviour
         //change the game object's name for better understandability
         transform.name = destination.itemName.GetType().Name;
         //add the item to the destination queue
-        destinationQueue.Enqueue(transform.gameObject);
+        destinationQueue.Add(transform.gameObject);
     }
 
-    private void ClearItem(GameObject item = null)
+    public void ClearItem(GameObject item = null)
     {
         //the default assumption is that the first destination in the queue will be cleared
         int index = 0;
-        GameObject lastDestination = destinationQueue.Dequeue();
 
         if (item)
         {
             //if there is a specific item to clear from the queue, find the index first
             index = IndexOf(item, destinationQueue);
-            lastDestination = destinationQueue.ElementAt(index);
             Debug.Log(index);
         }
 
+        GameObject destination = destinationQueue[index];
+        
         //delete the destination from the queue
         //destroy the icon in the task panel
-        if (lastDestination.name == container.GetChild(index).name)
+        if (destination.name == container.GetChild(index).name)
         {
             Destroy(container.GetChild(index));
         }
@@ -95,17 +97,20 @@ public class TaskPanel : MonoBehaviour
         {
             Debug.Log("The panel and the queue is not synced.");
         }
+        
+        PlayerController.Instance.DequeuePath()
     }
 
-    private int IndexOf(GameObject item, Queue<GameObject> queue)
+    private int IndexOf(GameObject item, List<GameObject> list)
     {
         int i = 0;
 
-        foreach (GameObject obj in queue)
+        foreach (GameObject obj in list)
         {
             if (obj == item) { return i; }
             i++;
         }
+
         return -1;
     }
 }
