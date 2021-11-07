@@ -354,6 +354,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3932946a19c57484f9c17e8381bc3f1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destination: {fileID: 0}
 --- !u!212 &156689093
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4634,6 +4635,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72b3174f34bb455448f7b95c11c03ac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destination: {fileID: 0}
 --- !u!212 &871640570
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5169,6 +5171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36ea4561cd4e08140b07216ff1a9042d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destination: {fileID: 0}
 --- !u!50 &968810835
 Rigidbody2D:
   serializedVersion: 4
@@ -7028,6 +7031,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df348ae1e9b59fc488109f108ae3da4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destination: {fileID: 0}
 --- !u!114 &1789555537
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7427,6 +7431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3479da7b057bd8148b810b60e50785ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destination: {fileID: 0}
   cleanBed: {fileID: 21300000, guid: d68da3f51bb8b174cace87b4d646d0e8, type: 3}
   dirtyBed: {fileID: 21300000, guid: 625f78374c37e6541a3731faaaba3653, type: 3}
 --- !u!1 &1914766217
@@ -11366,6 +11371,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7cea3912b5139947b763da9b61296e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destination: {fileID: 0}
 --- !u!212 &1939328317
 SpriteRenderer:
   m_ObjectHideFlags: 0

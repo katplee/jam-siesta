@@ -62,10 +62,11 @@ public class PlayerController : Controller
         TransportPlayer(nextDestination);
     }
 
-    public void TransportPlayer(Transform destination)
+    public void TransportPlayer(Transform destination, DestinationScriptable destinationInfo = null)
     {
         //if the path has not been reset aka the player is moving, cancel transport operation
-        if (endPosition != Vector3Int.zero) { AddPath(destination); return; }
+        if (endPosition != Vector3Int.zero) { AddPath(destination, destinationInfo); return; }
+        else { UpdateTaskPanel(destinationInfo); }
 
         //even if destination is added at a time when endPosition has already been set to zero, add to
         //the end of the queue if there is a queue
@@ -152,9 +153,16 @@ public class PlayerController : Controller
         InvokeMoveCompleteEvent();
     }
 
-    private void AddPath(Transform path)
+    private void AddPath(Transform path, DestinationScriptable destination)
     {
         this.path.Enqueue(path);
+        UpdateTaskPanel(destination);
+    }
+
+    private void UpdateTaskPanel(DestinationScriptable destination)
+    {
+        if (!destination) { return; }
+        TaskPanel.Instance.GenerateInstance(destination);
     }
 
     private Transform DequeuePath()

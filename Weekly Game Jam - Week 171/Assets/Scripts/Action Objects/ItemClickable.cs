@@ -11,10 +11,12 @@ public class ItemClickable : Clickable, IUserInterface
     protected Transform customerNode = null;
     protected Transform itemNode = null;
     private Tilemap playerTilemap = null;
+
     public Transform container { get; private set; } = null;
     protected ItemTransferrable content = null;
     protected GameObject contentObject;
     private List<ItemTransferrable> itemsInStock = new List<ItemTransferrable>();
+    [SerializeField] private DestinationScriptable destination;
 
 
     public string label
@@ -54,6 +56,9 @@ public class ItemClickable : Clickable, IUserInterface
         //note: position conversion to cell position will be done inside the move player method
         PlayerController.Instance.TransportPlayer(playerNode);
         Player.Instance.RestartTags();
+
+        //update the task panel by adding the icon on this clickable item
+
     }
 
     protected ItemTransferrable GenerateContent()

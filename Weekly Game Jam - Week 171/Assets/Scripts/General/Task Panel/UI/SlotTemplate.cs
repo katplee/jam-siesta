@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlotTemplate : MonoBehaviour
+public class SlotTemplate : UIObject
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private TaskPanel root = null;
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        
+        if (transform.root.TryGetComponent(out root))
+        {
+            if (!transform.parent.GetComponent<Container>())
+            {
+                root.DeclareThis(Label, this);
+                transform.localScale = Vector3.zero;
+            }
+        }
     }
 }

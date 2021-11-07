@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Container : MonoBehaviour
+public class Container : UIObject
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private TaskPanel root = null;
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        
+        if (transform.root.TryGetComponent(out root))
+        {
+            root.DeclareThis(Label, this);
+        }    
     }
 }
