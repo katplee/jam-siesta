@@ -97,8 +97,8 @@ public class TaskPanel : MonoBehaviour
         {
             Debug.Log("The panel and the queue is not synced.");
         }
-        
-        PlayerController.Instance.DequeuePath()
+
+        //PlayerController.Instance.DequeuePath(); temporarily commented out
     }
 
     private int IndexOf(GameObject item, List<GameObject> list)

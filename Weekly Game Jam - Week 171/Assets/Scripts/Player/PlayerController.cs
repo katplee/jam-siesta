@@ -22,7 +22,9 @@ public class PlayerController : Controller
     public static event Action OnItemPress;
     public static event Action<MNode> OnMoveComplete;
 
-    private List<Transform> path = new List<Transform>();
+    //private List<Transform> path = new List<Transform>();
+    private Queue<Transform> path = new Queue<Transform>();
+
 
     private Player player = null;
     private Animator animator = null;
@@ -56,23 +58,23 @@ public class PlayerController : Controller
         OnMoveComplete?.Invoke(positionNode);
 
         //at the front of the queue is the destination where the player is currently in
-        DequeuePath();
+        //DequeuePath(); temorarily commented out
 
         //if there is no more destination queued, return
         if (path.Count == 0) { return; }
 
         //if there is still destination queued, peek at the destination which is now at the front
-        Transform nextDestination = path[0];
+        Transform nextDestination = DequeuePath();
         //go to the next path in the queue if there is a destination queued
         TransportPlayer(nextDestination);
     }
 
-    public void TransportPlayer(Transform destination, DestinationScriptable destinationInfo = null)
+    public void TransportPlayer(Transform destination)
     {
         //add the destination to the queue and update the task panel
-        if (destinationInfo) { AddPath(destination, destinationInfo); }
+        //if (destinationInfo) {  }
         //if the path has not been reset aka the player is moving, cancel transport operation
-        if (endPosition != Vector3Int.zero) { return; }
+        if (endPosition != Vector3Int.zero) { AddPath(destination); return; }
 
         //even if destination is added at a time when endPosition has already been set to zero, add to
         //the end of the queue if there is a queue
@@ -159,10 +161,12 @@ public class PlayerController : Controller
         InvokeMoveCompleteEvent();
     }
 
-    private void AddPath(Transform path, DestinationScriptable destination)
+    //private void AddPath(Transform path, DestinationScriptable destination)
+    private void AddPath(Transform path)
+
     {
-        this.path.Add(path);
-        UpdateTaskPanel(destination);
+        this.path.Enqueue(path);
+        //UpdateTaskPanel(destination);
     }
 
     private void UpdateTaskPanel(DestinationScriptable destination)
@@ -171,11 +175,13 @@ public class PlayerController : Controller
         TaskPanel.Instance.GenerateInstance(destination);
     }
 
-    public void DequeuePath(Transform destination)
+    public Transform DequeuePath()
     {
-        path.Remove(destination);
+        Transform next = path.Dequeue();
+        return next;
     }
 
+    /* temorarily commented out
     private Transform IndexOf(Transform destination, List<GameObject> list)
     {
         int i = 0;
@@ -188,6 +194,7 @@ public class PlayerController : Controller
 
         return -1;
     }
+    */
 
     public bool IsMoving()
     {

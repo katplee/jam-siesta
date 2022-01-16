@@ -54,7 +54,7 @@ public class ItemClickable : Clickable, IUserInterface
     {
         //the player is brought to the node corresponding to the item clicked
         //note: position conversion to cell position will be done inside the move player method
-        PlayerController.Instance.TransportPlayer(playerNode, destination);
+        PlayerController.Instance.TransportPlayer(playerNode);
         Player.Instance.RestartTags();
     }
 
