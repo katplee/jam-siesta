@@ -67,7 +67,7 @@ public abstract class Element : MonoBehaviour, IUserInterface
         return received;
     }
 
-    public bool ReceiveItem(ItemTransferrable[] items)
+    public virtual bool ReceiveItem(ItemTransferrable[] items)
     {
         //problem down the line: what if at the moment, only 1 item can be received by the player?
         //can the player go back to it again at another time?
@@ -83,14 +83,14 @@ public abstract class Element : MonoBehaviour, IUserInterface
             else
             {
                 itemsInHand.Add(item); received = received || true;
-                item.transform.SetParent(transform);
+                item.transform.SetParent(transform);                
                 //item.SetOwner(); //sets the parent game element as the parent
             }
         }
         return received;
     }
 
-    protected bool ReleaseItem<T>(int quantity, T itemType, bool mustBeClean, out List<ItemTransferrable> items)
+    protected virtual bool ReleaseItem<T>(int quantity, T itemType, bool mustBeClean, out List<ItemTransferrable> items)
         where T : ItemTransferrable
     {
         List<ItemTransferrable> itemsOfType = new List<ItemTransferrable>();

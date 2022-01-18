@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -17,6 +18,8 @@ public class Player : Element
             return instance;
         }
     }
+
+    public static event Action OnItemUpdate;
 
     public PlayerPerformance performance { get; private set; } = null;
     
@@ -37,6 +40,21 @@ public class Player : Element
         activeTag = customerTag;
         selectedCustomer = customer;
         return activeTag;
+    }
+
+    public override bool ReceiveItem(ItemTransferrable[] items)
+    {
+        bool received = base.ReceiveItem(items);
+
+        if (received) { OnItemUpdate?.Invoke(); }
+
+        return received;
+    }
+
+    protected override bool ReleaseItem<T>(int quantity, T itemType, bool mustBeClean, out List<ItemTransferrable> items)
+        where T : ItemTransferrable
+    {
+
     }
 
     public void RestartTags()
