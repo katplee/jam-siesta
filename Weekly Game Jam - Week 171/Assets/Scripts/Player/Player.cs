@@ -27,12 +27,21 @@ public class Player : Element
     private Tag activeTag = null;
     private Customer selectedCustomer = null;
 
+    //UI-related parameters
+    private UIItemContainer containerUI = null;
+
     public override Tilemap Tilemap { get; set; }
 
     private void Awake()
     {
+        SubscribeEvent();
+
         performance = GetComponent<PlayerPerformance>();
         Tilemap = TilemapManager.Instance.playerTilemap;
+    }
+    private void OnDestroy()
+    {
+        UnsubscribeEvent();
     }
 
     public Tag SelectCustomer(Customer customer, Tag customerTag)
@@ -52,9 +61,17 @@ public class Player : Element
     }
 
     protected override bool ReleaseItem<T>(int quantity, T itemType, bool mustBeClean, out List<ItemTransferrable> items)
-        where T : ItemTransferrable
     {
+        bool released = base.ReleaseItem(quantity, itemType, mustBeClean, out items);
 
+        if (released) { OnItemUpdate?.Invoke(); }
+
+        return released;
+    }
+
+    private void Test()
+    {
+        containerUI.UpdateItemContainer(itemsInHand);
     }
 
     public void RestartTags()
@@ -68,5 +85,26 @@ public class Player : Element
         if(activeTag != null) { customer = selectedCustomer; }
         else { customer = null; }
         return activeTag;
+    }
+
+    public void DeclareThis<T>(string element, T UIobject)
+        where T : UIObject
+    {
+        switch (element) 
+        {
+            case "UIItemContainer":
+                containerUI = UIobject as UIItemContainer;
+                break;
+        }
+    }
+
+    private void SubscribeEvent()
+    {
+        OnItemUpdate += Test;
+    }
+
+    private void UnsubscribeEvent()
+    {
+        OnItemUpdate -= Test;
     }
 }
