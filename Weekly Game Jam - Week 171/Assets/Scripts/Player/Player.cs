@@ -28,7 +28,7 @@ public class Player : Element
     private Customer selectedCustomer = null;
 
     //UI-related parameters
-    private UIItemContainer containerUI = null;
+    private UIItemContainer itemContainerUI = null;
 
     public override Tilemap Tilemap { get; set; }
 
@@ -69,9 +69,9 @@ public class Player : Element
         return released;
     }
 
-    private void Test()
+    private void UpdateItems()
     {
-        containerUI.UpdateItemContainer(itemsInHand);
+        itemContainerUI.UpdateItemContainer(itemsInHand);
     }
 
     public void RestartTags()
@@ -93,18 +93,18 @@ public class Player : Element
         switch (element) 
         {
             case "UIItemContainer":
-                containerUI = UIobject as UIItemContainer;
+                itemContainerUI = UIobject as UIItemContainer;
                 break;
         }
     }
 
     private void SubscribeEvent()
     {
-        OnItemUpdate += Test;
+        OnItemUpdate += UpdateItems;
     }
 
     private void UnsubscribeEvent()
     {
-        OnItemUpdate -= Test;
+        OnItemUpdate -= UpdateItems;
     }
 }
