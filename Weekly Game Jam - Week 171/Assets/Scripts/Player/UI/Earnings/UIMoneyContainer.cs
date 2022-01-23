@@ -5,51 +5,50 @@ using UnityEngine;
 public class UIMoneyContainer : UIObject
 {
     private Dictionary<ItemTransferrable, Sprite> numberDictionary = new Dictionary<ItemTransferrable, Sprite>();
-    private UIMoney money = null;
+    private List<UIMoney> money = new List<UIMoney> {
+        new UIMoney(), //ones: 0
+        new UIMoney(), //tens: 1
+        new UIMoney(), //hundreds: 2
+        new UIMoney(), //thousands: 3
+        new UIMoney()  //ten thousands: 4
+    };
 
     private void Awake()
     {
-        Player.Instance.DeclareThis(Label, this);
-
-        UpdateItemContainer(null);
+        PlayerPerformance.Instance.DeclareThis(Label, this);
     }
 
-    private void SetItem(UIItem item, bool isFirst)
+    private void Start()
     {
-        int i = (isFirst) ? 0 : 1;
-        items[i] = item;
+        UpdateEarnings(0f);
     }
 
-    public void DeclareThis<T>(string element, T UIObject, bool isFirst)
+    private void SetEarnings(UIMoney earnings, int place)
+    {
+        money[place] = earnings;
+    }
+
+    public void DeclareThis<T>(string element, T UIObject, int siblingIndex)
         where T : UIObject
     {
         switch (element)
         {
-            case "UIItem":
-                SetItem(UIObject as UIItem, isFirst);
+            case "UIMoney":
+                SetEarnings(UIObject as UIMoney, siblingIndex);
                 break;
         }
     }
 
-    public void UpdateItemContainer(List<ItemTransferrable> transferrables)
+    public void UpdateEarnings(float earnings)
     {
-        if (transferrables == null) { RefreshList(); return; }
+        string _earnings = earnings.ToString();
+        Debug.Log(_earnings);
 
-        List<ItemTransferrable> sorted = transferrables.OrderBy(x => x.label).ToList();
 
-        if (sorted.Count == 0) { RefreshList(); return; }
-
-        for (int i = 0; i < sorted.Count; i++)
+        for (int i = 0; i < _earnings.Length; i++)
         {
-            items[i].ChangeText(sorted[i].label);
-        }
-    }
-
-    private void RefreshList()
-    {
-        for (int i = 0; i < items.Count; i++)
-        {
-            items[i].ChangeText("-");
+            Debug.Log(_earnings[_earnings.Length - (i + 1)]);
+            money[i].ChangeText(_earnings[_earnings.Length - (i + 1)]);
         }
     }
 }

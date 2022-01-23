@@ -40,6 +40,10 @@ public class PlayerPerformance : MonoBehaviour
     public float AddCustomerPayment(float payment)
     {
         money += payment;
+
+        //update the UI
+        moneyContainerUI.UpdateEarnings(money);
+
         return money;
     }
 
@@ -48,7 +52,7 @@ public class PlayerPerformance : MonoBehaviour
     {
         switch (element)
         {
-            case "UIItemContainer":
+            case "UIMoneyContainer":
                 moneyContainerUI = UIobject as UIMoneyContainer;
                 break;
         }

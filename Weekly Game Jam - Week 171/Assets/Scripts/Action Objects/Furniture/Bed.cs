@@ -97,7 +97,7 @@ public class Bed : ItemClickable
 
     private bool HasItemTransferrableChild()
     {
-        foreach(Transform transform in transform)
+        foreach (Transform transform in transform)
         {
             if (transform.GetComponent<ItemTransferrable>()) { return true; }
         }
@@ -110,7 +110,7 @@ public class Bed : ItemClickable
         ItemTransferrable sheets = GenerateContent();
         return sheets;
     }
-    
+
     private void ChangeBedSprite(bool clean)
     {
         spriteRenderer.sprite = clean ? cleanBed : dirtyBed;
@@ -122,6 +122,13 @@ public class Bed : ItemClickable
         {
             item.gameObject.AddComponent<Dirty>();
         }
+    }
+
+    public void UpdateBedDetails()
+    {
+        if (GetComponentInChildren<Sleeping>()) { return; }
+     
+        //the lights will not light up if a customer is currently occupying the pod
     }
 
     /*

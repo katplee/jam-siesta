@@ -11,7 +11,10 @@ public class UIItemContainer : UIObject
     private void Awake()
     {
         Player.Instance.DeclareThis(Label, this);
+    }
 
+    private void Start()
+    {
         UpdateItemContainer(null);
     }
 

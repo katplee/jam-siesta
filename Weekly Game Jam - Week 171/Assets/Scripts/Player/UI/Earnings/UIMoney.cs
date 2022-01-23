@@ -15,12 +15,12 @@ public class UIMoney : UIObject
 
         if (parent)
         {
-            parent.DeclareThis(Label, this);
+            parent.DeclareThis(Label, this, transform.GetSiblingIndex());
         }
     }
 
-    public void ChangeText(string newText)
+    public void ChangeText(char newText)
     {
-        text.text = newText;
+        text.text = newText.ToString();
     }
 }
