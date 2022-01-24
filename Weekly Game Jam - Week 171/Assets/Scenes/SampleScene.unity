@@ -9005,6 +9005,7 @@ GameObject:
   - component: {fileID: 716386562}
   - component: {fileID: 716386564}
   - component: {fileID: 716386563}
+  - component: {fileID: 716386565}
   m_Layer: 5
   m_Name: Sheets
   m_TagString: Untagged
@@ -9044,7 +9045,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.13725491}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -9068,6 +9069,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 716386561}
   m_CullTransparentMesh: 0
+--- !u!114 &716386565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 716386561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a251ea821bee584baf3dd95d0b3f9cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &720271238
 GameObject:
   m_ObjectHideFlags: 0
@@ -9079,6 +9092,7 @@ GameObject:
   - component: {fileID: 720271239}
   - component: {fileID: 720271241}
   - component: {fileID: 720271240}
+  - component: {fileID: 720271242}
   m_Layer: 5
   m_Name: Pajamas
   m_TagString: Untagged
@@ -9118,7 +9132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.13725491}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -9142,6 +9156,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 720271238}
   m_CullTransparentMesh: 0
+--- !u!114 &720271242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 720271238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b8de8a671e1e7c4ea25d3451f6dd8b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &742730563
 GameObject:
   m_ObjectHideFlags: 0
@@ -15138,6 +15164,7 @@ GameObject:
   - component: {fileID: 1692629432}
   - component: {fileID: 1692629434}
   - component: {fileID: 1692629433}
+  - component: {fileID: 1692629435}
   m_Layer: 5
   m_Name: Bed_1
   m_TagString: Untagged
@@ -15204,6 +15231,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1692629431}
   m_CullTransparentMesh: 0
+--- !u!114 &1692629435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692629431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09414461154961b4a89c95ba01ab1e42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1700408376
 GameObject:
   m_ObjectHideFlags: 0
