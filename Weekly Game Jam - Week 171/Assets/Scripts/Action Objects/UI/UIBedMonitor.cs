@@ -6,6 +6,12 @@ public class UIBedMonitor : UIObject
 {
     private UICleanBed bed = null;
     private UIWashPajamas pajamas = null;
+    private UICustomerType ctype = null;
+
+    private void Awake()
+    {
+        Debug.Log($"bed monitor: {transform.GetSiblingIndex()}");
+    }
 
     private void SetBed(UICleanBed bed)
     {
@@ -29,8 +35,6 @@ public class UIBedMonitor : UIObject
             case "UIWashPajamas":
                 SetPajamas(UIObject as UIWashPajamas);
                 break;
-
-
         }
     }
 }

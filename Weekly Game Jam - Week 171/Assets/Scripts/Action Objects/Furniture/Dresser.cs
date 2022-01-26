@@ -16,6 +16,11 @@ public class Dresser : ItemClickable
         bed = pod.GetComponentInChildren<Bed>();
         alarm = GetComponent<DresserAlarm>();
 
+        if (pod)
+        {
+            pod.DeclareThis(Label, this);
+        }
+
         base.Awake();
     }
 

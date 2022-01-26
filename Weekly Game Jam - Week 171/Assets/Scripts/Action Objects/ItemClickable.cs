@@ -18,6 +18,10 @@ public class ItemClickable : Clickable, IUserInterface
     private List<ItemTransferrable> itemsInStock = new List<ItemTransferrable>();
     [SerializeField] private DestinationScriptable destination;
 
+    public virtual string Label
+    {
+        get { return GetType().Name; }
+    }
 
     public string label
     {

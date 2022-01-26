@@ -7,6 +7,7 @@ public class Bed : ItemClickable
 {
     private Pajamas _content = null;
     private PlayerController playerController = null;
+    private Pod pod = null;
 
     private SpriteRenderer spriteRenderer = null;
 
@@ -18,7 +19,13 @@ public class Bed : ItemClickable
         //set the content
         content = new Sheets();
         playerController = PlayerController.Instance;
+        pod = GetComponentInParent<Pod>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        if (pod)
+        {
+            pod.DeclareThis(Label, this);
+        }
 
         //do the usual parameter-setting
         base.Awake();
@@ -58,6 +65,9 @@ public class Bed : ItemClickable
             {
                 customer.UpdateCustomerSatisfaction();
                 customer.controller.TransportCustomer(customerNode);
+
+                //update the details to the customer's on the bed monitor
+
             }
         }
         return terminate;
