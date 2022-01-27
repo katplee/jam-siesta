@@ -1,16 +1,44 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class UIBedMonitor : UIObject
 {
+    public static event Action<UIBedMonitor, int> OnBedSynchronization;
+
     private UICleanBed bed = null;
     private UIWashPajamas pajamas = null;
     private UICustomerType ctype = null;
+    private int index = -1;
 
     private void Awake()
     {
-        Debug.Log($"bed monitor: {transform.GetSiblingIndex()}");
+        index = transform.GetSiblingIndex();
+    }
+
+    private void Start()
+    {
+        OnBedSynchronization?.Invoke(this, index);
+    }
+
+    public void ReceiveBool(string label, bool item)
+    {
+        switch (label)
+        {
+            case "clean_bed":
+                //signal the player to clean the sheets; true = bed is dirty
+                bed.ChangeOpacity(item);
+                break;
+
+            case "wash_pajamas":
+                //signal the player to clean the sheets; true = bed is dirty
+                pajamas.ChangeOpacity(item);
+                break;
+
+            default:
+                break;
+        }
     }
 
     private void SetBed(UICleanBed bed)

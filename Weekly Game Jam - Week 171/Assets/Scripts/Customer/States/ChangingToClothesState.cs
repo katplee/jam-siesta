@@ -83,11 +83,13 @@ public class ChangingToClothesState : StateMachineBehaviour
     {
         Customer giver = customer;
         bool transferred = giver.DropItemTo(bed, dropoffItem);
+        pod.PassBool("clean_bed", transferred);
 
         if (!transferred) { return false; }
 
         Sheets sheets = bed.LeaveSheets() as Sheets;
         transferred = bed.ReceiveItem(new List<ItemTransferrable>() { sheets });
+        pod.PassBool("wash_pajamas", transferred);
 
         return transferred;
     }

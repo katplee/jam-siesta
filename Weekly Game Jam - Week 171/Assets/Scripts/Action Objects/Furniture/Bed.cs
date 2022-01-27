@@ -123,7 +123,14 @@ public class Bed : ItemClickable
 
     private void ChangeBedSprite(bool clean)
     {
+        bool sheets = GetComponentInChildren<Sheets>();
         spriteRenderer.sprite = clean ? cleanBed : dirtyBed;
+
+        //sync with the bed monitor panel
+        //true means clean bed, false means dirty bed
+        pod.PassBool("clean_bed", !clean);
+        pod.PassBool("wash_pajamas", !clean);
+
     }
 
     private void AddDirtyTag(List<ItemTransferrable> clean)
