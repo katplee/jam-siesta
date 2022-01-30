@@ -44,12 +44,17 @@ public class Pod : MonoBehaviour
 
     public void PassString(string label, string item)
     {
-
+        monitor.ReceiveString(label, item);
     }
 
     public void PassBool(string label, bool item)
     {
         monitor.ReceiveBool(label, item);
+    }
+
+    public void PassSprite(string label, Sprite item)
+    {
+        monitor.ReceiveSprite(label, item);
     }
 
     public void DeclareThis<T>(string element, T UIobject)

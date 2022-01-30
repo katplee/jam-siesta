@@ -32,10 +32,10 @@ public class DresserAlarm : MonoBehaviour
         customerAlarm = alarm;
     }
 
-    public bool UpdateAlarm()
+    public bool UpdateAlarm(out float excess)
     {
         _alarm = Mathf.Max(_alarm, -alarm);
-        if (_alarm == -alarm) { return false; }
+        if (_alarm == -alarm) { excess = _alarm; return false; }
 
         if (Mathf.Max(_alarm, 0) == 0 && allowance != 0)
         {
@@ -53,6 +53,7 @@ public class DresserAlarm : MonoBehaviour
             customerAlarm.ChangeFillColor(false);
         }
 
+        excess = _alarm;
         return true;
     }
 

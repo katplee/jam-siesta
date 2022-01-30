@@ -15,6 +15,7 @@ public class ChangingToPajamasState : StateMachineBehaviour
     private CustomerController controller = null;
     private SpriteRenderer renderer = null;
     private Animator animator = null;
+    private Pod pod = null;
     private float blinkingTime = 0f;
     private bool end = false;
 
@@ -31,9 +32,13 @@ public class ChangingToPajamasState : StateMachineBehaviour
         controller = customer.GetComponent<CustomerController>();
         renderer = customer.GetComponent<SpriteRenderer>();
         this.animator = animator;
+        pod = customer.GetComponentInParent<Pod>();
         blinkingTime = customer.GetChangingTime();
 
         SubscribeEvents();
+
+        //do the things necessary for the state
+        PerformStateProcesses();
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -64,7 +69,11 @@ public class ChangingToPajamasState : StateMachineBehaviour
     }
 
     //private void TransferItem() { }
-    //private void PerformStateProcesses() { }
+    private void PerformStateProcesses()
+    {
+        pod.PassString("customer_type", customer.profile.customerSubType);
+        pod.PassSprite("customer_image", customer.profile.standard);
+    }
 
     private void SubscribeEvents()
     {

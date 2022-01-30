@@ -1,18 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class UITimeLeft : MonoBehaviour
+public class UICustomerTimeLeft : UIObject
 {
-    // Start is called before the first frame update
-    void Start()
+    private UIBedMonitor parent;
+    private Text text;
+
+    private void Awake()
     {
-        
+        parent = GetComponentInParent<UIBedMonitor>();
+        text = GetComponent<Text>();
+
+        if (parent)
+        {
+            parent.DeclareThis(Label, this);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ChangeText(string customerTimeLeft)
     {
-        
+        text.text = customerTimeLeft;
     }
 }

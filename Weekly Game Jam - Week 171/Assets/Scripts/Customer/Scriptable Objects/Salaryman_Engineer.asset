@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: Salaryman_Engineer
   m_EditorClassIdentifier: 
   customerType: 1
+  customerSubType: Engineer
   sleepNeeded: 3
   sleepAllowance: 2
   patience: 2
   controller: {fileID: 22100000, guid: f8a86270759b08b4ba7433f0bd526c24, type: 2}
   sleeping: {fileID: 21300000, guid: 185666cbeecbc1d4e99e084df3d894b0, type: 3}
+  standard: {fileID: -3226036734911846361, guid: cc3fddf3c6f4c7a46ab47f6ca4b7b307,
+    type: 3}

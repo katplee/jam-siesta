@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: Parent_Mom
   m_EditorClassIdentifier: 
   customerType: 2
+  customerSubType: Parent
   sleepNeeded: 3
   sleepAllowance: 2
   patience: 2
   controller: {fileID: 22100000, guid: 384bf2d07ca01274b9fcc801e01498d5, type: 2}
   sleeping: {fileID: 21300000, guid: 6f42f189569bd31488088105ddec8e17, type: 3}
+  standard: {fileID: 4769413903677429357, guid: cc3fddf3c6f4c7a46ab47f6ca4b7b307,
+    type: 3}

@@ -1,18 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class UICustomerImage : MonoBehaviour
+public class UICustomerImage : UIObject
 {
-    // Start is called before the first frame update
-    void Start()
+    private UIBedMonitor parent;
+    private Image image;
+
+    private void Awake()
     {
-        
+        parent = GetComponentInParent<UIBedMonitor>();
+        image = GetComponent<Image>();
+
+        if (parent)
+        {
+            parent.DeclareThis(Label, this);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ChangeImage(Sprite customerImage)
     {
-        
+        image.sprite= customerImage;
     }
 }

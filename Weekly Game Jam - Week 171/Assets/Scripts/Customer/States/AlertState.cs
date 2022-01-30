@@ -51,7 +51,7 @@ public class AlertState : StateMachineBehaviour
 
     private void CheckForEndState(MNode node)
     {
-        if (CheckCustomerPositionRequirements (node))
+        if (CheckCustomerPositionRequirements(node))
         {
             Destroy(customer.GetComponent<Sleeping>());
             UnsubscribeEvents();
@@ -61,8 +61,13 @@ public class AlertState : StateMachineBehaviour
 
     private void AnimateElement()
     {
-        if (alarm.UpdateAlarm()) { return; }
-        
+        if (alarm.UpdateAlarm(out float excess))
+        {
+            if (excess <= 0) { pod.PassString("customer_timeleft", "WAKE UP NOW!"); }
+            else { pod.PassString("customer_timeleft", excess.ToString("F2") + "s"); }
+            return;
+        }
+
         end = true;
     }
 
