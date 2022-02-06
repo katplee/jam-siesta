@@ -23,4 +23,9 @@ public class UICustomerType : UIObject
     {
         text.text = customerType;
     }
+
+    public void EmptyText()
+    {
+        text.text = "[VACANT]";
+    }
 }

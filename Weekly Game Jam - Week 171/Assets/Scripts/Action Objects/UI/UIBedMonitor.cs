@@ -6,6 +6,7 @@ using UnityEngine;
 public class UIBedMonitor : UIObject
 {
     public static event Action<UIBedMonitor, int> OnBedSynchronization;
+    public event Action OnBedEmpty;
 
     private UICleanBed bed = null;
     private UIWashPajamas pajamas = null;
@@ -22,6 +23,7 @@ public class UIBedMonitor : UIObject
     private void Start()
     {
         OnBedSynchronization?.Invoke(this, index);
+
     }
 
     public void ReceiveBool(string label, bool item)

@@ -64,7 +64,7 @@ public class AlertState : StateMachineBehaviour
         if (alarm.UpdateAlarm(out float excess))
         {
             if (excess <= 0) { pod.PassString("customer_timeleft", "WAKE UP NOW!"); }
-            else { pod.PassString("customer_timeleft", excess.ToString("F2") + "s"); }
+            else { pod.PassString("customer_timeleft", excess.ToString("F0") + "s"); }
             return;
         }
 

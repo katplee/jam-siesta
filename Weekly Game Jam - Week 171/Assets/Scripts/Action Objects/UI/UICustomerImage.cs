@@ -23,4 +23,9 @@ public class UICustomerImage : UIObject
     {
         image.sprite= customerImage;
     }
+
+    public void ResetImage()
+    {
+        image.sprite = null;
+    }
 }

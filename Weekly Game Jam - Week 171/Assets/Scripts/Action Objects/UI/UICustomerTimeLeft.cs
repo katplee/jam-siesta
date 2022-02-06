@@ -23,4 +23,9 @@ public class UICustomerTimeLeft : UIObject
     {
         text.text = customerTimeLeft;
     }
+
+    public void ResetText()
+    {
+        text.text = "";
+    }
 }
