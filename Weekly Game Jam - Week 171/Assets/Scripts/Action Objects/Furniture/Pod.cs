@@ -38,8 +38,9 @@ public class Pod : MonoBehaviour
         this.monitor = monitor;
     }
 
-    public void PassFloat(string label, float item)
+    public void PassInt(string label, int item)
     {
+        monitor.ReceiveInt(label, item);
     }
 
     public void PassString(string label, string item)

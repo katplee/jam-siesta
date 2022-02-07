@@ -53,6 +53,7 @@ public class AlertState : StateMachineBehaviour
     {
         if (CheckCustomerPositionRequirements(node))
         {
+            Debug.Log("finished!");
             Destroy(customer.GetComponent<Sleeping>());
             UnsubscribeEvents();
             animator.SetTrigger("MoveState");
@@ -63,6 +64,12 @@ public class AlertState : StateMachineBehaviour
     {
         if (alarm.UpdateAlarm(out float excess))
         {
+            Debug.Log($"excess: {excess}");
+            //update the panel's background color
+            if (excess == 0) { pod.PassInt("wake_up_customer", 1); }
+            else { pod.PassInt("wake_up_customer", 2); }
+
+            //update the actual time left
             if (excess <= 0) { pod.PassString("customer_timeleft", "WAKE UP NOW!"); }
             else { pod.PassString("customer_timeleft", excess.ToString("F0") + "s"); }
             return;

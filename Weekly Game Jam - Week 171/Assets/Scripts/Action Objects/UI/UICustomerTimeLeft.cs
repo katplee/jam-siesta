@@ -6,11 +6,14 @@ using UnityEngine.UI;
 public class UICustomerTimeLeft : UIObject
 {
     private UIBedMonitor parent;
+    private UICustomerTimeText timeText;
     private Text text;
 
     private void Awake()
     {
         parent = GetComponentInParent<UIBedMonitor>();
+        timeText = parent.GetComponentInChildren<UICustomerTimeText>();
+
         text = GetComponent<Text>();
 
         if (parent)
@@ -22,10 +25,12 @@ public class UICustomerTimeLeft : UIObject
     public void ChangeText(string customerTimeLeft)
     {
         text.text = customerTimeLeft;
+        timeText.ChangeOpacity(true);
     }
 
     public void ResetText()
     {
         text.text = "";
+        timeText.ChangeOpacity(false);
     }
 }

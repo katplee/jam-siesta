@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIBedMonitor : UIObject
 {
@@ -13,17 +14,37 @@ public class UIBedMonitor : UIObject
     private UICustomerType ctype = null;
     private UICustomerImage cimage = null;
     private UICustomerTimeLeft ctimeleft = null;
+    private UICustomerTimeText ctimetext = null;
+
+    private Image image = null;
+    [SerializeField] private List<Sprite> bgs = new List<Sprite>(); //0: normal, 1: green, 2: red
+
     private int index = -1;
 
     private void Awake()
     {
         index = transform.GetSiblingIndex();
+        image = GetComponent<Image>();
     }
 
     private void Start()
     {
         OnBedSynchronization?.Invoke(this, index);
+        ResetPanel();
+    }
 
+    private void ChangeBackground(int index)
+    {
+        image.sprite = bgs[index];
+    }
+
+    public void ResetPanel()
+    {
+        bed.ChangeOpacity(false);
+        pajamas.ChangeOpacity(false);
+        ctype.EmptyText();
+        cimage.ResetImage();
+        ctimeleft.ResetText();
     }
 
     public void ReceiveBool(string label, bool item)
@@ -38,7 +59,7 @@ public class UIBedMonitor : UIObject
             case "wash_pajamas":
                 //signal the player to clean the sheets; true = bed is dirty
                 pajamas.ChangeOpacity(item);
-                break;
+                break;            
 
             default:
                 break;
@@ -75,6 +96,21 @@ public class UIBedMonitor : UIObject
         }
     }
 
+    public void ReceiveInt(string label, int item)
+    {
+        switch (label)
+        {
+            case "wake_up_customer":
+                ChangeBackground(item);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    
+
     public void DeclareThis<T>(string element, T UIObject)
         where T : UIObject
     {
@@ -98,6 +134,10 @@ public class UIBedMonitor : UIObject
 
             case "UICustomerTimeLeft":
                 SetCustomerTimeLeft(UIObject as UICustomerTimeLeft);
+                break;
+
+            case "UICustomerTimeText":
+                SetCustomerTimeText(UIObject as UICustomerTimeText);
                 break;
         }
     }
@@ -125,5 +165,10 @@ public class UIBedMonitor : UIObject
     private void SetCustomerTimeLeft(UICustomerTimeLeft ctimeleft)
     {
         this.ctimeleft = ctimeleft;
+    }
+
+    private void SetCustomerTimeText(UICustomerTimeText ctimetext)
+    {
+        this.ctimetext = ctimetext;
     }
 }
