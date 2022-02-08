@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class DresserAlarm : MonoBehaviour
 {
+    public event Action OnReset;
+
     //patience-related user interface parameters
     private UIAlarm customerAlarm = null;
     private Canvas canvas = null;
@@ -95,6 +97,8 @@ public class DresserAlarm : MonoBehaviour
         ToggleVisibility("false");
         float grade = _alarm / alarm;
         grade = (grade == 0) ? 1 : -1;
+
+        OnReset?.Invoke();
 
         //reset timers
         _alarm = 0f;

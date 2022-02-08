@@ -64,7 +64,6 @@ public class AlertState : StateMachineBehaviour
     {
         if (alarm.UpdateAlarm(out float excess))
         {
-            Debug.Log($"excess: {excess}");
             //update the panel's background color
             if (excess == 0) { pod.PassInt("wake_up_customer", 1); }
             else { pod.PassInt("wake_up_customer", 2); }
@@ -92,13 +91,21 @@ public class AlertState : StateMachineBehaviour
         return node.GetComponent(checkPoint.GetType());
     }
 
+    private void DeclareEnd()
+    {
+        end = true;
+        pod.PassBool("reset_panel", false);
+    }
+
     private void SubscribeEvents()
     {
+        alarm.OnReset += DeclareEnd;
         controller.OnMoveComplete += CheckForEndState;
     }
 
     private void UnsubscribeEvents()
     {
+        alarm.OnReset -= DeclareEnd;
         controller.OnMoveComplete -= CheckForEndState;
     }
 }

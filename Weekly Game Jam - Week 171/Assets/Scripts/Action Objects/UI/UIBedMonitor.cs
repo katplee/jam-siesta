@@ -30,7 +30,7 @@ public class UIBedMonitor : UIObject
     private void Start()
     {
         OnBedSynchronization?.Invoke(this, index);
-        ResetPanel();
+        ResetPanel(true);
     }
 
     private void ChangeBackground(int index)
@@ -38,13 +38,17 @@ public class UIBedMonitor : UIObject
         image.sprite = bgs[index];
     }
 
-    public void ResetPanel()
+    public void ResetPanel(bool initial)
     {
-        bed.ChangeOpacity(false);
-        pajamas.ChangeOpacity(false);
         ctype.EmptyText();
         cimage.ResetImage();
         ctimeleft.ResetText();
+        ChangeBackground(0); //change background to standard background
+
+        if (!initial) { return; }
+
+        bed.ChangeOpacity(false); //grayout clean bed icon
+        pajamas.ChangeOpacity(false); //grayout clean pajamas icon
     }
 
     public void ReceiveBool(string label, bool item)
@@ -59,7 +63,11 @@ public class UIBedMonitor : UIObject
             case "wash_pajamas":
                 //signal the player to clean the sheets; true = bed is dirty
                 pajamas.ChangeOpacity(item);
-                break;            
+                break;
+
+            case "reset_panel":
+                ResetPanel(item);
+                break;
 
             default:
                 break;
