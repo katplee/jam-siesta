@@ -7,12 +7,24 @@ using UnityEngine.SceneManagement;
 public class PauseScene : MonoBehaviour
 {
     private int mainMenu = 0;
-    private int pauseMenu = 1;
-    private int prototype = 2;
+    private int prototype = 1;
+
+    private GameObject panel;
+
+    private void Start()
+    {
+        panel = transform.GetChild(0).gameObject;
+    }
+
+    public void Pause()
+    {
+        panel.SetActive(true);
+        Time.timeScale = 0f;
+    }
 
     public void Resume()
     {
-        SceneManager.LoadScene(prototype);
+        panel.SetActive(false);
         Time.timeScale = 1f;
     }
 

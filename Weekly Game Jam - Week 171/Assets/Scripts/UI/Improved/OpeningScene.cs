@@ -6,8 +6,7 @@ using UnityEngine.SceneManagement;
 public class OpeningScene : MonoBehaviour
 {
     private int mainMenu = 0;
-    private int pauseMenu = 1;
-    private int prototype = 2;
+    private int prototype = 1;
 
     public void Play()
     {

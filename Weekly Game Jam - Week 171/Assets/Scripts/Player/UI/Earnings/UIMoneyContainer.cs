@@ -42,13 +42,13 @@ public class UIMoneyContainer : UIObject
     public void UpdateEarnings(float earnings)
     {
         string _earnings = earnings.ToString();
-        Debug.Log(_earnings);
 
-
-        for (int i = 0; i < _earnings.Length; i++)
+        for (int i = 0; i < money.Count; i++)
         {
-            Debug.Log(_earnings[_earnings.Length - (i + 1)]);
-            money[i].ChangeText(_earnings[_earnings.Length - (i + 1)]);
+            if (i + 1 > _earnings.Length) { money[i + 1].gameObject.SetActive(false); break; }
+
+            char i_text = _earnings[_earnings.Length - (i + 1)];
+            money[i].ChangeText(i_text);
         }
     }
 }
