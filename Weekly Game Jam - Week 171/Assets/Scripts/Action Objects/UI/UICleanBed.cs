@@ -8,8 +8,9 @@ public class UICleanBed : UIObject
     private UIBedMonitor parent;
     private Image image;
 
-    private const byte on_a = 255;
-    private const byte off_a = 35;
+    private const byte on_a = 100;
+    private const byte off_a = 0;
+    //private const byte off_a = 35;
 
     private void Awake()
     {

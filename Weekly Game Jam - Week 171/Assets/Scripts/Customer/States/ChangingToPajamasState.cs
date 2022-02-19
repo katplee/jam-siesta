@@ -71,8 +71,8 @@ public class ChangingToPajamasState : StateMachineBehaviour
     //private void TransferItem() { }
     private void PerformStateProcesses()
     {
-        pod.PassString("customer_type", customer.profile.customerSubType);
-        pod.PassSprite("customer_image", customer.profile.standard);
+        //pod.PassString("customer_type", customer.profile.customerSubType);
+        //pod.PassSprite("customer_image", customer.profile.standard);
     }
 
     private void SubscribeEvents()

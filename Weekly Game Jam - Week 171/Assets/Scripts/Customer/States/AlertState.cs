@@ -64,6 +64,9 @@ public class AlertState : StateMachineBehaviour
     {
         if (alarm.UpdateAlarm(out float excess))
         {
+            return;
+
+            /*
             //update the panel's background color
             if (excess == 0) { pod.PassInt("wake_up_customer", 1); }
             else { pod.PassInt("wake_up_customer", 2); }
@@ -72,6 +75,7 @@ public class AlertState : StateMachineBehaviour
             if (excess <= 0) { pod.PassString("customer_timeleft", "WAKE UP NOW!"); }
             else { pod.PassString("customer_timeleft", excess.ToString("F0") + "s"); }
             return;
+            */
         }
 
         end = true;

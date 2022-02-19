@@ -40,10 +40,10 @@ public class UIBedMonitor : UIObject
 
     public void ResetPanel(bool initial)
     {
-        ctype.EmptyText();
-        cimage.ResetImage();
-        ctimeleft.ResetText();
-        ChangeBackground(0); //change background to standard background
+        //ctype.EmptyText();
+        //cimage.ResetImage();
+        //ctimeleft.ResetText();
+        //ChangeBackground(0); //change background to standard background
 
         if (!initial) { return; }
 
