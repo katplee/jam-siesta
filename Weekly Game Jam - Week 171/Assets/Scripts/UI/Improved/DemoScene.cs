@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class OpeningScene : MonoBehaviour
+public class DemoScene : MonoBehaviour
 {
     private int mainMenu = 0;
     private int prototype = 1;
@@ -15,13 +16,13 @@ public class OpeningScene : MonoBehaviour
         Time.timeScale = 1f;
     }
 
+    public void GoToMainMenu()
+    {
+        SceneManager.LoadScene(mainMenu);
+    }
+
     public void HowTo()
     {
         SceneManager.LoadScene(howTo);
-    }
-
-    public void QuitGame()
-    {
-        Application.Quit();
     }
 }

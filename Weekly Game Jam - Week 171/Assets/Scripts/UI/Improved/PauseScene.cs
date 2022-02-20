@@ -17,8 +17,6 @@ public class PauseScene : MonoBehaviour
     }
 
     public void Pause()
-
-
     {
         panel.SetActive(true);
         Time.timeScale = 0f;

@@ -1,13 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class OpeningScene : MonoBehaviour
+public class HowToScene : MonoBehaviour
 {
     private int mainMenu = 0;
     private int prototype = 1;
-    private int howTo = 2;
+    private int demo = 3;
 
     public void Play()
     {
@@ -15,13 +16,14 @@ public class OpeningScene : MonoBehaviour
         Time.timeScale = 1f;
     }
 
-    public void HowTo()
+    public void GoToMainMenu()
     {
-        SceneManager.LoadScene(howTo);
+        SceneManager.LoadScene(mainMenu);
     }
 
-    public void QuitGame()
+    public void Demo()
     {
-        Application.Quit();
+        SceneManager.LoadScene(demo);
     }
+
 }
