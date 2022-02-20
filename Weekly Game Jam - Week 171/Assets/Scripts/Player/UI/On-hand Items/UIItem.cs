@@ -7,6 +7,7 @@ public class UIItem : UIObject
 {
     private UIItemContainer parent;
     private Text text;
+    private Image image;
     private int index;
 
     private void Awake()
@@ -25,5 +26,10 @@ public class UIItem : UIObject
     public void ChangeText(string newText)
     {
         text.text = newText;
+    }
+
+    public void ChangeSprite(Sprite newSprite)
+    {
+        image.sprite = newSprite;
     }
 }
