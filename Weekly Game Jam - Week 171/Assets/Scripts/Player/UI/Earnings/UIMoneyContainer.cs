@@ -42,7 +42,7 @@ public class UIMoneyContainer : UIObject
 
     public void UpdateEarnings(float earnings)
     {
-        string _earnings = (earnings == 0f)? "   " : earnings.ToString();
+        string _earnings = (earnings == 0f)? "000" : earnings.ToString();
 
         //the last element of the money list is the comma, thus the -1
         for (int i = 0; i < money.Count - 1; i++)
