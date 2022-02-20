@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 441142e0e8f27ad47aceee3c31bf2f08, type: 3}
   m_Name: Sheets
   m_EditorClassIdentifier: 
+  name: Sheets
   icon: {fileID: -3044188892547700311, guid: a83dc1887d2ebd443a35fc938f8ab206, type: 3}

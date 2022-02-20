@@ -14,12 +14,13 @@ public class UIItem : UIObject
     {
         parent = GetComponentInParent<UIItemContainer>();
         text = GetComponent<Text>();
+        image = GetComponent<Image>();
         index = transform.parent.GetSiblingIndex() - 1;
 
         if (parent)
         {
             bool index_bool = (index == 0) ? true : false;
-            parent.DeclareThis(Label, this, index_bool);
+            //parent.DeclareThis(Label, this, index_bool);
         }
     }
 

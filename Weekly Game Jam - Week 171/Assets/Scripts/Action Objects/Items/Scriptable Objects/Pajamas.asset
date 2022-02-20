@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 441142e0e8f27ad47aceee3c31bf2f08, type: 3}
   m_Name: Pajamas
   m_EditorClassIdentifier: 
+  name: Pajamas
   icon: {fileID: 6254187779420992325, guid: a83dc1887d2ebd443a35fc938f8ab206, type: 3}
