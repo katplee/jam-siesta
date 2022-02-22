@@ -26,7 +26,7 @@ public class DepositBagState : StateMachineBehaviour
         satisfaction = customer.satisfaction;
         this.animator = animator;
         receiver = Player.Instance;
-
+        
         SubscribeEvents();
     }
     

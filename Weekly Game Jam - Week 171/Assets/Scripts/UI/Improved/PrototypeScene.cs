@@ -11,6 +11,8 @@ public class PrototypeScene : MonoBehaviour
 
     public void GoToMainMenu()
     {
+        Time.timeScale = 0f;
+        Time.timeScale = 1f;
         SceneManager.LoadScene(mainMenu);
     }
 

@@ -47,5 +47,8 @@ public class MouseInputsController : MonoBehaviour
     private void OnDisable()
     {
         mouseInputs.Disable();
+
+        mouseInputs.ActionObjects.LeftClick.performed -= AssessClickedObject;
+        mouseInputs.ActionObjects.LeftClick.performed -= InvokeClickResponse;
     }
 }
